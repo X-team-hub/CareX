@@ -28,7 +28,7 @@ header.app-topbar {
 .main {
   width: 100%;
   max-width: 1080px;
-  padding-top: 98px !important;
+  padding-top: 28px !important;
   color: var(--carex-selfcare-ink);
 }
 
@@ -116,6 +116,16 @@ header.app-topbar {
   color: var(--carex-selfcare-ink);
 }
 
+.modal-backdrop {
+  z-index: 1100 !important;
+}
+
+.modal-hero .back {
+  border: 1px solid var(--line) !important;
+  background: var(--card) !important;
+  color: var(--ink) !important;
+}
+
 .modal-hero {
   background: linear-gradient(120deg, var(--rose2), var(--sun2)) !important;
 }
@@ -151,7 +161,7 @@ header.app-topbar {
 
 @media (max-width: 950px) {
   .main {
-    padding: 91px 18px calc(105px + env(safe-area-inset-bottom)) !important;
+    padding: 20px 18px calc(112px + env(safe-area-inset-bottom)) !important;
   }
 
   .welcome {

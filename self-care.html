@@ -945,16 +945,15 @@
           <section class="section" id="history">
             <div class="section-head">
               <h2>Your practice</h2>
-              <p>Stored on this device</p>
+              <p>Synced to your account</p>
             </div>
             <div class="kegel-card">
               <strong id="historyCount">No sessions completed yet</strong>
               <p class="note" id="historyText">
-                Completed demo sessions are saved in this browser only. This is
-                not synced to a CareX account or database.
+                Completed sessions you save will appear here.
               </p>
               <button class="secondary" id="clearHistory">
-                Clear local demo history
+                Clear session history
               </button>
             </div>
           </section>
@@ -996,6 +995,11 @@
       </section>
     </div>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/common.js"></script>
     <script src="js/theme.js"></script>
     <script>
       (() => {
@@ -1025,6 +1029,8 @@
               "Lie back on pillows, bring the soles of your feet together, and let your knees open only as far as comfortable. Support both thighs with cushions and breathe slowly.",
           },
         ];
+        let selfCareUser = null;
+        let selfCareHistory = [];
         let mode = null,
           index = 0,
           remaining = 0,
@@ -1074,38 +1080,40 @@
           clearTimeout(toast.timer);
           toast.timer = setTimeout(() => t.classList.remove("show"), 3200);
         }
-        function loadHistory() {
-          try {
-            return JSON.parse(
-              localStorage.getItem("carex-selfcare-demo-history") || "[]",
-            );
-          } catch (e) {
-            return [];
-          }
+        async function loadHistory() {
+          const { data, error } = await sb
+            .from("self_care_sessions")
+            .select("id,activity,completed_at")
+            .eq("user_id", selfCareUser.id)
+            .order("completed_at", { ascending: false })
+            .limit(30);
+          if (error) throw error;
+          selfCareHistory = data || [];
         }
-        function saveHistory(type) {
+        async function saveHistory(activity) {
+          if (!selfCareUser) return false;
           try {
-            const h = loadHistory();
-            h.unshift({ type, completedAt: new Date().toISOString() });
-            localStorage.setItem(
-              "carex-selfcare-demo-history",
-              JSON.stringify(h.slice(0, 30)),
-            );
+            const { error } = await sb
+              .from("self_care_sessions")
+              .insert({ user_id: selfCareUser.id, activity });
+            if (error) throw error;
+            await loadHistory();
             renderHistory();
-          } catch (e) {
-            toast(
-              "Could not save local progress. Browser storage may be disabled.",
-            );
+            return true;
+          } catch (error) {
+            console.error("Could not save self-care session:", error);
+            toast("Could not save this session. Please try again.");
+            return false;
           }
         }
         function renderHistory() {
-          const h = loadHistory();
+          const h = selfCareHistory;
           $("#historyCount").textContent = h.length
             ? `${h.length} completed session${h.length === 1 ? "" : "s"}`
             : "No sessions completed yet";
           $("#historyText").textContent = h.length
-            ? `Most recent: ${h[0].type} · ${new Date(h[0].completedAt).toLocaleString()}. Saved in this browser only; not synced to an account.`
-            : "Completed demo sessions are saved in this browser only. This is not synced to a CareX account or database.";
+            ? `Most recent: ${h[0].activity} · ${new Date(h[0].completed_at).toLocaleString()}.`
+            : "Completed sessions you save will appear here.";
         }
         function openModal(art, html) {
           stopTimer();
@@ -1136,9 +1144,12 @@
             `<h2 id="modalTitle">Foot massage to relieve cramps</h2><p class="lead">A gentle, optional self-massage routine. Evidence that foot massage specifically relieves menstrual cramps is limited, so use it for comfort rather than as a treatment.</p><div class="pose-list"><div class="pose-item"><div class="pose-thumb">🦶</div><div><strong>1. Warm up · 1 minute</strong><p>Rub your feet gently between your palms or use a warm towel. Keep the pressure comfortable.</p></div></div><div class="pose-item"><div class="pose-thumb">🤲</div><div><strong>2. Massage the sole · 2 minutes</strong><p>Use your thumbs to make slow circles along the sole, avoiding any sore or injured areas.</p></div></div><div class="pose-item"><div class="pose-thumb">🌿</div><div><strong>3. Relax · 2 minutes</strong><p>Gently circle your ankles and stretch your toes, then rest. Stop if you feel pain, numbness, or discomfort.</p></div></div></div><div class="safety">For severe or unusual cramps, contact a qualified healthcare professional. This routine is for relaxation and is not medical treatment.</div><button class="primary" id="footDone">✓ &nbsp; Mark routine complete</button>`,
           );
           $("#footDone").onclick = () => {
-            saveHistory("Foot massage routine");
-            toast("Routine marked complete on this device.");
-            closeModal();
+            saveHistory("Foot massage routine").then(saved => {
+              if (saved) {
+                toast("Routine saved to your account.");
+                closeModal();
+              }
+            });
           };
         }
         function timerMarkup() {
@@ -1252,9 +1263,9 @@
             startClock();
           }
         }
-        function completeSession(name) {
+        async function completeSession(name) {
           stopTimer();
-          saveHistory(name);
+          await saveHistory(name);
           $("#modalArt").textContent = "🌸";
           $("#modalBody").innerHTML =
             `<div class="session"><span class="session-badge">SESSION COMPLETE</span><h2 id="modalTitle">Well done for showing up for yourself.</h2><div class="session-art">🌸</div><p class="lead">You completed ${name}. Take a moment to notice how you feel, without pressure to feel any particular way.</p><button class="primary" id="finishClose">Done</button></div>`;
@@ -1369,22 +1380,38 @@
             );
           }),
         );
-        $("#clearHistory").onclick = () => {
+        $("#clearHistory").onclick = async () => {
           if (
             confirm(
-              "Clear locally stored demo session history from this browser?",
+              "Clear your saved Self Care session history?",
             )
           ) {
             try {
-              localStorage.removeItem("carex-selfcare-demo-history");
+              const { error } = await sb
+                .from("self_care_sessions")
+                .delete()
+                .eq("user_id", selfCareUser.id);
+              if (error) throw error;
+              await loadHistory();
               renderHistory();
-              toast("Local demo history cleared.");
-            } catch (e) {
-              toast("Could not clear browser storage.");
+              toast("Session history cleared.");
+            } catch (error) {
+              console.error("Could not clear self-care history:", error);
+              toast("Could not clear session history.");
             }
           }
         };
-        renderHistory();
+        (async () => {
+          try {
+            selfCareUser = await requireAuth();
+            if (!selfCareUser) return;
+            await loadHistory();
+            renderHistory();
+          } catch (error) {
+            console.error("Could not load self-care history:", error);
+            toast("Could not load your session history.");
+          }
+        })();
         // Rebind controls after timer view creation; controls are delegated and handlers remain current.
         // Keep a single delegated controller for dynamic session buttons.
         $("#modalBody").addEventListener("click", (e) => {

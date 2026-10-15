@@ -1,7 +1,7 @@
 const translations = {
   en: {
     signup_login: "Already have an account? Login",
-    data_on_device: "Your data stays on this device.",
+    data_on_device: "Your health data is saved to your CareX account.",
     language: "Language",
     logout: "Logout",
     app_name: "CareX",
@@ -213,7 +213,7 @@ as_needed: "जरूरत के अनुसार",
     medicine_reminders: "दवा के रिमाइंडर",
     registered_mobile: "पंजीकृत मोबाइल नंबर दर्ज करें",
     signup_login: "क्या आपका पहले से खाता है? लॉग इन करें",
-    data_on_device: "आपका डेटा इसी डिवाइस पर रहता है।",
+    data_on_device: "आपका स्वास्थ्य डेटा आपके CareX खाते में सहेजा जाता है।",
     language: "भाषा",
     reset_password: "पासवर्ड रीसेट करें",
 enter_new_password: "नीचे अपना नया पासवर्ड दर्ज करें।",

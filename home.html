@@ -1244,7 +1244,18 @@
       if (!supabaseUser) return;
       homeUser = supabaseUser;
 
+      const { data: profile, error: profileError } = await sb
+        .from('profiles')
+        .select('full_name')
+        .eq('id', supabaseUser.id)
+        .maybeSingle();
+
+      if (profileError) {
+        console.error('Could not load profile name:', profileError);
+      }
+
       const fullName =
+        profile?.full_name ||
         supabaseUser.user_metadata?.full_name ||
         supabaseUser.email?.split('@')[0] ||
         'User';

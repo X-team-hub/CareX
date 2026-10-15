@@ -868,8 +868,17 @@ async function loadProfile(){
   profileUser=user;
 
   const meta=user.user_metadata||{};
+  const {data:profile,error}=await sb.from('profiles')
+    .select('*')
+    .eq('id',user.id)
+    .maybeSingle();
 
-  const name=meta.full_name||user.email?.split('@')[0]||'User';
+  if(error){
+    toast('Could not load your profile: '+error.message);
+    return;
+  }
+
+  const name=profile?.full_name||meta.full_name||user.email?.split('@')[0]||'User';
 
   document.getElementById('profileName').textContent=name;
   document.getElementById('avatar').textContent=name.charAt(0).toUpperCase();
@@ -877,23 +886,23 @@ async function loadProfile(){
   document.getElementById('nameView').textContent=name;
   document.getElementById('nameInput').value=name;
 
-  document.getElementById('ageView').textContent=meta.age||'—';
-  document.getElementById('ageInput').value=meta.age||'';
+  document.getElementById('ageView').textContent=profile?.age||'—';
+  document.getElementById('ageInput').value=profile?.age||'';
 
   document.getElementById('emailView').textContent=user.email||'—';
   document.getElementById('userIdView').textContent=user.id||'—';
 
-  const allergies=meta.allergies||'';
+  const allergies=profile?.allergies||'';
   document.getElementById('allergyView').textContent=allergies||'—';
   document.getElementById('allergyInput').value=allergies;
 
-  const medicines=meta.medicines||'';
+  const medicines=profile?.medicines||'';
   document.getElementById('medicineView').textContent=medicines||'—';
   document.getElementById('medicineInput').value=medicines;
 
   document.getElementById('reminderEmail').textContent=user.email||'—';
 
-  loadNotifications(meta.carex_notifications);
+  loadNotifications(profile);
 
   applyProfileLanguage();
 }
@@ -921,21 +930,21 @@ async function saveProfile(){
     return toast(getLang()==='hi'?'कृपया नाम भरें':'Please enter your name');
   }
 
-  if(age&&(Number(age)<8||Number(age)>70)){
+  if(age&&(!Number.isInteger(Number(age))||Number(age)<8||Number(age)>70)){
     return toast(getLang()==='hi'?'उम्र सही भरें':'Please enter a valid age');
   }
 
   const button=document.getElementById('saveBtn');
   button.disabled=true;
 
-  const {error}=await sb.auth.updateUser({
-    data:{
+  const {error}=await sb.from('profiles')
+    .update({
       full_name:name,
-      age:age,
-      allergies:allergies,
-      medicines:medicines
-    }
-  });
+      age:age?Number(age):null,
+      allergies,
+      medicines
+    })
+    .eq('id',user.id);
 
   button.disabled=false;
 
@@ -952,30 +961,18 @@ async function saveProfile(){
   );
 }
 
-function defaultNotifications(){
-  return{
-    enabled:false,
-    days_before:3,
-    per_day:1,
-    times:['09:00'],
-    email:profileUser?.email||''
-  };
-}
-
-function loadNotifications(saved){
-
-  const settings=saved||defaultNotifications();
+function loadNotifications(profile){
 
   document.getElementById('notifyEnabled').checked=
-    settings.enabled===true;
+    profile?.notifications_enabled===true;
 
   document.getElementById('notifyDays').value=
-    settings.days_before||3;
+    profile?.notification_days_before||3;
 
   document.getElementById('notifyCount').value=
-    settings.per_day||1;
+    profile?.notification_count||1;
 
-  renderTimes(settings.times||['09:00']);
+  renderTimes(profile?.notification_times||['09:00']);
 
   notificationState();
 }
@@ -1024,19 +1021,14 @@ async function saveNotifications(){
     ...document.querySelectorAll('#times input')
   ].map(input=>input.value);
 
-  const settings={
-    enabled,
-    days_before:days,
-    per_day:perDay,
-    times,
-    email:user.email||''
-  };
-
-  const {error}=await sb.auth.updateUser({
-    data:{
-      carex_notifications:settings
-    }
-  });
+  const {error}=await sb.from('profiles')
+    .update({
+      notifications_enabled:enabled,
+      notification_days_before:days,
+      notification_count:perDay,
+      notification_times:times
+    })
+    .eq('id',user.id);
 
   if(error)return toast(error.message);
 
@@ -1069,12 +1061,11 @@ async function exportData(){
       dailyR,
       symptomR,
       moodR,
-      medicineR,
       medicineReminderR,
       notificationR,
       appointmentR,
       chatR,
-      reminderLogR
+      selfCareR
     ]=await Promise.all([
 
       sb.from('profiles')
@@ -1099,11 +1090,6 @@ async function exportData(){
         .select('*')
         .eq('user_id',uid),
 
-      sb.from('medicines')
-        .select('*')
-        .eq('user_id',uid)
-        .order('created_at',{ascending:true}),
-
       sb.from('medicine_reminders')
         .select('*')
         .eq('user_id',uid)
@@ -1124,10 +1110,10 @@ async function exportData(){
         .eq('user_id',uid)
         .order('created_at',{ascending:true}),
 
-      sb.from('carex_reminder_logs')
+      sb.from('self_care_sessions')
         .select('*')
         .eq('user_id',uid)
-        .order('scheduled_for',{ascending:true})
+        .order('completed_at',{ascending:true})
     ]);
 
     const results=[
@@ -1136,12 +1122,11 @@ async function exportData(){
       dailyR,
       symptomR,
       moodR,
-      medicineR,
       medicineReminderR,
       notificationR,
       appointmentR,
       chatR,
-      reminderLogR
+      selfCareR
     ];
 
     const failed=results.find(r=>r.error);
@@ -1152,25 +1137,30 @@ async function exportData(){
 
     const profile=profileR.data||{};
     const cycles=cycleR.data||[];
-    const daily=(dailyR.data||[]).map(d=>({
-      ...d,
-      log_date:d.log_date||d.date,
-      symptoms:Array.isArray(d.symptoms)?d.symptoms:[]
-    }));
     const symptoms=(symptomR.data||[]).map(s=>({
       ...s,
       log_date:s.log_date||s.date
+    }));
+    const symptomsByDate=new Map();
+    symptoms.forEach(s=>{
+      const key=s.log_date;
+      if(!symptomsByDate.has(key))symptomsByDate.set(key,[]);
+      symptomsByDate.get(key).push(s.symptom);
+    });
+    const daily=(dailyR.data||[]).map(d=>({
+      ...d,
+      log_date:d.log_date||d.date,
+      symptoms:symptomsByDate.get(d.log_date||d.date)||[]
     }));
     const moods=(moodR.data||[]).map(m=>({
       ...m,
       log_date:m.log_date||m.date
     }));
-    const medicines=medicineR.data||[];
     const medicineReminders=medicineReminderR.data||[];
     const notifications=notificationR.data||[];
     const appointments=appointmentR.data||[];
     const chats=chatR.data||[];
-    const reminderLogs=reminderLogR.data||[];
+    const selfCareSessions=selfCareR.data||[];
 
     const {jsPDF}=window.jspdf;
 
@@ -1338,6 +1328,10 @@ async function exportData(){
         ['Age',safe(meta.age)],
         ['Language',safe(profile.language)],
         ['Theme',safe(profile.theme)],
+        ['Period Reminder Enabled',safe(profile.notifications_enabled)],
+        ['Days Before Period',safe(profile.notification_days_before)],
+        ['Daily Reminder Count',safe(profile.notification_count)],
+        ['Reminder Times',arr(profile.notification_times)],
         ['Last Period Start',date(meta.last_period_start)],
         ['Usual Cycle Length',
           meta.cycle_length
@@ -1485,24 +1479,6 @@ async function exportData(){
     }
 
 
-    /* MEDICINES */
-
-    if(medicines.length){
-
-      doc.addPage();
-      pageTitle('Medicines',7);
-
-      table(
-        ['Medicine','Notes','Added'],
-        medicines.map(m=>[
-          safe(m.name),
-          safe(m.notes),
-          date(m.created_at)
-        ])
-      );
-    }
-
-
     /* MEDICINE REMINDERS */
 
     if(medicineReminders.length){
@@ -1578,20 +1554,18 @@ async function exportData(){
     }
 
 
-    /* EMAIL REMINDERS */
+    /* SELF CARE SESSIONS */
 
-    if(reminderLogs.length){
+    if(selfCareSessions.length){
 
       doc.addPage();
-      pageTitle('Email Reminder History',12);
+      pageTitle('Self Care Sessions',12);
 
       table(
-        ['Scheduled Date','Time','Status','Sent At'],
-        reminderLogs.map(r=>[
-          date(r.scheduled_for),
-          safe(r.notification_time),
-          safe(r.status),
-          dateTime(r.sent_at)
+        ['Completed','Activity'],
+        selfCareSessions.map(s=>[
+          dateTime(s.completed_at),
+          safe(s.activity)
         ])
       );
     }
@@ -1651,13 +1625,71 @@ async function deleteData(){
 
   if(!confirm(message))return;
 
-  localStorage.removeItem('carex-notifications');
+  const user=await currentUser();
+  if(!user)return;
 
-  toast(
-    getLang()==='hi'
-      ?'स्थानीय सेटिंग हटा दी गई'
-      :'Local settings removed'
-  );
+  const tables=[
+    'symptom_logs',
+    'mood_logs',
+    'daily_logs',
+    'cycle_logs',
+    'insights',
+    'appointments',
+    'medicine_reminders',
+    'chat_messages',
+    'chat_sessions',
+    'notifications',
+    'self_care_sessions'
+  ];
+
+  try{
+    for(const tableName of tables){
+      const {error}=await sb.from(tableName)
+        .delete()
+        .eq('user_id',user.id);
+      if(error)throw error;
+    }
+
+    const {error:profileError}=await sb.from('profiles')
+      .update({
+        full_name:null,
+        mobile:null,
+        age:null,
+        date_of_birth:null,
+        allergies:'',
+        medicines:'',
+        notifications_enabled:false,
+        notification_days_before:3,
+        notification_count:1,
+        notification_times:['09:00']
+      })
+      .eq('id',user.id);
+    if(profileError)throw profileError;
+
+    const {error:authError}=await sb.auth.updateUser({
+      data:{
+        full_name:null,
+        mobile:null,
+        mobile:null,
+        username:null,
+        age:null,
+        allergies:null,
+        medicines:null,
+        carex_notifications:null
+      }
+    });
+    if(authError)throw authError;
+
+    await loadProfile();
+    toast(getLang()==='hi'
+      ?'आपका सेव किया गया डेटा हटा दिया गया'
+      :'Your saved data has been deleted');
+  }catch(error){
+    console.error('CareX data deletion error:',error);
+    toast(getLang()==='hi'
+      ?'डेटा हटाया नहीं जा सका: '+error.message
+      :'Could not delete saved data: '+error.message);
+  }
 }
 
 loadProfile();

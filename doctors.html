@@ -246,33 +246,6 @@
     let selectedDoctor = null;
     let bookingUser = null;
 
-    const doctors = [
-      {
-        id: '6b9a725d-d438-4a80-bcd8-aa704a53c053',
-        name: 'Dr. Ananya Rao',
-        specialization: 'Gynaecologist',
-        experience: 12,
-        languages: ['Hindi', 'English'],
-        price: 400
-      },
-      {
-        id: '6731c5ec-2599-42ae-8c5d-27dc425ac0cf',
-        name: 'Dr. Meera Iyer',
-        specialization: 'PCOS Specialist',
-        experience: 9,
-        languages: ['English', 'Tamil'],
-        price: 350
-      },
-      {
-        id: '18a58392-5aac-449e-92a9-82c745bb2967',
-        name: 'Dr. Farah Khan',
-        specialization: 'General Physician',
-        experience: 7,
-        languages: ['Hindi', 'Urdu'],
-        price: 200
-      }
-    ];
-
     function getInitials(name) {
       return name
         .split(' ')
@@ -281,40 +254,60 @@
         .join('');
     }
 
-    function renderDoctors() {
+    async function renderDoctors() {
       const list = document.getElementById('doc-list');
+      list.textContent = 'Loading doctors...';
 
+      bookingUser = await requireAuth();
+      if (!bookingUser) return;
+
+      const { data: doctors, error } = await sb
+        .from('doctors')
+        .select('id,name,specialization,experience_years,languages,consultation_fee,verified')
+        .eq('is_active', true)
+        .order('name');
+
+      if (error) {
+        console.error('Could not load doctors:', error);
+        list.textContent = 'Could not load doctors. Please try again later.';
+        return;
+      }
+
+      if (!doctors?.length) {
+        list.textContent = 'No doctors are available right now.';
+        return;
+      }
+
+      window.doctors = doctors;
       list.innerHTML = doctors.map(d => `
         <div class="doc">
 
           <div class="av">
-            ${getInitials(d.name)}
+            ${escapeHtml(getInitials(d.name))}
           </div>
 
           <div class="doc-info">
 
             <div class="doc-name">
-              ${d.name}
+              ${escapeHtml(d.name)}
             </div>
 
             <div class="doc-meta mute">
-              ${d.specialization} · ${d.experience} yrs
+              ${escapeHtml(d.specialization || '')} · ${Number(d.experience_years) || 0} yrs
             </div>
 
             <div class="doc-meta mute">
-              ${d.languages.join(', ')}
+              ${escapeHtml((d.languages || []).join(', '))}
             </div>
 
-            <div class="verified">
-              ✓ Verified
-            </div>
+            ${d.verified ? '<div class="verified">✓ Verified</div>' : ''}
 
           </div>
 
           <div class="doc-price">
 
             <strong>
-              ₹${d.price}
+              ₹${Number(d.consultation_fee) || 0}
             </strong>
 
             <br>
@@ -333,7 +326,7 @@
 
     function openBook(id) {
       selectedDoctor =
-        doctors.find(d => d.id === id);
+        window.doctors?.find(d => d.id === id);
 
       if (!selectedDoctor) return;
 
@@ -344,7 +337,7 @@
         selectedDoctor.specialization;
 
       document.getElementById('d-info').textContent =
-        `${selectedDoctor.experience} years experience · ${selectedDoctor.languages.join(', ')} · ₹${selectedDoctor.price}`;
+        `${Number(selectedDoctor.experience_years) || 0} years experience · ${(selectedDoctor.languages || []).join(', ')} · ₹${Number(selectedDoctor.consultation_fee) || 0}`;
 
       document.getElementById('dlg').showModal();
 
@@ -354,12 +347,7 @@
     async function bookNow() {
       if (!selectedDoctor) return;
 
-      const {
-        data,
-        error
-      } = await sb.auth.getSession();
-
-      if (error || !data.session) {
+      if (!bookingUser) {
         document.getElementById('dlg').close();
 
         toast('Please login to book an appointment');
@@ -371,16 +359,16 @@
         return;
       }
 
-      bookingUser = data.session.user;
-
       const time =
         document.getElementById('d-time').value;
 
       const mode =
         document.getElementById('d-mode').value;
 
-      const date =
-        new Date().toISOString().split('T')[0];
+      const now = new Date();
+      const date = new Date(
+        now.getTime() - now.getTimezoneOffset() * 60000
+      ).toISOString().slice(0, 10);
 
       const { error: bookingError } =
         await sb
@@ -390,8 +378,8 @@
             doctor_id: selectedDoctor.id,
             appointment_date: date,
             appointment_time: time + ':00',
-            status: 'booked',
-            notes: 'Consultation mode: ' + mode
+            status: 'pending',
+            mode
           });
 
       if (bookingError) {
