@@ -1,0 +1,1876 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Insights - CareX</title>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    a,
+    a:hover,
+    a:focus,
+    a:active {
+      text-decoration: none !important;
+    }
+
+    button {
+      text-decoration: none !important;
+      font-family: inherit;
+    }
+
+    .wrap {
+      width: calc(100% - 32px) !important;
+      max-width: 1280px !important;
+      margin: auto !important;
+      padding: 28px 0 45px !important;
+    }
+
+    /* HEADER */
+
+    header {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 24px;
+      padding-bottom: 30px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+    }
+
+    .brand-name {
+      font-family: "Poppins", sans-serif;
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -.07em;
+      line-height: 1;
+      color: var(--plum);
+      white-space: nowrap;
+    }
+
+    .brand-x {
+      color: var(--rose);
+    }
+
+    /* TOP NAV */
+
+    .desktop-nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+      padding: 5px;
+      justify-self: center;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: var(--card);
+      box-shadow: 0 8px 24px rgba(115,67,86,.07);
+    }
+
+    .desktop-nav a {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 13px;
+      border-radius: 11px;
+      color: var(--mute);
+      font-size: .78rem;
+      font-weight: 700;
+      white-space: nowrap;
+      transition: .2s ease;
+    }
+
+    .desktop-nav a:hover,
+    .desktop-nav a.active {
+      color: var(--rose);
+      background: var(--rose2);
+      transform: translateY(-1px);
+    }
+
+    /* CONTROLS */
+
+    .top-controls {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .ctrl-btn {
+      min-height: 40px;
+      padding: 8px 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--card);
+      color: var(--ink);
+      font-size: .78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .ctrl-btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--rose);
+      box-shadow: 0 8px 20px rgba(115,67,86,.12);
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--rose2);
+      color: var(--rose);
+      border: 1px solid var(--line);
+    }
+
+    /* INTRO */
+
+    .page-intro {
+      margin: 5px 0 28px;
+    }
+
+    .page-intro h1 {
+      margin: 0;
+      color: var(--plum);
+      font-family: "Poppins", sans-serif;
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
+      line-height: 1.1;
+      letter-spacing: -.05em;
+    }
+
+    .page-intro p {
+      max-width: 650px;
+      margin: 9px 0 0;
+      color: var(--mute);
+      font-family: "Noto Sans Devanagari", "DM Sans", sans-serif;
+      font-size: .96rem;
+      line-height: 1.7;
+    }
+
+    /* MAIN */
+
+    .insight-grid {
+      display: grid;
+      grid-template-columns: .9fr 1.35fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .premium-card {
+      position: relative;
+      overflow: hidden;
+      padding: 27px;
+      border: 1px solid var(--line);
+      border-radius: 26px !important;
+      background: var(--card);
+      box-shadow: 0 18px 45px rgba(115,67,86,.08);
+    }
+
+    .premium-card::after {
+      content: "";
+      position: absolute;
+      width: 170px;
+      height: 170px;
+      right: -85px;
+      bottom: -85px;
+      border-radius: 50%;
+      background: var(--rose2);
+      opacity: .35;
+      pointer-events: none;
+    }
+
+    .premium-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .tracking-history {
+      margin-top: 22px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .tracking-history-list {
+      display: grid;
+      gap: 9px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .tracking-history-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: var(--card);
+    }
+
+    .tracking-history-item strong,
+    .tracking-history-item small {
+      display: block;
+      overflow-wrap: anywhere;
+    }
+
+    .tracking-history-item small {
+      margin-top: 4px;
+      color: var(--mute);
+      font-size: .74rem;
+      line-height: 1.5;
+    }
+
+    .tracking-history-empty {
+      margin: 0;
+      color: var(--mute);
+      font-size: .8rem;
+    }
+
+    .section-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .section-top h2 {
+      margin: 0;
+      color: var(--plum);
+      font-family: "Poppins", sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+
+    .badge {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--sage2);
+      color: var(--sage);
+      font-size: .7rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    /* STATS */
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .stat {
+      min-width: 0;
+      padding: 19px 10px;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: var(--bg);
+      transition: .2s ease;
+    }
+
+    .stat:hover {
+      transform: translateY(-2px);
+      border-color: var(--rose3);
+    }
+
+    .stat b {
+      display: block;
+      color: var(--rose);
+      font-family: "Poppins", sans-serif;
+      font-size: 1.7rem;
+    }
+
+    .stat-label {
+      display: block;
+      margin-top: 3px;
+      color: var(--mute);
+      font-size: .72rem;
+      font-weight: 700;
+    }
+
+    .stat small {
+      display: block;
+      margin-top: 4px;
+      color: var(--mute);
+      font-size: .65rem;
+    }
+
+    .pattern-note {
+      display: flex;
+      gap: 9px;
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 14px;
+      background: var(--sage2);
+      color: var(--ink);
+      font-size: .8rem;
+      line-height: 1.5;
+    }
+
+    /* CHART */
+
+    .chart-wrap {
+      width: 100%;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .chart {
+      min-width: 500px;
+      min-height: 265px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-evenly;
+      gap: 20px;
+      padding: 28px 20px 48px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .bar-box {
+      height: 205px;
+      min-width: 70px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .bar-value {
+      margin-bottom: 7px;
+      color: var(--plum);
+      font-size: .78rem;
+      font-weight: 800;
+    }
+
+    .bar {
+      width: 54px;
+      min-height: 25px;
+      border-radius: 12px 12px 6px 6px;
+      background: linear-gradient(
+        to top,
+        var(--rose),
+        var(--rose3)
+      );
+      box-shadow: 0 8px 20px rgba(201,120,165,.16);
+      transition: .25s ease;
+    }
+
+    .bar-box:hover .bar,
+    .bar-box.selected .bar {
+      transform: translateY(-5px);
+      box-shadow: 0 14px 28px rgba(201,120,165,.28);
+    }
+
+    .bar-month {
+      margin-top: 9px;
+      color: var(--mute);
+      font-size: .68rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .bar-hint {
+      margin-top: 3px;
+      color: var(--rose);
+      font-size: .57rem;
+      opacity: 0;
+      transition: .2s ease;
+    }
+
+    .bar-box:hover .bar-hint,
+    .bar-box.selected .bar-hint {
+      opacity: 1;
+    }
+
+    .empty-chart {
+      width: 100%;
+      align-self: center;
+      text-align: center;
+      color: var(--mute);
+      font-size: .85rem;
+      line-height: 1.6;
+    }
+
+    /* DETAIL */
+
+    .month-detail {
+      margin-top: 18px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--bg);
+      animation: detailIn .25s ease;
+    }
+
+    @keyframes detailIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .detail-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .detail-title h3 {
+      margin: 0;
+      color: var(--plum);
+      font-family: "Poppins", sans-serif;
+      font-size: 1rem;
+    }
+
+    .detail-close {
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: var(--card);
+      color: var(--mute);
+      cursor: pointer;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+    }
+
+    .detail-item {
+      padding: 11px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: var(--card);
+    }
+
+    .detail-item span {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--mute);
+      font-size: .65rem;
+    }
+
+    .detail-item b {
+      color: var(--ink);
+      font-size: .78rem;
+    }
+
+    .symptom-area {
+      margin-top: 14px;
+    }
+
+    .symptom-area h4 {
+      margin: 0 0 8px;
+      color: var(--plum);
+      font-size: .8rem;
+    }
+
+    .symptom-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .symptom-pill {
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: var(--rose2);
+      color: var(--rose);
+      font-size: .68rem;
+      font-weight: 700;
+    }
+
+    .no-symptoms {
+      color: var(--mute);
+      font-size: .75rem;
+    }
+
+    /* LEARN */
+
+    .learn-card {
+      margin-top: 22px;
+    }
+
+    .learn-item {
+      border-top: 1px solid var(--line);
+    }
+
+    .learn-item summary {
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 2px;
+      cursor: pointer;
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .learn-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .learn-item summary::after {
+      content: "+";
+      color: var(--rose);
+      font-size: 1.2rem;
+    }
+
+    .learn-item[open] summary::after {
+      content: "−";
+    }
+
+    .learn-answer {
+      padding: 0 2px 16px;
+      color: var(--mute);
+      font-size: .83rem;
+      line-height: 1.65;
+    }
+
+    /* MOBILE NAV */
+
+    .bottom-nav {
+      display: none !important;
+    }
+
+    /* TABLET */
+
+    @media (max-width: 1050px) and (min-width: 701px) {
+
+      header {
+        grid-template-columns: auto 1fr;
+      }
+
+      .desktop-nav {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        width: 100%;
+      }
+
+      .desktop-nav a {
+        flex: 1;
+        justify-content: center;
+      }
+
+      .top-controls {
+        justify-self: end;
+      }
+
+      .insight-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 700px) {
+
+      .wrap {
+        width: calc(100% - 24px) !important;
+        padding: 15px 0 95px !important;
+      }
+
+      header {
+        display: flex;
+        gap: 9px;
+        padding-bottom: 23px;
+      }
+
+      .brand-logo {
+        width: 40px;
+        height: 40px;
+      }
+
+      .brand-name {
+        font-size: 1.75rem;
+      }
+
+      .desktop-nav {
+        display: none !important;
+      }
+
+      .top-controls {
+        margin-left: auto;
+        gap: 5px;
+      }
+
+      .ctrl-btn {
+        min-height: 36px;
+        padding: 6px 9px;
+        font-size: .68rem;
+      }
+
+      .avatar {
+        width: 36px;
+        height: 36px;
+      }
+
+      .page-intro {
+        margin: 3px 0 19px;
+      }
+
+      .page-intro h1 {
+        font-size: 2.25rem;
+      }
+
+      .page-intro p {
+        font-size: .84rem;
+      }
+
+      .insight-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .premium-card {
+        width: 100%;
+        padding: 19px;
+        border-radius: 22px !important;
+      }
+
+      .section-top h2 {
+        font-size: 1rem;
+      }
+
+      .stats {
+        gap: 7px;
+      }
+
+      .stat {
+        padding: 15px 6px;
+      }
+
+      .stat b {
+        font-size: 1.4rem;
+      }
+
+      .stat-label {
+        font-size: .65rem;
+      }
+
+      .chart {
+        min-width: 500px;
+      }
+
+      .detail-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .learn-card {
+        margin-top: 14px;
+      }
+
+      .bottom-nav {
+        position: fixed !important;
+        display: grid !important;
+        left: 10px !important;
+        right: 10px !important;
+        bottom: 10px !important;
+        width: auto !important;
+        margin: 0 !important;
+        z-index: 1000;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 3px;
+        padding: 7px;
+        border-radius: 19px;
+        border: 1px solid var(--line);
+        background: var(--card);
+        box-shadow: 0 15px 35px rgba(115,67,86,.15);
+      }
+
+      .nav-item {
+        min-width: 0;
+        padding: 7px 2px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        border-radius: 14px;
+        color: var(--mute);
+      }
+
+      .nav-item:hover,
+      .nav-item.active {
+        color: var(--rose);
+        background: var(--rose2);
+      }
+
+      .nav-item span:first-child {
+        font-size: 1.05rem;
+        line-height: 1;
+      }
+
+      .nav-item span:last-child {
+        font-size: .61rem;
+      }
+    }
+
+    @media (max-width: 370px) {
+
+      .brand-logo {
+        width: 36px;
+        height: 36px;
+      }
+
+      .brand-name {
+        font-size: 1.55rem;
+      }
+
+      .ctrl-btn {
+        padding: 5px 7px;
+        font-size: .62rem;
+      }
+
+      .page-intro h1 {
+        font-size: 2rem;
+      }
+
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* LARGE DESKTOP */
+
+    @media (min-width: 1400px) {
+
+      .wrap {
+        max-width: 1380px !important;
+        padding-top: 38px !important;
+      }
+
+      .brand-logo {
+        width: 60px;
+        height: 60px;
+      }
+
+      .brand-name {
+        font-size: 2.6rem;
+      }
+
+      .page-intro h1 {
+        font-size: 4rem;
+      }
+
+      .premium-card {
+        padding: 32px;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="css/app-navigation.css">
+</head>
+
+<body>
+
+  <div class="wrap">
+
+    <header class="app-topbar">
+
+      <div class="brand app-brand">
+        <img
+          src="assets/images/20261003_115356.png"
+          class="brand-logo"
+          alt="CareX logo"
+          onerror="this.style.display='none'"
+        >
+
+        <div class="brand-name">
+          Care<span class="brand-x">X</span>
+        </div>
+      </div>
+
+      <nav class="desktop-nav app-desktop-nav" aria-label="Main navigation">
+
+        <a href="home.html">
+          <span>🏠</span>
+          <span data-i18n="home">Home</span>
+        </a>
+
+        <a href="track.html">
+          <span>✏️</span>
+          <span data-i18n="track">Track</span>
+        </a>
+
+        <a href="insights.html" class="active">
+          <span>📈</span>
+          <span data-i18n="insights">Insights</span>
+        </a>
+
+        <a href="assistant.html">
+          <span>💬</span>
+          <span data-i18n="assistant">Ask</span>
+        </a>
+
+        <a href="profile.html">
+          <span>👤</span>
+          <span data-i18n="profile">Profile</span>
+        </a>
+
+      </nav>
+
+      <div class="top-controls app-controls">
+
+        <button
+          type="button"
+          class="ctrl-btn app-control"
+          onclick="setLang(getLang()==='en'?'hi':'en')"
+        >
+          🌐 <span id="lang-label">HI</span>
+        </button>
+
+        <button
+          type="button"
+          class="ctrl-btn app-control"
+          onclick="toggleTheme()"
+        >
+          ☀️ / 🌙
+        </button>
+
+        <a
+          href="profile.html"
+          class="avatar"
+          aria-label="Profile"
+        >
+          👤
+        </a>
+
+      </div>
+
+    </header>
+
+    <section class="page-intro">
+
+      <h1 data-i18n="insights">
+        Insights
+      </h1>
+
+      <p id="insight-intro">
+        Understand your cycle patterns.
+      </p>
+
+    </section>
+
+    <main class="insight-grid">
+
+      <section class="premium-card">
+
+        <div class="section-top">
+
+          <h2 data-i18n="your_patterns">
+            Your Patterns
+          </h2>
+
+          <span
+            class="badge"
+            id="pattern-badge"
+          >
+            Based on logs
+          </span>
+
+        </div>
+
+        <div class="stats">
+
+          <div class="stat">
+            <b id="avg-cycle">—</b>
+
+            <span
+              class="stat-label"
+              data-i18n="avg_cycle"
+            >
+              Avg Cycle
+            </span>
+
+            <small id="cycle-unit">
+              days
+            </small>
+          </div>
+
+          <div class="stat">
+            <b id="avg-period">—</b>
+
+            <span
+              class="stat-label"
+              data-i18n="avg_period"
+            >
+              Avg Period
+            </span>
+
+            <small id="period-unit">
+              days
+            </small>
+          </div>
+
+          <div class="stat">
+            <b id="variation">—</b>
+
+            <span
+              class="stat-label"
+              data-i18n="variation"
+            >
+              Variation
+            </span>
+
+            <small id="variation-unit">
+              days
+            </small>
+          </div>
+
+        </div>
+
+        <div class="pattern-note">
+          <span>✓</span>
+
+          <span id="pattern-note">
+            Your insights are based on the cycle data you have logged.
+          </span>
+        </div>
+
+      </section>
+
+      <section class="premium-card">
+
+        <div class="section-top">
+
+          <h2 data-i18n="cycle_history">
+            Cycle History
+          </h2>
+
+          <span
+            class="badge"
+            id="history-label"
+          >
+            Click a month
+          </span>
+
+        </div>
+
+        <div class="chart-wrap">
+
+          <div
+            class="chart"
+            id="cycle-chart"
+          ></div>
+
+        </div>
+
+        <div
+          id="month-detail"
+          class="month-detail"
+          style="display:none;"
+        ></div>
+
+      </section>
+
+    </main>
+
+    <section class="insight-grid tracking-history" aria-label="Tracking history">
+      <section class="premium-card" aria-labelledby="period-history-title">
+        <div class="section-top">
+          <h2 id="period-history-title">Previous Periods</h2>
+        </div>
+        <ul id="period-history-list" class="tracking-history-list" aria-live="polite">
+          <li class="tracking-history-empty">Loading period history…</li>
+        </ul>
+      </section>
+
+      <section class="premium-card" aria-labelledby="daily-history-title">
+        <div class="section-top">
+          <h2 id="daily-history-title">Previous Daily Logs</h2>
+        </div>
+        <ul id="daily-history-list" class="tracking-history-list" aria-live="polite">
+          <li class="tracking-history-empty">Loading daily history…</li>
+        </ul>
+      </section>
+    </section>
+
+    <section class="premium-card learn-card">
+
+      <div class="section-top">
+
+        <h2 data-i18n="learn">
+          Learn
+        </h2>
+
+        <span class="badge">
+          2 topics
+        </span>
+
+      </div>
+
+      <details class="learn-item">
+
+        <summary data-i18n="fertile_question">
+          What is the fertile window?
+        </summary>
+
+        <p
+          class="learn-answer"
+          data-i18n="fertile_info"
+        >
+          Ovulation usually happens about 14 days before the next period.
+        </p>
+
+      </details>
+
+      <details class="learn-item">
+
+        <summary data-i18n="cramps_question">
+          Why do cramps happen?
+        </summary>
+
+        <p
+          class="learn-answer"
+          data-i18n="cramps_info"
+        >
+          The uterus contracts to shed its lining, causing mild to moderate pain.
+        </p>
+
+      </details>
+
+    </section>
+
+  </div>
+
+  <nav class="bottom-nav app-bottom-nav" aria-label="Main navigation">
+
+    <a href="home.html" class="nav-item">
+      <span>🏠</span>
+      <span data-i18n="home">Home</span>
+    </a>
+
+    <a href="track.html" class="nav-item">
+      <span>✏️</span>
+      <span data-i18n="track">Track</span>
+    </a>
+
+    <a href="insights.html" class="nav-item active">
+      <span>📈</span>
+      <span data-i18n="insights">Insights</span>
+    </a>
+
+    <a href="assistant.html" class="nav-item">
+      <span>💬</span>
+      <span data-i18n="assistant">Ask</span>
+    </a>
+
+    <a href="profile.html" class="nav-item">
+      <span>👤</span>
+      <span data-i18n="profile">Profile</span>
+    </a>
+
+  </nav>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/language.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/common.js"></script>
+
+  <script>
+    let cycles = [];
+    let dailyLogs = [];
+    let symptomLogs = [];
+    let periodHistory = [];
+
+    function average(values) {
+      if (!values.length) return null;
+
+      return Math.round(
+        values.reduce((a, b) => a + b, 0) / values.length
+      );
+    }
+
+    function cycleLengths() {
+      const result = [];
+
+      for (let i = 0; i < cycles.length - 1; i++) {
+        const value = diff(
+          cycles[i + 1].start_date,
+          cycles[i].start_date
+        );
+
+        if (value > 0 && value <= 100) {
+          result.push(value);
+        }
+      }
+
+      return result;
+    }
+
+    function periodLengths() {
+      return cycles
+        .map(cycle => {
+
+          if (cycle.period_length) {
+            return Number(cycle.period_length);
+          }
+
+          if (cycle.start_date && cycle.end_date) {
+            return diff(
+              cycle.start_date,
+              cycle.end_date
+            ) + 1;
+          }
+
+          return null;
+        })
+        .filter(
+          value => value && value > 0 && value <= 30
+        );
+    }
+
+    function monthKey(date) {
+      return date ? date.substring(0, 7) : "";
+    }
+
+    function monthLabel(key) {
+      if (!key) return "";
+
+      const date = new Date(key + "-01");
+
+      return date.toLocaleDateString(
+        getLang() === "hi" ? "hi-IN" : "en-IN",
+        {
+          month: "short",
+          year: "numeric"
+        }
+      );
+    }
+
+    function formatDate(date) {
+      if (!date) return "—";
+
+      return new Date(
+        date + "T00:00:00"
+      ).toLocaleDateString(
+        getLang() === "hi" ? "hi-IN" : "en-IN",
+        {
+          day: "numeric",
+          month: "short",
+          year: "numeric"
+        }
+      );
+    }
+
+    function historyDate(record) {
+      return String(record?.date || record?.log_date || "").slice(0, 10);
+    }
+
+    function renderTrackingHistory() {
+      const lang = getLang();
+      const copy = lang === "hi"
+        ? {
+            period: "पीरियड",
+            ended: "समाप्त",
+            noEnd: "समाप्ति की तारीख दर्ज नहीं",
+            saved: "सेव किया गया",
+            inProgress: "जारी है",
+            days: "दिन",
+            noPeriods: "अभी कोई पीरियड हिस्ट्री नहीं है।",
+            noDaily: "अभी कोई पुराना डेली लॉग नहीं है।",
+            symptoms: "लक्षण",
+            flow: "फ्लो",
+            pain: "दर्द",
+            note: "नोट",
+            noSymptoms: "कोई लक्षण दर्ज नहीं",
+            loadingPeriods: "पीरियड हिस्ट्री लोड हो रही है…",
+            loadingDaily: "डेली हिस्ट्री लोड हो रही है…"
+          }
+        : {
+            period: "Period",
+            ended: "Ended",
+            noEnd: "End date not entered",
+            saved: "Saved",
+            inProgress: "In progress",
+            days: "days",
+            noPeriods: "No period history yet.",
+            noDaily: "No previous daily logs yet.",
+            symptoms: "Symptoms",
+            flow: "Flow",
+            pain: "Pain",
+            note: "Note",
+            noSymptoms: "No symptoms recorded",
+            loadingPeriods: "Loading period history…",
+            loadingDaily: "Loading daily history…"
+          };
+
+      $("#period-history-title").textContent =
+        lang === "hi" ? "पिछले पीरियड" : "Previous Periods";
+      $("#daily-history-title").textContent =
+        lang === "hi" ? "पुराने डेली लॉग" : "Previous Daily Logs";
+
+      const periodList = $("#period-history-list");
+      periodList.replaceChildren();
+      if (!periodHistory.length) {
+        const empty = document.createElement("li");
+        empty.className = "tracking-history-empty";
+        empty.textContent = copy.noPeriods;
+        periodList.append(empty);
+      } else {
+        periodHistory.forEach(cycle => {
+          const item = document.createElement("li");
+          item.className = "tracking-history-item";
+          const details = document.createElement("div");
+          const title = document.createElement("strong");
+          title.textContent =
+            `${copy.period} · ${formatDate(cycle.start_date)}`;
+          const description = document.createElement("small");
+          const duration = cycle.period_length ||
+            (cycle.start_date && cycle.end_date
+              ? diff(cycle.start_date, cycle.end_date) + 1
+              : null);
+          description.textContent = [
+            cycle.end_date
+              ? `${copy.ended}: ${formatDate(cycle.end_date)}`
+              : copy.noEnd,
+            duration ? `${duration} ${copy.days}` : "",
+            cycle.cycle_length ? `${cycle.cycle_length} ${copy.days}` : ""
+          ].filter(Boolean).join(" · ");
+          details.append(title, description);
+
+          const status = document.createElement("span");
+          status.className = "badge";
+          status.textContent = cycle.end_date ? copy.saved : copy.inProgress;
+          item.append(details, status);
+          periodList.append(item);
+        });
+      }
+
+      const byDate = new Map();
+      dailyLogs.forEach(log => {
+        const date = historyDate(log);
+        if (!date || date === todayStr()) return;
+        byDate.set(date, {
+          ...(byDate.get(date) || {}),
+          ...log,
+          date,
+          symptoms: Array.isArray(log.symptoms) ? [...log.symptoms] : []
+        });
+      });
+      symptomLogs.forEach(log => {
+        const date = historyDate(log);
+        if (!date || date === todayStr() || !log.symptom) return;
+        const record = byDate.get(date) || { date, symptoms: [] };
+        if (!record.symptoms.includes(log.symptom)) {
+          record.symptoms.push(log.symptom);
+        }
+        byDate.set(date, record);
+      });
+
+      const dailyList = $("#daily-history-list");
+      dailyList.replaceChildren();
+      const dailyHistory = [...byDate.values()]
+        .sort((a, b) => b.date.localeCompare(a.date));
+      if (!dailyHistory.length) {
+        const empty = document.createElement("li");
+        empty.className = "tracking-history-empty";
+        empty.textContent = copy.noDaily;
+        dailyList.append(empty);
+      } else {
+        dailyHistory.forEach(log => {
+          const item = document.createElement("li");
+          item.className = "tracking-history-item";
+          const details = document.createElement("div");
+          const title = document.createElement("strong");
+          title.textContent = formatDate(log.date);
+          const summary = [];
+          const symptoms = (log.symptoms || []).map(symptomName);
+          if (symptoms.length) {
+            summary.push(`${copy.symptoms}: ${symptoms.join(", ")}`);
+          }
+          if (log.flow && !["none", "no bleeding", "no_bleeding"].includes(
+            String(log.flow).toLowerCase()
+          )) {
+            summary.push(`${copy.flow}: ${t(String(log.flow).toLowerCase())}`);
+          }
+          if (log.pain !== null && log.pain !== undefined && log.pain !== "" &&
+              Number(log.pain) > 0) {
+            summary.push(`${copy.pain}: ${log.pain}`);
+          }
+          if (log.notes) summary.push(`${copy.note}: ${log.notes}`);
+          if (!summary.length) summary.push(copy.noSymptoms);
+
+          const description = document.createElement("small");
+          description.textContent = summary.join(" · ");
+          details.append(title, description);
+          item.append(details);
+          dailyList.append(item);
+        });
+      }
+    }
+
+    function safeText(value) {
+      const div = document.createElement("div");
+      div.textContent = value ?? "";
+      return div.innerHTML;
+    }
+
+    function symptomName(key) {
+      const translatedKey = {
+        mood_changes: "mood",
+        back_pain: "backache",
+        breasts: "tender_breasts"
+      }[key] || key;
+
+      try {
+        if (typeof t === "function") {
+          return t(translatedKey);
+        }
+      } catch (e) {}
+
+      const fallback = {
+        cramps: "Cramps",
+        fatigue: "Fatigue",
+        headache: "Headache",
+        bloating: "Bloating",
+        mood: "Mood changes",
+        back_pain: "Back pain",
+        cravings: "Cravings"
+      };
+
+      return fallback[key] || key;
+    }
+
+    function renderStats() {
+
+      const cycle = cycleLengths();
+      const period = periodLengths();
+
+      const avgCycle = average(cycle);
+      const avgPeriod = average(period);
+
+      const variation =
+        cycle.length >= 2
+          ? Math.max(...cycle) - Math.min(...cycle)
+          : null;
+
+      $("#avg-cycle").textContent =
+        avgCycle === null ? "—" : avgCycle;
+
+      $("#avg-period").textContent =
+        avgPeriod === null ? "—" : avgPeriod;
+
+      $("#variation").textContent =
+        variation === null ? "—" : variation;
+    }
+
+    function getMonthData() {
+
+      return cycles
+        .slice()
+        .reverse()
+        .map(cycle => {
+
+          const key = monthKey(
+            cycle.start_date
+          );
+
+          const symptomSet = new Set();
+
+          dailyLogs
+            .filter(log => monthKey(log.log_date || log.date) === key)
+            .forEach(log => {
+            (log.symptoms || []).forEach(
+              symptom => symptomSet.add(symptom)
+            );
+          });
+
+          symptomLogs
+            .filter(log => monthKey(log.date || log.log_date) === key)
+            .forEach(log => symptomSet.add(log.symptom));
+
+          let cycleLength =
+            cycle.cycle_length
+              ? Number(cycle.cycle_length)
+              : null;
+
+          if (!cycleLength) {
+
+            const index = cycles.findIndex(
+              item => item.id === cycle.id
+            );
+
+            if (
+              index >= 0 &&
+              index < cycles.length - 1
+            ) {
+              cycleLength = diff(
+                cycles[index + 1].start_date,
+                cycle.start_date
+              );
+            }
+          }
+
+          return {
+            ...cycle,
+            month: key,
+            cycleLength,
+            symptoms: Array.from(symptomSet)
+          };
+        });
+    }
+
+    function showMonthDetail(item, activeBar) {
+
+      document
+        .querySelectorAll(".bar-box")
+        .forEach(bar => {
+          bar.classList.remove("selected");
+        });
+
+      activeBar.classList.add("selected");
+
+      const lang = getLang();
+
+      const symptoms = item.symptoms || [];
+
+      let symptomHTML = "";
+
+      if (symptoms.length) {
+
+        symptomHTML = `
+          <div class="symptom-list">
+            ${symptoms.map(key => `
+              <span class="symptom-pill">
+                ${safeText(symptomName(key))}
+              </span>
+            `).join("")}
+          </div>
+        `;
+
+      } else {
+
+        symptomHTML = `
+          <div class="no-symptoms">
+            ${
+              lang === "hi"
+                ? "इस महीने कोई लक्षण दर्ज नहीं किया गया।"
+                : "No symptoms recorded."
+            }
+          </div>
+        `;
+      }
+
+      const detail = $("#month-detail");
+
+      detail.style.display = "block";
+
+      detail.innerHTML = `
+        <div class="detail-title">
+
+          <h3>
+            ${
+              lang === "hi"
+                ? "महीने की जानकारी"
+                : "Month details"
+            }
+
+            · ${safeText(monthLabel(item.month))}
+          </h3>
+
+          <button
+            type="button"
+            class="detail-close"
+            onclick="closeMonthDetail()"
+            aria-label="Close"
+          >
+            ×
+          </button>
+
+        </div>
+
+        <div class="detail-grid">
+
+          <div class="detail-item">
+
+            <span>
+              ${
+                lang === "hi"
+                  ? "पीरियड शुरू"
+                  : "Period started"
+              }
+            </span>
+
+            <b>
+              ${safeText(formatDate(item.start_date))}
+            </b>
+
+          </div>
+
+          <div class="detail-item">
+
+            <span>
+              ${
+                lang === "hi"
+                  ? "पीरियड खत्म"
+                  : "Period ended"
+              }
+            </span>
+
+            <b>
+              ${safeText(formatDate(item.end_date))}
+            </b>
+
+          </div>
+
+          <div class="detail-item">
+
+            <span>
+              ${
+                lang === "hi"
+                  ? "साइकिल लंबाई"
+                  : "Cycle length"
+              }
+            </span>
+
+            <b>
+              ${
+                item.cycleLength
+                  ? item.cycleLength +
+                    (
+                      lang === "hi"
+                        ? " दिन"
+                        : " days"
+                    )
+                  : "—"
+              }
+            </b>
+
+          </div>
+
+        </div>
+
+        <div class="symptom-area">
+
+          <h4>
+            ${
+              lang === "hi"
+                ? "इस महीने दर्ज लक्षण"
+                : "Symptoms recorded this month"
+            }
+          </h4>
+
+          ${symptomHTML}
+
+        </div>
+      `;
+
+      detail.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest"
+      });
+    }
+
+    function closeMonthDetail() {
+
+      const detail = $("#month-detail");
+
+      if (detail) {
+        detail.style.display = "none";
+      }
+
+      document
+        .querySelectorAll(".bar-box")
+        .forEach(bar => {
+          bar.classList.remove("selected");
+        });
+    }
+
+    function renderChart() {
+
+      const chart = $("#cycle-chart");
+
+      if (!chart) return;
+
+      chart.innerHTML = "";
+
+      const monthData = getMonthData();
+
+      if (!monthData.length) {
+
+        chart.innerHTML = `
+          <div class="empty-chart">
+            ${
+              getLang() === "hi"
+                ? "अभी कोई cycle data उपलब्ध नहीं है।"
+                : "No cycle data available yet."
+            }
+          </div>
+        `;
+
+        return;
+      }
+
+      const validValues = monthData
+        .map(item => Number(item.cycleLength))
+        .filter(value => value > 0);
+
+      if (!validValues.length) {
+
+        chart.innerHTML = `
+          <div class="empty-chart">
+            ${
+              getLang() === "hi"
+                ? "साइकिल लंबाई दिखाने के लिए और data चाहिए।"
+                : "More cycle data is needed to show the chart."
+            }
+          </div>
+        `;
+
+        return;
+      }
+
+      const max = Math.max(
+        ...validValues,
+        30
+      );
+
+      monthData.forEach(item => {
+
+        const box =
+          document.createElement("div");
+
+        box.className = "bar-box";
+
+        const value =
+          Number(item.cycleLength) || 0;
+
+        const height =
+          Math.max(
+            28,
+            (value / max) * 155
+          );
+
+        box.innerHTML = `
+          <div class="bar-value">
+            ${value || "—"}
+          </div>
+
+          <div
+            class="bar"
+            style="height:${height}px"
+          ></div>
+
+          <div class="bar-month">
+            ${safeText(monthLabel(item.month))}
+          </div>
+
+          <div class="bar-hint">
+            ${
+              getLang() === "hi"
+                ? "देखें"
+                : "View"
+            }
+          </div>
+        `;
+
+        box.addEventListener(
+          "click",
+          function() {
+            showMonthDetail(item, box);
+          }
+        );
+
+        chart.appendChild(box);
+      });
+    }
+
+    function updateLanguage() {
+
+      const lang = getLang();
+
+      $("#lang-label").textContent =
+        lang === "hi" ? "EN" : "HI";
+
+      $("#insight-intro").textContent =
+        lang === "hi"
+          ? "अपने मासिक चक्र के पैटर्न समझें।"
+          : "Understand your cycle patterns.";
+
+      $("#pattern-badge").textContent =
+        lang === "hi"
+          ? "लॉग के आधार पर"
+          : "Based on logs";
+
+      $("#history-label").textContent =
+        lang === "hi"
+          ? "महीने पर क्लिक करें"
+          : "Click a month";
+
+      $("#cycle-unit").textContent =
+        lang === "hi"
+          ? "दिन"
+          : "days";
+
+      $("#period-unit").textContent =
+        lang === "hi"
+          ? "दिन"
+          : "days";
+
+      $("#variation-unit").textContent =
+        lang === "hi"
+          ? "दिन"
+          : "days";
+
+      $("#pattern-note").textContent =
+        lang === "hi"
+          ? "आपके Insights आपके द्वारा दर्ज किए गए cycle data पर आधारित हैं।"
+          : "Your insights are based on the cycle data you have logged.";
+
+      applyTranslations();
+
+      renderTrackingHistory();
+      renderStats();
+      renderChart();
+    }
+
+    async function loadInsights() {
+
+      const user =
+        await requireAuth();
+
+      if (!user) return;
+
+      const cycleResult = await sb
+        .from("cycle_logs")
+        .select(
+          "id,start_date,end_date,cycle_length,period_length"
+        )
+        .eq("user_id", user.id)
+        .order(
+          "start_date",
+          {
+            ascending: false
+          }
+        )
+        .limit(6);
+
+      if (cycleResult.error) {
+
+        toast(
+          getLang() === "hi"
+            ? "Insights load नहीं हो सके।"
+            : "Could not load insights."
+        );
+
+        return;
+      }
+
+      cycles =
+        cycleResult.data || [];
+
+      const [logResult, symptomResult, periodHistoryResult] = await Promise.all([
+        sb
+          .from("daily_logs")
+          .select("*")
+          .eq("user_id", user.id),
+        sb
+          .from("symptom_logs")
+          .select("*")
+          .eq("user_id", user.id),
+        sb
+          .from("cycle_logs")
+          .select("id,start_date,end_date,cycle_length,period_length")
+          .eq("user_id", user.id)
+          .order("start_date", { ascending: false })
+      ]);
+
+      if (logResult.error || symptomResult.error || periodHistoryResult.error) {
+        console.error(
+          "Could not load tracking history:",
+          logResult.error || symptomResult.error || periodHistoryResult.error
+        );
+        toast(
+          getLang() === "hi"
+            ? "ट्रैकिंग हिस्ट्री लोड नहीं हो सकी।"
+            : "Could not load tracking history."
+        );
+        return;
+      }
+
+      dailyLogs = logResult.data || [];
+      symptomLogs = symptomResult.data || [];
+      periodHistory = periodHistoryResult.data || [];
+
+      renderTrackingHistory();
+      renderStats();
+      renderChart();
+    }
+
+    async function initInsights() {
+
+      const user =
+        await requireAuth();
+
+      if (!user) return;
+
+      await loadInsights();
+
+      updateLanguage();
+
+      document.addEventListener(
+        "carexLanguageChanged",
+        updateLanguage
+      );
+    }
+
+    initInsights();
+  </script>
+
+</body>
+</html>

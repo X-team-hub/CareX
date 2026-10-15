@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>CareX</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:#FBF7FC;
+      --card:#fff;
+      --ink:#352B3D;
+      --mute:#81758A;
+      --line:#E7DDEB;
+      --rose:#C978A5;
+      --rose2:#F5E5F0;
+      --rose3:#F8C8D5;
+      --plum:#674B70;
+      --plum2:#7B526B;
+      --shadow:0 6px 18px rgba(115,67,86,.07);
+      --font-head:'Fraunces',Georgia,serif;
+      --font-body:'DM Sans',system-ui,sans-serif;
+    }
+
+    [data-theme="dark"] {
+      --bg:#170F14;
+      --card:#291B22;
+      --ink:#F8EAF0;
+      --mute:#BCA7B1;
+      --line:#3D2932;
+      --rose:#ED8CA7;
+      --rose2:#43252F;
+      --rose3:#633440;
+      --plum:#E2BFD0;
+      --plum2:#C99EB5;
+      --shadow:0 7px 20px rgba(0,0,0,.22);
+    }
+
+    * {
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    html {
+      scroll-behavior:smooth;
+      background:var(--bg);
+    }
+
+    body {
+      min-height:100vh;
+      background:
+        radial-gradient(circle at 0 0,rgba(246,180,199,.16),transparent 28%),
+        radial-gradient(circle at 100% 10%,rgba(215,169,195,.10),transparent 25%),
+        var(--bg);
+      color:var(--ink);
+      font:16px/1.5 var(--font-body);
+    }
+
+    button,
+    a {
+      font:inherit;
+    }
+
+    button {
+      cursor:pointer;
+    }
+
+    /* NAVBAR */
+
+    .home-nav {
+      position:sticky;
+      top:0;
+      z-index:20;
+      min-height:76px;
+      padding:10px clamp(18px,7vw,100px);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      background:var(--card);
+      border-bottom:1px solid var(--line);
+    }
+
+    .home-brand {
+      display:flex;
+      align-items:center;
+      gap:9px;
+      color:var(--plum);
+      text-decoration:none;
+      font-family:var(--font-head);
+      font-size:30px;
+      font-weight:700;
+    }
+
+    .home-brand:hover {
+      text-decoration:none;
+    }
+
+    .home-logo {
+      width:40px;
+      height:40px;
+      object-fit:contain;
+    }
+
+    .home-brand-text span {
+      color:var(--rose);
+    }
+
+    .home-actions {
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .home-theme,
+    .home-lang {
+      width:auto;
+      border:1px solid var(--line);
+      background:var(--bg);
+      color:var(--ink);
+      box-shadow:none;
+    }
+
+    .home-theme {
+      width:42px;
+      height:42px;
+      padding:0;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+    }
+
+    .home-lang {
+      padding:9px 16px;
+      border-radius:99px;
+    }
+
+    .home-login,
+    .home-signup {
+      text-decoration:none !important;
+    }
+
+    .home-login {
+      width:auto;
+      padding:10px 16px;
+      color:var(--plum);
+      background:transparent;
+    }
+
+    .home-signup {
+      width:auto;
+      min-width:100px;
+      padding:11px 20px;
+      border-radius:99px;
+      background:linear-gradient(135deg,var(--rose),var(--plum2));
+      color:#fff;
+      text-align:center;
+    }
+
+    .home-login:hover,
+    .home-signup:hover {
+      text-decoration:none !important;
+    }
+
+    .home-page :is(a,button):focus-visible {
+      outline:3px solid var(--rose);
+      outline-offset:3px;
+    }
+
+    /* HERO */
+
+    .home-hero {
+      min-height:590px;
+      padding:65px clamp(20px,7vw,100px);
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(380px,.9fr);
+      align-items:center;
+      gap:clamp(35px,6vw,80px);
+      background:
+        radial-gradient(circle at 100% 0%,var(--rose2),transparent 35%),
+        linear-gradient(120deg,var(--bg),var(--rose2));
+    }
+
+    .hero-content {
+      max-width:650px;
+    }
+
+    .hero-tag {
+      display:inline-block;
+      margin-bottom:20px;
+      padding:7px 15px;
+      border-radius:99px;
+      background:var(--card);
+      color:var(--rose);
+      border:1px solid var(--line);
+      font-size:.78rem;
+      font-weight:700;
+    }
+
+    .home-hero h1 {
+      font-family:var(--font-head);
+      font-size:clamp(48px,6vw,78px);
+      line-height:1.02;
+      letter-spacing:-2px;
+      color:var(--ink);
+    }
+
+    .home-hero h1 em {
+      color:var(--rose);
+      font-style:italic;
+    }
+
+    .hero-description {
+      max-width:620px;
+      margin:24px 0 30px;
+      color:var(--mute);
+      font-size:1.05rem;
+      line-height:1.75;
+    }
+
+    .hero-buttons {
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+
+    .hero-primary,
+    .hero-secondary {
+      width:auto;
+      min-height:48px;
+      padding:12px 24px;
+      border-radius:99px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      text-decoration:none !important;
+      font-weight:700;
+      transition:.2s ease;
+    }
+
+    .hero-primary {
+      background:linear-gradient(135deg,var(--rose),var(--plum2));
+      color:#fff;
+    }
+
+    .hero-secondary {
+      background:var(--card);
+      color:var(--plum);
+      border:1px solid var(--line);
+    }
+
+    .hero-primary:hover,
+    .hero-secondary:hover {
+      transform:translateY(-2px);
+      text-decoration:none;
+    }
+
+    /* IMAGE */
+
+    .hero-image {
+      width:100%;
+      min-height:450px;
+      border-radius:30px;
+      background:
+        linear-gradient(rgba(103,75,112,.08),rgba(103,75,112,.08)),
+        url("assets/images/carex-hero.jpg") center/cover no-repeat;
+      border:1px solid var(--line);
+      box-shadow:0 18px 45px rgba(115,67,86,.13);
+    }
+
+    /* FEATURES */
+
+    .home-features {
+      padding:80px clamp(20px,7vw,100px);
+      background:var(--card);
+    }
+
+    .home-heading {
+      max-width:700px;
+      margin:0 auto 45px;
+      text-align:center;
+    }
+
+    .home-heading h2 {
+      margin-bottom:10px;
+      font-family:var(--font-head);
+      font-size:clamp(34px,4vw,50px);
+    }
+
+    .home-heading p {
+      color:var(--mute);
+    }
+
+    .home-feature-grid {
+      max-width:1120px;
+      margin:auto;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+    }
+
+    .home-feature {
+      padding:26px;
+      border:1px solid var(--line);
+      border-radius:20px;
+      background:var(--card);
+      box-shadow:var(--shadow);
+      transition:.22s ease;
+    }
+
+    .home-feature:hover {
+      transform:translateY(-5px);
+      box-shadow:0 12px 28px rgba(115,67,86,.11);
+    }
+
+    .feature-icon {
+      width:45px;
+      height:45px;
+      margin-bottom:17px;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+      background:var(--rose2);
+      color:var(--rose);
+      font-size:20px;
+    }
+
+    .home-feature h3 {
+      margin-bottom:8px;
+      font-family:var(--font-head);
+      color:var(--plum);
+    }
+
+    .home-feature p {
+      color:var(--mute);
+      font-size:.9rem;
+      line-height:1.65;
+    }
+
+    /* CTA */
+
+    .home-cta {
+      max-width:1120px;
+      margin:65px auto;
+      padding:55px 25px;
+      border-radius:28px;
+      text-align:center;
+      background:linear-gradient(135deg,var(--plum),var(--rose));
+      color:#fff;
+      box-shadow:var(--shadow);
+    }
+
+    .home-cta h2 {
+      margin-bottom:10px;
+      font-family:var(--font-head);
+      color:#fff;
+      font-size:clamp(32px,4vw,48px);
+    }
+
+    .home-cta p {
+      max-width:600px;
+      margin:0 auto 23px;
+      opacity:.9;
+    }
+
+    .cta-button {
+      width:auto;
+      display:inline-flex;
+      padding:12px 25px;
+      border-radius:99px;
+      background:#fff;
+      color:var(--plum);
+      text-decoration:none !important;
+      font-weight:700;
+    }
+
+    /* FOOTER */
+
+    .home-footer {
+      padding:45px clamp(20px,7vw,100px) 25px;
+      background:var(--rose2);
+      border-top:1px solid var(--line);
+    }
+
+    .footer-content {
+      max-width:1120px;
+      margin:auto;
+      display:grid;
+      grid-template-columns:1.4fr 1fr 1fr;
+      gap:40px;
+    }
+
+    .footer-logo {
+      width:40px;
+      height:40px;
+      object-fit:contain;
+      margin-bottom:10px;
+    }
+
+    .footer-content p {
+      max-width:380px;
+      color:var(--mute);
+      font-size:.88rem;
+      line-height:1.65;
+    }
+
+    .footer-column strong {
+      display:block;
+      margin-bottom:12px;
+      color:var(--plum);
+    }
+
+    .footer-column a {
+      display:block;
+      margin-bottom:8px;
+      color:var(--mute);
+      text-decoration:none !important;
+      font-size:.88rem;
+    }
+
+    .footer-bottom {
+      max-width:1120px;
+      margin:30px auto 0;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      text-align:center;
+      color:var(--mute);
+      font-size:.8rem;
+    }
+
+    /* HINDI */
+
+    .home-page.hi {
+      font-family:"Noto Sans Devanagari",sans-serif;
+    }
+
+    .home-page.hi h1,
+    .home-page.hi h2,
+    .home-page.hi h3,
+    .home-page.hi .home-brand {
+      font-family:"Noto Sans Devanagari",sans-serif;
+    }
+
+    /* TABLET */
+
+    @media (max-width:900px) {
+      .home-hero {
+        grid-template-columns:1fr;
+        text-align:center;
+      }
+
+      .hero-content {
+        max-width:700px;
+        margin:auto;
+      }
+
+      .hero-buttons {
+        justify-content:center;
+      }
+
+      .hero-image {
+        max-width:650px;
+        margin:auto;
+      }
+
+      .home-feature-grid {
+        grid-template-columns:repeat(2,1fr);
+      }
+
+      .footer-content {
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+    /* MOBILE */
+
+    @media (max-width:600px) {
+      .home-nav {
+        min-height:68px;
+        padding:8px 14px;
+      }
+
+      .home-brand {
+        font-size:24px;
+      }
+
+      .home-logo {
+        width:34px;
+        height:34px;
+      }
+
+      .home-actions {
+        gap:5px;
+      }
+
+      .home-theme {
+        width:38px;
+        height:38px;
+      }
+
+      .home-lang {
+        padding:8px 10px;
+        font-size:.75rem;
+      }
+
+      .home-login {
+        display:none;
+      }
+
+      .home-signup {
+        min-width:auto;
+        padding:9px 13px;
+        font-size:.8rem;
+      }
+
+      .home-hero {
+        padding:50px 18px;
+      }
+
+      .home-hero h1 {
+        font-size:46px;
+        letter-spacing:-1px;
+      }
+
+      .hero-description {
+        font-size:.92rem;
+      }
+
+      .hero-image {
+        min-height:clamp(250px,75vw,350px);
+        border-radius:24px;
+      }
+
+      .home-hero h1 {
+        font-size:clamp(36px,11vw,46px);
+      }
+
+      .home-features {
+        padding:65px 18px;
+      }
+
+      .home-feature-grid {
+        grid-template-columns:1fr;
+      }
+
+      .home-cta {
+        margin:45px 18px;
+        padding:45px 20px;
+      }
+
+      .footer-content {
+        grid-template-columns:1fr;
+        gap:25px;
+      }
+    }
+
+    @media (max-width:380px) {
+      .home-nav {
+        gap:8px;
+        padding-inline:10px;
+      }
+
+      .home-brand {
+        gap:6px;
+        font-size:21px;
+      }
+
+      .home-logo {
+        width:30px;
+        height:30px;
+      }
+
+      .home-actions {
+        gap:4px;
+      }
+
+      .home-theme {
+        width:34px;
+        height:34px;
+      }
+
+      .home-lang {
+        padding:7px 8px;
+      }
+
+      .home-signup {
+        padding:8px 10px;
+      }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      html {
+        scroll-behavior:auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        transition-duration:.01ms !important;
+        scroll-behavior:auto !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="home-page" id="homePage">
+
+  <!-- NAVBAR -->
+  <header class="home-nav">
+
+    <a href="index.html" class="home-brand">
+      <img
+        src="assets/images/20261003_115356.png"
+        alt="CareX Logo"
+        class="home-logo">
+
+      <span class="home-brand-text">
+        Care<span>X</span>
+      </span>
+    </a>
+
+    <div class="home-actions">
+
+      <button
+        type="button"
+        class="home-theme"
+        id="homeThemeButton"
+        onclick="toggleHomeTheme()">
+        🌙
+      </button>
+
+      <button
+        type="button"
+        class="home-lang"
+        id="homeLangButton"
+        onclick="toggleHomeLanguage()">
+        हिन्दी
+      </button>
+
+      <a
+        href="login.html"
+        class="home-login"
+        data-en="Login"
+        data-hi="लॉग इन">
+        Login
+      </a>
+
+      <a
+        href="signup.html"
+        class="home-signup"
+        data-en="Sign Up"
+        data-hi="साइन अप">
+        Sign Up
+      </a>
+
+    </div>
+
+  </header>
+
+
+  <!-- HERO -->
+  <section class="home-hero">
+
+    <div class="hero-content">
+
+      <div
+        class="hero-tag"
+        data-en="Menstrual health companion"
+        data-hi="मासिक धर्म स्वास्थ्य साथी">
+        Menstrual health companion
+      </div>
+
+      <h1>
+        <span
+          data-en="Understand your cycle,"
+          data-hi="अपने मासिक चक्र को समझें,">
+          Understand your cycle,
+        </span>
+
+        <br>
+
+        <em
+          data-en="gently."
+          data-hi="आसानी से।">
+          gently.
+        </em>
+      </h1>
+
+      <p
+        class="hero-description"
+        data-en="CareX brings period tracking, health insights, medicine information and helpful AI support together in one calm place."
+        data-hi="CareX मासिक धर्म ट्रैकिंग, स्वास्थ्य जानकारी, दवाओं की जानकारी और उपयोगी AI सहायता को एक शांत और आसान जगह पर लाता है।">
+        CareX brings period tracking, health insights, medicine information
+        and helpful AI support together in one calm place.
+      </p>
+
+      <div class="hero-buttons">
+
+        <a
+          href="signup.html"
+          class="hero-primary"
+          data-en="Create free account"
+          data-hi="निःशुल्क खाता बनाएं">
+          Create free account
+        </a>
+
+        <a
+          href="#features"
+          class="hero-secondary"
+          data-en="Learn more"
+          data-hi="और जानें">
+          Learn more
+        </a>
+
+      </div>
+
+    </div>
+
+    <!-- IMAGE ONLY -->
+    <div class="hero-image"></div>
+
+  </section>
+
+
+  <!-- FEATURES -->
+  <section class="home-features" id="features">
+
+    <div class="home-heading">
+
+      <h2
+        data-en="Everything in one calm place"
+        data-hi="सब कुछ एक शांत जगह पर">
+        Everything in one calm place
+      </h2>
+
+      <p
+        data-en="Simple tools to help you understand and manage your menstrual health."
+        data-hi="आपके मासिक धर्म स्वास्थ्य को समझने और व्यवस्थित करने में मदद करने वाले आसान उपकरण।">
+        Simple tools to help you understand and manage your menstrual health.
+      </p>
+
+    </div>
+
+
+    <div class="home-feature-grid">
+
+      <article class="home-feature">
+        <div class="feature-icon">♡</div>
+
+        <h3
+          data-en="Period Tracking"
+          data-hi="मासिक धर्म ट्रैकिंग">
+          Period Tracking
+        </h3>
+
+        <p
+          data-en="Record period dates, flow, pain and symptoms in one place."
+          data-hi="मासिक धर्म की तारीख, रक्तस्राव, दर्द और लक्षण एक जगह दर्ज करें।">
+          Record period dates, flow, pain and symptoms in one place.
+        </p>
+      </article>
+
+
+      <article class="home-feature">
+        <div class="feature-icon">◷</div>
+
+        <h3
+          data-en="Health Insights"
+          data-hi="स्वास्थ्य जानकारी">
+          Health Insights
+        </h3>
+
+        <p
+          data-en="Understand useful patterns from the information you record."
+          data-hi="आपके द्वारा दर्ज जानकारी से उपयोगी पैटर्न को समझें।">
+          Understand useful patterns from the information you record.
+        </p>
+      </article>
+
+
+      <article class="home-feature">
+        <div class="feature-icon">✦</div>
+
+        <h3
+          data-en="CareX AI"
+          data-hi="CareX AI सहायता">
+          CareX AI
+        </h3>
+
+        <p
+          data-en="Get simple general menstrual-health information through the CareX assistant."
+          data-hi="CareX सहायक से मासिक धर्म स्वास्थ्य की सरल सामान्य जानकारी प्राप्त करें।">
+          Get simple general menstrual-health information through the CareX assistant.
+        </p>
+      </article>
+
+
+      <article class="home-feature">
+        <div class="feature-icon">＋</div>
+
+        <h3
+          data-en="Medicine Decoder"
+          data-hi="दवा की जानकारी">
+          Medicine Decoder
+        </h3>
+
+        <p
+          data-en="Learn general information about medicines, warnings and precautions."
+          data-hi="दवाओं की सामान्य जानकारी, चेतावनियों और सावधानियों के बारे में जानें।">
+          Learn general information about medicines, warnings and precautions.
+        </p>
+      </article>
+
+
+      <article class="home-feature">
+        <div class="feature-icon">⌕</div>
+
+        <h3
+          data-en="Medicine Scanner"
+          data-hi="दवा स्कैनर">
+          Medicine Scanner
+        </h3>
+
+        <p
+          data-en="Use a medicine image to help identify available information."
+          data-hi="दवा की तस्वीर से उपलब्ध जानकारी पहचानने में मदद लें।">
+          Use a medicine image to help identify available information.
+        </p>
+      </article>
+
+
+      <article class="home-feature">
+        <div class="feature-icon">♧</div>
+
+        <h3
+          data-en="Reminders"
+          data-hi="अनुस्मारक">
+          Reminders
+        </h3>
+
+        <p
+          data-en="Manage helpful period and medicine reminders according to your preferences."
+          data-hi="अपनी पसंद के अनुसार मासिक धर्म और दवा के उपयोगी अनुस्मारक व्यवस्थित करें।">
+          Manage helpful period and medicine reminders according to your preferences.
+        </p>
+      </article>
+
+    </div>
+
+  </section>
+
+
+  <!-- CTA -->
+  <section class="home-cta">
+
+    <h2
+      data-en="Start your CareX journey"
+      data-hi="अपनी CareX यात्रा शुरू करें">
+      Start your CareX journey
+    </h2>
+
+    <p
+      data-en="A calm and simple place to understand your menstrual health."
+      data-hi="अपने मासिक धर्म स्वास्थ्य को समझने के लिए एक शांत और आसान जगह।">
+      A calm and simple place to understand your menstrual health.
+    </p>
+
+    <a
+      href="signup.html"
+      class="cta-button"
+      data-en="Get started"
+      data-hi="शुरू करें">
+      Get started
+    </a>
+
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer class="home-footer">
+
+    <div class="footer-content">
+
+      <div>
+        <img
+          class="footer-logo"
+          src="assets/images/20261003_115356.png"
+          alt="CareX">
+
+        <p
+          data-en="Better information. Healthier choices. A brighter you."
+          data-hi="बेहतर जानकारी। बेहतर स्वास्थ्य संबंधी विकल्प। एक बेहतर कल।">
+          Better information. Healthier choices. A brighter you.
+        </p>
+      </div>
+
+
+      <div class="footer-column">
+
+        <strong>CareX</strong>
+
+        <a
+          href="login.html"
+          data-en="Login"
+          data-hi="लॉग इन">
+          Login
+        </a>
+
+        <a
+          href="signup.html"
+          data-en="Sign Up"
+          data-hi="साइन अप">
+          Sign Up
+        </a>
+
+      </div>
+
+
+      <div class="footer-column">
+
+        <strong
+          data-en="Important"
+          data-hi="महत्वपूर्ण">
+          Important
+        </strong>
+
+        <p
+          data-en="CareX provides general health education and tracking tools. It does not replace advice from a qualified healthcare professional."
+          data-hi="CareX सामान्य स्वास्थ्य शिक्षा और ट्रैकिंग उपकरण प्रदान करता है। यह योग्य स्वास्थ्य पेशेवर की सलाह का विकल्प नहीं है।">
+          CareX provides general health education and tracking tools.
+          It does not replace advice from a qualified healthcare professional.
+        </p>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      © 2026 CareX
+    </div>
+
+  </footer>
+
+</div>
+
+
+<script>
+
+  function updateHomeLanguage() {
+    const lang =
+      localStorage.getItem("carex_lang") ||
+      localStorage.getItem("carex-lang") ||
+      "en";
+
+    document.documentElement.lang = lang;
+
+    const page = document.getElementById("homePage");
+
+    if (page) {
+      page.classList.toggle("hi", lang === "hi");
+    }
+
+    document.querySelectorAll("[data-en]").forEach(function(el) {
+      el.textContent =
+        lang === "hi"
+          ? el.getAttribute("data-hi")
+          : el.getAttribute("data-en");
+    });
+
+    const button = document.getElementById("homeLangButton");
+
+    if (button) {
+      button.textContent =
+        lang === "hi"
+          ? "English"
+          : "हिन्दी";
+    }
+  }
+
+
+  function toggleHomeLanguage() {
+    const current =
+      localStorage.getItem("carex_lang") ||
+      localStorage.getItem("carex-lang") ||
+      "en";
+
+    const next =
+      current === "hi" ? "en" : "hi";
+
+    localStorage.setItem("carex_lang", next);
+    localStorage.setItem("carex-lang", next);
+
+    updateHomeLanguage();
+  }
+
+
+  function updateHomeTheme() {
+    const theme =
+      localStorage.getItem("carex-theme") || "light";
+
+    document.documentElement.setAttribute(
+      "data-theme",
+      theme
+    );
+
+    const button =
+      document.getElementById("homeThemeButton");
+
+    if (button) {
+      button.textContent =
+        theme === "dark" ? "☀️" : "🌙";
+    }
+  }
+
+
+  function toggleHomeTheme() {
+    const current =
+      localStorage.getItem("carex-theme") || "light";
+
+    const next =
+      current === "dark" ? "light" : "dark";
+
+    localStorage.setItem("carex-theme", next);
+
+    updateHomeTheme();
+  }
+
+
+  document.addEventListener("DOMContentLoaded", function() {
+    updateHomeLanguage();
+    updateHomeTheme();
+  });
+
+</script>
+
+</body>
+</html>

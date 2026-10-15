@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Medicine Decoder - CareX</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    *{box-sizing:border-box}
+
+    html{
+      overflow-x:hidden;
+      scroll-behavior:smooth;
+    }
+
+    body{
+      margin:0;
+      min-height:100vh;
+      overflow-x:hidden;
+      font-family:"DM Sans","Noto Sans Devanagari",sans-serif;
+    }
+
+    a{text-decoration:none!important}
+
+    .wrap{
+      width:calc(100% - 32px)!important;
+      max-width:1280px!important;
+      margin:auto!important;
+      padding:28px 0 40px!important;
+    }
+
+    /* HEADER */
+
+    header{
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      align-items:center;
+      gap:25px;
+      padding-bottom:30px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .brand-logo{
+      width:52px;
+      height:52px;
+      object-fit:contain;
+    }
+
+    .brand-name{
+      font-family:"Poppins",sans-serif;
+      font-size:2.25rem;
+      font-weight:800;
+      letter-spacing:-.07em;
+      color:var(--plum);
+    }
+
+    .brand-x{color:var(--rose)}
+
+    /* NAVIGATION */
+
+    .desktop-nav{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:4px;
+      padding:5px;
+      border:1px solid var(--line);
+      border-radius:17px;
+      background:var(--card);
+      box-shadow:0 8px 24px rgba(115,67,86,.07);
+    }
+
+    .desktop-nav a{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      padding:10px 13px;
+      border-radius:11px;
+      color:var(--mute);
+      font-size:.78rem;
+      font-weight:700;
+      transition:.2s ease;
+      white-space:nowrap;
+    }
+
+    .desktop-nav a:hover,
+    .desktop-nav a.active{
+      color:var(--rose);
+      background:var(--rose2);
+    }
+
+    .desktop-nav a span:first-child{
+      font-size:1rem;
+    }
+
+    /* CONTROLS */
+
+    .top-controls{
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .ctrl-btn{
+      min-height:40px;
+      padding:8px 13px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:var(--card);
+      color:var(--ink);
+      font-size:.78rem;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    #user-avatar{
+      width:40px!important;
+      height:40px!important;
+      display:grid!important;
+      place-items:center!important;
+      padding:0!important;
+      border-radius:50%;
+      background:var(--rose2);
+      color:var(--rose);
+      border:1px solid var(--line);
+      font-weight:800;
+    }
+
+    /* PAGE */
+
+    .medicine-head{
+      margin:5px 0 25px;
+    }
+
+    .medicine-head h1{
+      margin:0;
+      color:var(--plum);
+      font-family:"Poppins",sans-serif;
+      font-size:clamp(2.2rem,4vw,3.6rem);
+      letter-spacing:-.05em;
+    }
+
+    .medicine-head p{
+      margin:8px 0 0;
+      color:var(--mute);
+      font-size:1rem;
+    }
+
+    .medicine-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:20px;
+    }
+
+    .medicine-card{
+      padding:28px;
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:var(--card);
+      box-shadow:0 18px 45px rgba(115,67,86,.08);
+    }
+
+    .medicine-card h2{
+      margin:0 0 7px;
+      color:var(--plum);
+      font-size:1.2rem;
+    }
+
+    .medicine-card p{
+      margin:0 0 20px;
+      color:var(--mute);
+      font-size:.86rem;
+      line-height:1.6;
+    }
+
+    .medicine-input{
+      width:100%;
+      height:54px;
+      padding:0 16px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      outline:none;
+      background:var(--bg);
+      color:var(--ink);
+      font:inherit;
+    }
+
+    .medicine-input:focus{
+      border-color:var(--rose);
+    }
+
+    .primary-btn{
+      width:100%;
+      min-height:52px;
+      margin-top:12px;
+      border:0;
+      border-radius:15px;
+      background:linear-gradient(135deg,var(--rose),var(--plum2));
+      color:#fff;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .primary-btn:disabled{
+      opacity:.5;
+      cursor:not-allowed;
+    }
+
+    /* UPLOAD */
+
+    .upload-box{
+      min-height:190px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:20px;
+      border:2px dashed var(--line);
+      border-radius:20px;
+      background:var(--bg);
+    }
+
+    .upload-icon{
+      font-size:2.5rem;
+      margin-bottom:8px;
+    }
+
+    .upload-buttons{
+      display:flex;
+      gap:10px;
+      margin-top:15px;
+      width:100%;
+    }
+
+    .upload-btn{
+      flex:1;
+      min-height:46px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid var(--line);
+      border-radius:13px;
+      background:var(--card);
+      color:var(--ink);
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .upload-btn:hover{
+      border-color:var(--rose);
+      color:var(--rose);
+    }
+
+    .upload-btn input{
+      display:none;
+    }
+
+    #image-preview{
+      display:none;
+      margin-top:15px;
+    }
+
+    #medicine-preview-image{
+      width:100%;
+      max-height:260px;
+      object-fit:contain;
+      border-radius:17px;
+      border:1px solid var(--line);
+      background:var(--bg);
+    }
+
+    .remove-btn{
+      width:100%;
+      margin-top:9px;
+      min-height:42px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:transparent;
+      color:var(--mute);
+      cursor:pointer;
+    }
+
+    /* STATUS */
+
+    .status-box{
+      display:none;
+      margin-top:20px;
+      padding:15px;
+      border-radius:15px;
+      line-height:1.55;
+      white-space:pre-wrap;
+    }
+
+    .status-box.loading{
+      display:block;
+      background:var(--rose2);
+      color:var(--plum);
+    }
+
+    .status-box.error{
+      display:block;
+      background:var(--rose2);
+      color:var(--rose);
+    }
+
+    /* RESULT */
+
+    .medicine-result{
+      display:none;
+      margin-top:20px;
+      padding:25px;
+      border:1px solid var(--line);
+      border-radius:24px;
+      background:var(--card);
+      box-shadow:0 15px 35px rgba(115,67,86,.08);
+    }
+
+    .medicine-result h2{
+      margin:0 0 15px;
+      color:var(--plum);
+      font-size:1.15rem;
+    }
+
+    #medicine-result-content{
+      color:var(--ink);
+      white-space:pre-wrap;
+      overflow-wrap:anywhere;
+      line-height:1.7;
+      font-size:.92rem;
+    }
+
+    /* MOBILE NAV */
+
+    .bottom-nav{
+      display:none!important;
+    }
+
+    @media(max-width:1050px) and (min-width:701px){
+      header{
+        grid-template-columns:auto 1fr;
+      }
+
+      .desktop-nav{
+        grid-column:1/-1;
+        grid-row:2;
+      }
+
+      .desktop-nav a{
+        flex:1;
+        justify-content:center;
+      }
+
+      .top-controls{
+        justify-self:end;
+      }
+    }
+
+    @media(max-width:700px){
+
+      .wrap{
+        width:calc(100% - 24px)!important;
+        padding:15px 0 95px!important;
+      }
+
+      header{
+        display:flex;
+        gap:10px;
+        padding-bottom:22px;
+      }
+
+      .brand-logo{
+        width:40px;
+        height:40px;
+      }
+
+      .brand-name{
+        font-size:1.75rem;
+      }
+
+      .desktop-nav{
+        display:none!important;
+      }
+
+      .top-controls{
+        margin-left:auto;
+        gap:5px;
+      }
+
+      .ctrl-btn{
+        min-height:36px;
+        padding:6px 9px;
+        font-size:.7rem;
+      }
+
+      #user-avatar{
+        width:36px!important;
+        height:36px!important;
+      }
+
+      .medicine-head{
+        margin-bottom:18px;
+      }
+
+      .medicine-head h1{
+        font-size:2.25rem;
+      }
+
+      .medicine-grid{
+        grid-template-columns:1fr;
+        gap:13px;
+      }
+
+      .medicine-card{
+        padding:20px;
+        border-radius:22px;
+      }
+
+      .upload-buttons{
+        flex-direction:column;
+      }
+
+      .bottom-nav{
+        position:fixed!important;
+        display:grid!important;
+        left:10px!important;
+        right:10px!important;
+        bottom:10px!important;
+        z-index:1000;
+        grid-template-columns:repeat(5,1fr);
+        gap:3px;
+        padding:7px;
+        border:1px solid var(--line);
+        border-radius:19px;
+        background:var(--card);
+        box-shadow:0 15px 35px rgba(115,67,86,.15);
+      }
+
+      .nav-item{
+        min-width:0;
+        padding:7px 2px;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        gap:3px;
+        border-radius:14px;
+        color:var(--mute);
+      }
+
+      .nav-item.active,
+      .nav-item:hover{
+        color:var(--rose);
+        background:var(--rose2);
+      }
+
+      .nav-item span:first-child{
+        font-size:1.05rem;
+      }
+
+      .nav-item span:last-child{
+        font-size:.61rem;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="css/app-navigation.css">
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <header class="app-topbar">
+
+    <a href="home.html" class="brand app-brand">
+      <img
+        src="assets/images/20261003_115356.png"
+        class="brand-logo"
+        alt="CareX"
+      >
+
+      <div class="brand-name">
+        Care<span class="brand-x">X</span>
+      </div>
+    </a>
+
+    <nav class="desktop-nav app-desktop-nav" aria-label="Main navigation">
+
+      <a href="home.html">
+        <span>🏠</span>
+        <span data-i18n="home">Home</span>
+      </a>
+
+      <a href="track.html">
+        <span>✏️</span>
+        <span data-i18n="track">Track</span>
+      </a>
+
+      <a href="insights.html">
+        <span>📈</span>
+        <span data-i18n="insights">Insights</span>
+      </a>
+
+      <a href="assistant.html">
+        <span>💬</span>
+        <span data-i18n="assistant">Ask</span>
+      </a>
+
+      <a href="profile.html">
+        <span>👤</span>
+        <span data-i18n="profile">Profile</span>
+      </a>
+
+    </nav>
+
+    <div class="top-controls app-controls">
+
+      <button
+        class="ctrl-btn app-control"
+        type="button"
+        onclick="setLang(getLang()==='en'?'hi':'en')"
+      >
+        🌐 <span id="lang-label">HI</span>
+      </button>
+
+      <button
+        class="ctrl-btn app-control"
+        type="button"
+        onclick="toggleTheme()"
+      >
+        ☀️ / 🌙
+      </button>
+
+      <a href="profile.html" id="user-avatar">👤</a>
+
+    </div>
+
+  </header>
+
+
+  <section class="medicine-head">
+
+    <h1 data-i18n="medicine_decoder">Medicine Decoder</h1>
+
+    <p>
+      Look up a medicine by name or scan its label for general information.
+    </p>
+
+  </section>
+
+
+  <section class="medicine-grid">
+
+    <!-- NAME -->
+
+    <div class="medicine-card">
+
+      <h2>Ask by medicine name</h2>
+
+      <p>
+        Enter a medicine name to learn about its common uses and precautions.
+      </p>
+
+      <input
+        id="med-input"
+        class="medicine-input"
+        type="text"
+        placeholder="Enter medicine name"
+        autocomplete="off"
+      >
+
+      <button
+        id="name-analyze-button"
+        class="primary-btn"
+        type="button"
+        onclick="analyzeMedicine()"
+      >
+        Explain Medicine
+      </button>
+
+    </div>
+
+
+    <!-- IMAGE -->
+
+    <div class="medicine-card">
+
+      <h2>Scan medicine label</h2>
+
+      <p>
+        Take a clear photo of the medicine strip, box or label.
+      </p>
+
+      <div class="upload-box">
+
+        <div class="upload-icon">📷</div>
+
+        <strong>Choose a medicine photo</strong>
+
+        <div class="upload-buttons">
+
+          <label class="upload-btn">
+            📷 Camera
+            <input
+              id="med-camera"
+              type="file"
+              accept="image/*"
+              capture="environment"
+            >
+          </label>
+
+          <label class="upload-btn">
+            🖼️ Gallery
+            <input
+              id="med-gallery"
+              type="file"
+              accept="image/*"
+            >
+          </label>
+
+        </div>
+
+      </div>
+
+
+      <div id="image-preview">
+
+        <img
+          id="medicine-preview-image"
+          alt="Medicine preview"
+        >
+
+        <button
+          type="button"
+          class="remove-btn"
+          onclick="removeMedicineImage()"
+        >
+          Remove photo
+        </button>
+
+      </div>
+
+
+      <button
+        id="image-analyze-button"
+        class="primary-btn"
+        type="button"
+        onclick="analyzeMedicine()"
+        disabled
+      >
+        Explain from Photo
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <div id="medicine-status" class="status-box"></div>
+
+
+  <section id="medicine-result" class="medicine-result">
+
+    <h2 id="medicine-result-heading">Medicine Explanation</h2>
+
+    <div id="medicine-result-content"></div>
+
+  </section>
+
+</div>
+
+
+<!-- MOBILE NAV -->
+
+<nav class="bottom-nav app-bottom-nav" aria-label="Main navigation">
+
+  <a href="home.html" class="nav-item">
+    <span>🏠</span>
+    <span data-i18n="home">Home</span>
+  </a>
+
+  <a href="track.html" class="nav-item">
+    <span>✏️</span>
+    <span data-i18n="track">Track</span>
+  </a>
+
+  <a href="insights.html" class="nav-item">
+    <span>📈</span>
+    <span data-i18n="insights">Insights</span>
+  </a>
+
+  <a href="assistant.html" class="nav-item">
+    <span>💬</span>
+    <span data-i18n="assistant">Ask</span>
+  </a>
+
+  <a href="profile.html" class="nav-item">
+    <span>👤</span>
+    <span data-i18n="profile">Profile</span>
+  </a>
+
+</nav>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
+<script src="js/data.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/language.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/common.js"></script>
+<script src="js/medicine.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Login - CareX</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:#FBF7FC;
+      --card:#fff;
+      --ink:#352B3D;
+      --mute:#81758A;
+      --line:#E7DDEB;
+      --rose:#C978A5;
+      --rose2:#F5E5F0;
+      --plum:#674B70;
+      --plum2:#7B526B;
+      --shadow:0 18px 45px rgba(115,67,86,.10);
+    }
+
+    [data-theme="dark"] {
+      --bg:#170F14;
+      --card:#291B22;
+      --ink:#F8EAF0;
+      --mute:#BCA7B1;
+      --line:#3D2932;
+      --rose:#ED8CA7;
+      --rose2:#43252F;
+      --plum:#E2BFD0;
+      --plum2:#C99EB5;
+      --shadow:0 18px 45px rgba(0,0,0,.25);
+    }
+
+    * {
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    body {
+      min-height:100vh;
+      background:
+        radial-gradient(circle at 10% 0%,rgba(246,180,199,.20),transparent 30%),
+        radial-gradient(circle at 100% 100%,rgba(215,169,195,.14),transparent 30%),
+        var(--bg);
+      color:var(--ink);
+      font:16px/1.5 "DM Sans",sans-serif;
+    }
+
+    .login-page {
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* NAVBAR */
+
+    .login-nav {
+      min-height:76px;
+      padding:10px clamp(18px,7vw,100px);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      background:var(--card);
+      border-bottom:1px solid var(--line);
+    }
+
+    .brand {
+      display:flex;
+      align-items:center;
+      gap:9px;
+      color:var(--plum);
+      text-decoration:none;
+      font:700 30px "Fraunces",serif;
+    }
+
+    .brand img {
+      width:40px;
+      height:40px;
+      object-fit:contain;
+    }
+
+    .brand span {
+      color:var(--rose);
+    }
+
+    .nav-actions {
+      display:flex;
+      align-items:center;
+      gap:9px;
+    }
+
+    .theme-btn,
+    .lang-btn {
+      border:1px solid var(--line);
+      background:var(--bg);
+      color:var(--ink);
+      cursor:pointer;
+    }
+
+    .theme-btn {
+      width:42px;
+      height:42px;
+      padding:0;
+      border-radius:50%;
+    }
+
+    .lang-btn {
+      width:auto;
+      padding:9px 15px;
+      border-radius:99px;
+    }
+
+    /* MAIN */
+
+    .login-main {
+      flex:1;
+      width:100%;
+      max-width:1050px;
+      margin:auto;
+      padding:55px 25px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      align-items:center;
+      gap:60px;
+    }
+
+    .login-intro {
+      padding:20px;
+    }
+
+    .tag {
+      display:inline-block;
+      padding:7px 14px;
+      border-radius:99px;
+      background:var(--card);
+      border:1px solid var(--line);
+      color:var(--rose);
+      font-size:.78rem;
+      font-weight:700;
+    }
+
+    .login-intro h1 {
+      margin:20px 0 15px;
+      font:700 clamp(44px,5vw,66px)/1.05 "Fraunces",serif;
+    }
+
+    .login-intro h1 em {
+      color:var(--rose);
+    }
+
+    .login-intro p {
+      max-width:470px;
+      color:var(--mute);
+      line-height:1.75;
+    }
+
+    /* CARD */
+
+    .login-card {
+      padding:34px;
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:26px;
+      box-shadow:var(--shadow);
+    }
+
+    .login-card h2 {
+      margin-bottom:5px;
+      color:var(--plum);
+      font:700 34px "Fraunces",serif;
+    }
+
+    .login-sub {
+      margin-bottom:25px;
+      color:var(--mute);
+      font-size:.9rem;
+    }
+
+    .field {
+      margin-bottom:17px;
+    }
+
+    label {
+      display:block;
+      margin-bottom:6px;
+      color:var(--mute);
+      font-size:.84rem;
+      font-weight:600;
+    }
+
+    input {
+      width:100%;
+      padding:13px 14px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:var(--bg);
+      color:var(--ink);
+      font:inherit;
+      outline:none;
+    }
+
+    input:focus {
+      border-color:var(--rose);
+      box-shadow:0 0 0 3px var(--rose2);
+    }
+
+    .login-btn {
+      width:100%;
+      min-height:48px;
+      border:0;
+      border-radius:12px;
+      background:linear-gradient(135deg,var(--rose),var(--plum2));
+      color:#fff;
+      font-weight:700;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+
+    .login-btn:hover {
+      transform:translateY(-2px);
+    }
+
+    .forgot {
+      display:block;
+      margin-top:15px;
+      color:var(--mute);
+      text-align:right;
+      text-decoration:none !important;
+      font-size:.84rem;
+    }
+
+    .forgot:hover {
+      color:var(--rose);
+    }
+
+    .divider {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin:22px 0;
+      color:var(--mute);
+      font-size:.8rem;
+    }
+
+    .divider::before,
+    .divider::after {
+      content:"";
+      height:1px;
+      flex:1;
+      background:var(--line);
+    }
+
+    .google-btn {
+      width:100%;
+      min-height:46px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:var(--card);
+      color:var(--ink);
+      font-weight:600;
+      cursor:pointer;
+    }
+
+    .google-icon {
+      width:20px;
+      height:20px;
+    }
+
+    .signup-link {
+      margin-top:22px;
+      text-align:center;
+      color:var(--mute);
+      font-size:.88rem;
+    }
+
+    .signup-link a {
+      color:var(--rose);
+      font-weight:700;
+      text-decoration:none !important;
+    }
+
+    .error-msg {
+      display:none;
+      margin-bottom:15px;
+      padding:10px 12px;
+      border-radius:10px;
+      background:#FDE5EC;
+      color:#9B3D58;
+      font-size:.85rem;
+    }
+
+    .toast {
+      display:none;
+      position:fixed;
+      left:50%;
+      bottom:calc(16px + env(safe-area-inset-bottom, 0px));
+      z-index:1000;
+      width:max-content;
+      max-width:calc(100% - 32px);
+      padding:12px 16px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:var(--card);
+      color:var(--ink);
+      box-shadow:var(--shadow);
+      text-align:center;
+      transform:translateX(-50%);
+    }
+
+    .toast.show {
+      display:block;
+    }
+
+    /* MOBILE */
+
+    @media (max-width:800px) {
+      .login-main {
+        grid-template-columns:1fr;
+        max-width:600px;
+        gap:20px;
+        padding:35px 18px;
+      }
+
+      .login-intro {
+        text-align:center;
+        padding:5px;
+      }
+
+      .login-intro p {
+        margin:auto;
+      }
+    }
+
+    @media (max-width:500px) {
+      .login-nav {
+        padding:8px 15px;
+      }
+
+      .brand {
+        font-size:24px;
+      }
+
+      .brand img {
+        width:34px;
+        height:34px;
+      }
+
+      .login-intro h1 {
+        font-size:42px;
+      }
+
+      .login-card {
+        padding:23px 18px;
+        border-radius:20px;
+      }
+
+      .nav-actions {
+        gap:5px;
+      }
+
+      .theme-btn {
+        width:38px;
+        height:38px;
+      }
+
+      .lang-btn {
+        padding:8px 10px;
+        font-size:.78rem;
+      }
+
+      .login-main {
+        gap:14px;
+        padding:24px 14px 32px;
+      }
+
+      .login-intro {
+        display:none;
+      }
+
+      .login-intro h1 {
+        margin:12px 0 8px;
+        font-size:clamp(32px, 9vw, 38px);
+      }
+
+      .login-intro p {
+        font-size:.88rem;
+        line-height:1.55;
+      }
+
+      .login-card {
+        padding:21px 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="login-page">
+
+  <!-- NAVBAR -->
+  <header class="login-nav">
+
+    <a href="index.html" class="brand">
+      <img
+        src="assets/images/20261003_115356.png"
+        alt="CareX Logo">
+      Care<span>X</span>
+    </a>
+
+    <div class="nav-actions">
+
+      <button
+        type="button"
+        class="theme-btn"
+        id="themeButton"
+        onclick="toggleLoginTheme()">
+        🌙
+      </button>
+
+      <button
+        type="button"
+        class="lang-btn"
+        id="langButton"
+        onclick="toggleLoginLanguage()">
+        हिन्दी
+      </button>
+
+    </div>
+
+  </header>
+
+
+  <!-- MAIN -->
+  <main class="login-main">
+
+    <section class="login-intro">
+
+      <span class="tag">
+        MENSTRUAL HEALTH COMPANION
+      </span>
+
+      <h1>
+        Welcome<br>
+        <em>back.</em>
+      </h1>
+
+      <p>
+        Continue your CareX journey and keep your menstrual-health
+        information organized in one calm and private space.
+      </p>
+
+    </section>
+
+
+    <section class="login-card">
+
+      <h2 data-i18n="login">Login</h2>
+
+      <p class="login-sub" data-i18n="welcome">
+        Welcome back
+      </p>
+
+      <div id="loginError" class="error-msg" role="alert" aria-live="polite" tabindex="-1"></div>
+
+      <form id="loginForm" onsubmit="handleLogin(event)">
+
+        <div class="field">
+
+          <label for="loginEmail" data-i18n="email">
+            Email
+          </label>
+
+          <input
+            id="loginEmail"
+            type="email"
+            name="email"
+            autocomplete="email"
+            inputmode="email"
+            placeholder="name@example.com"
+            required>
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="loginPassword" data-i18n="password">
+            Password
+          </label>
+
+          <input
+            id="loginPassword"
+            type="password"
+            name="password"
+            autocomplete="current-password"
+            required>
+
+        </div>
+
+
+        <button
+          type="submit"
+          class="login-btn"
+          data-i18n="login">
+          Login
+        </button>
+
+      </form>
+
+
+      <a
+        href="forgot-password.html"
+        class="forgot"
+        data-i18n="forgot_password">
+        Forgot Password?
+      </a>
+
+
+      <div class="divider">
+        <span>or</span>
+      </div>
+
+
+      <button
+        type="button"
+        class="google-btn"
+        onclick="loginWithGoogle()">
+
+        <img
+          class="google-icon"
+          src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+          alt="Google">
+
+        <span>Continue with Google</span>
+
+      </button>
+
+
+      <p class="signup-link">
+
+        Don't have an account?
+
+        <a
+          href="signup.html"
+          data-i18n="create_account">
+          Create New Account
+        </a>
+
+      </p>
+
+    </section>
+
+  </main>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
+<script src="js/data.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/language.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/common.js"></script>
+
+<script>
+
+  function toggleLoginTheme() {
+
+    const current =
+      localStorage.getItem("carex-theme") || "light";
+
+    const next =
+      current === "dark" ? "light" : "dark";
+
+    localStorage.setItem("carex-theme", next);
+
+    updateLoginTheme();
+  }
+
+
+  function updateLoginTheme() {
+
+    const theme =
+      localStorage.getItem("carex-theme") || "light";
+
+    document.documentElement.setAttribute(
+      "data-theme",
+      theme
+    );
+
+    const button =
+      document.getElementById("themeButton");
+
+    if (button) {
+      button.textContent =
+        theme === "dark" ? "☀️" : "🌙";
+    }
+  }
+
+
+  function toggleLoginLanguage() {
+
+    setLang(getLang() === "hi" ? "en" : "hi");
+
+    updateLoginLanguage();
+  }
+
+
+  function updateLoginLanguage() {
+
+    const lang = getLang();
+
+    document.documentElement.lang = lang;
+
+    const button =
+      document.getElementById("langButton");
+
+    if (button) {
+      button.textContent =
+        lang === "hi" ? "English" : "हिन्दी";
+    }
+  }
+
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+      updateLoginTheme();
+      updateLoginLanguage();
+    }
+  );
+
+</script>
+
+</body>
+</html>

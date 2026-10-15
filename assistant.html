@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Ask CareX AI - CareX</title>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    a,
+    a:hover,
+    a:focus,
+    a:active {
+      text-decoration: none !important;
+    }
+
+    button {
+      font-family: inherit;
+      text-decoration: none !important;
+    }
+
+    .wrap {
+      width: calc(100% - 32px) !important;
+      max-width: 1280px !important;
+      margin: auto !important;
+      padding: 28px 0 45px !important;
+    }
+
+    /* ================= HEADER ================= */
+
+    header {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 24px;
+      padding-bottom: 30px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-family: "Poppins", sans-serif;
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -.07em;
+      line-height: 1;
+      color: var(--plum);
+      white-space: nowrap;
+    }
+
+    .brand-x {
+      color: var(--rose);
+    }
+
+    /* ================= NAV ================= */
+
+    .desktop-nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+      padding: 5px;
+      justify-self: center;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: var(--card);
+      box-shadow: 0 8px 24px rgba(115,67,86,.07);
+    }
+
+    .desktop-nav a {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 13px;
+      border-radius: 11px;
+      color: var(--mute);
+      font-size: .78rem;
+      font-weight: 700;
+      white-space: nowrap;
+      transition: .2s ease;
+    }
+
+    .desktop-nav a:hover,
+    .desktop-nav a.active {
+      color: var(--rose);
+      background: var(--rose2);
+      transform: translateY(-1px);
+    }
+
+    /* ================= CONTROLS ================= */
+
+    .top-controls {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .ctrl-btn {
+      min-height: 40px;
+      padding: 8px 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--card);
+      color: var(--ink);
+      font-size: .78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .ctrl-btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--rose);
+      box-shadow: 0 8px 20px rgba(115,67,86,.12);
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--rose2);
+      color: var(--rose);
+      border: 1px solid var(--line);
+    }
+
+    /* ================= INTRO ================= */
+
+    .page-intro {
+      margin: 5px 0 24px;
+    }
+
+    .page-intro h1 {
+      margin: 0;
+      color: var(--plum);
+      font-family: "Poppins", sans-serif;
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
+      line-height: 1.1;
+      letter-spacing: -.05em;
+    }
+
+    .page-intro p {
+      max-width: 650px;
+      margin: 9px 0 0;
+      color: var(--mute);
+      font-family: "Noto Sans Devanagari", "DM Sans", sans-serif;
+      font-size: .96rem;
+      line-height: 1.7;
+    }
+
+    /* ================= AI LAYOUT ================= */
+
+    .assistant-layout {
+      display: grid;
+      grid-template-columns: .72fr 1.45fr;
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .premium-card {
+      position: relative;
+      overflow: hidden;
+      padding: 27px;
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      background: var(--card);
+      box-shadow: 0 18px 45px rgba(115,67,86,.08);
+    }
+
+    .premium-card::after {
+      content: "";
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      right: -90px;
+      bottom: -90px;
+      border-radius: 50%;
+      background: var(--rose2);
+      opacity: .35;
+      pointer-events: none;
+    }
+
+    .premium-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ================= AI INFO ================= */
+
+    .ai-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 520px;
+    }
+
+    .ai-icon {
+      width: 72px;
+      height: 72px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 22px;
+      border-radius: 22px;
+      background: linear-gradient(
+        135deg,
+        var(--rose2),
+        var(--rose3)
+      );
+      font-size: 2rem;
+      box-shadow: 0 12px 28px rgba(201,120,165,.16);
+    }
+
+    .ai-info h2 {
+      margin: 0;
+      color: var(--plum);
+      font-family: "Poppins", sans-serif;
+      font-size: 1.65rem;
+      line-height: 1.25;
+    }
+
+    .ai-info p {
+      margin: 12px 0 0;
+      color: var(--mute);
+      font-size: .88rem;
+      line-height: 1.7;
+    }
+
+    .ai-points {
+      display: grid;
+      gap: 9px;
+      margin-top: 25px;
+    }
+
+    .ai-point {
+      display: flex;
+      gap: 9px;
+      padding: 11px 12px;
+      border-radius: 13px;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: .76rem;
+      line-height: 1.45;
+    }
+
+    .ai-point span:first-child {
+      color: var(--rose);
+      font-weight: 800;
+    }
+
+    .ai-note {
+      margin-top: 25px;
+      padding: 13px;
+      border-radius: 14px;
+      background: var(--sage2);
+      color: var(--ink);
+      font-size: .73rem;
+      line-height: 1.55;
+    }
+
+    /* ================= CHAT ================= */
+
+    .chat-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 520px;
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 17px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .chat-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .chat-status {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--sage);
+      box-shadow: 0 0 0 4px var(--sage2);
+    }
+
+    .chat-title h2 {
+      margin: 0;
+      color: var(--plum);
+      font-family: "Poppins", sans-serif;
+      font-size: 1.05rem;
+    }
+
+    .chat-status-text {
+      color: var(--sage);
+      font-size: .68rem;
+      font-weight: 700;
+    }
+
+    .chat {
+      height: 335px;
+      overflow-y: auto;
+      padding: 18px 4px;
+      scroll-behavior: smooth;
+    }
+
+    .chat::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .chat::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      background: var(--line);
+    }
+
+    .msg {
+      max-width: 82%;
+      margin-bottom: 12px;
+      padding: 11px 14px;
+      border-radius: 17px;
+      font-size: .82rem;
+      line-height: 1.65;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      animation: messageIn .2s ease;
+    }
+
+    @keyframes messageIn {
+      from {
+        opacity: 0;
+        transform: translateY(5px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .msg.bot {
+      margin-right: auto;
+      border: 1px solid var(--line);
+      border-top-left-radius: 5px;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    .msg.me {
+      margin-left: auto;
+      border-top-right-radius: 5px;
+      background: var(--rose);
+      color: #fff;
+    }
+
+    /* ================= SUGGESTIONS ================= */
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 4px 0 13px;
+    }
+
+    .chip {
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--rose2);
+      color: var(--rose);
+      font-size: .7rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .chip:hover {
+      transform: translateY(-2px);
+      border-color: var(--rose);
+      box-shadow: 0 7px 16px rgba(201,120,165,.12);
+    }
+
+    /* ================= SEND ================= */
+
+    .send {
+      display: flex;
+      gap: 9px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+
+    .send input {
+      flex: 1;
+      min-width: 0;
+      height: 46px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      outline: none;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: inherit;
+      font-size: .82rem;
+      transition: .2s ease;
+    }
+
+    .send input:focus {
+      border-color: var(--rose);
+      box-shadow: 0 0 0 3px var(--rose2);
+    }
+
+    .send button {
+      min-width: 88px;
+      height: 46px;
+      padding: 0 16px;
+      border: 0;
+      border-radius: 14px;
+      background: var(--rose);
+      color: #fff;
+      font-weight: 800;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .send button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 9px 20px rgba(201,120,165,.25);
+    }
+
+    .send button:disabled,
+    .send input:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    .disc {
+      margin: 13px 0 0;
+      color: var(--mute);
+      font-size: .66rem;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    /* ================= MOBILE NAV ================= */
+
+    .bottom-nav {
+      display: none !important;
+    }
+
+    /* ================= TABLET ================= */
+
+    @media (max-width: 1050px) and (min-width: 701px) {
+
+      header {
+        grid-template-columns: auto 1fr;
+      }
+
+      .desktop-nav {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        width: 100%;
+      }
+
+      .desktop-nav a {
+        flex: 1;
+        justify-content: center;
+      }
+
+      .top-controls {
+        justify-self: end;
+      }
+
+      .assistant-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .ai-info {
+        min-height: auto;
+      }
+    }
+
+    /* ================= MOBILE ================= */
+
+    @media (max-width: 700px) {
+
+      .wrap {
+        width: calc(100% - 24px) !important;
+        padding: 15px 0 95px !important;
+      }
+
+      header {
+        display: flex;
+        gap: 9px;
+        padding-bottom: 23px;
+      }
+
+      .brand-logo {
+        width: 40px;
+        height: 40px;
+      }
+
+      .brand-name {
+        font-size: 1.75rem;
+      }
+
+      .desktop-nav {
+        display: none !important;
+      }
+
+      .top-controls {
+        margin-left: auto;
+        gap: 5px;
+      }
+
+      .ctrl-btn {
+        min-height: 36px;
+        padding: 6px 9px;
+        font-size: .68rem;
+      }
+
+      .avatar {
+        width: 36px;
+        height: 36px;
+      }
+
+      .page-intro {
+        margin: 3px 0 19px;
+      }
+
+      .page-intro h1 {
+        font-size: 2.25rem;
+      }
+
+      .page-intro p {
+        font-size: .84rem;
+      }
+
+      .assistant-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .premium-card {
+        width: 100%;
+        padding: 19px;
+        border-radius: 22px;
+      }
+
+      .ai-info {
+        min-height: auto;
+      }
+
+      .ai-icon {
+        width: 58px;
+        height: 58px;
+        margin-bottom: 17px;
+        border-radius: 18px;
+        font-size: 1.6rem;
+      }
+
+      .ai-info h2 {
+        font-size: 1.3rem;
+      }
+
+      .ai-points {
+        margin-top: 18px;
+      }
+
+      .ai-note {
+        margin-top: 18px;
+      }
+
+      .chat-card {
+        min-height: 0;
+      }
+
+      .chat {
+        height: 340px;
+      }
+
+      .msg {
+        max-width: 90%;
+        font-size: .78rem;
+      }
+
+      .chip {
+        font-size: .66rem;
+        padding: 7px 10px;
+      }
+
+      .send input {
+        height: 44px;
+      }
+
+      .send button {
+        height: 44px;
+        min-width: 76px;
+      }
+
+      .bottom-nav {
+        position: fixed !important;
+        display: grid !important;
+        left: 10px !important;
+        right: 10px !important;
+        bottom: 10px !important;
+        width: auto !important;
+        margin: 0 !important;
+        z-index: 1000;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 3px;
+        padding: 7px;
+        border-radius: 19px;
+        border: 1px solid var(--line);
+        background: var(--card);
+        box-shadow: 0 15px 35px rgba(115,67,86,.15);
+      }
+
+      .nav-item {
+        min-width: 0;
+        padding: 7px 2px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        border-radius: 14px;
+        color: var(--mute);
+      }
+
+      .nav-item:hover,
+      .nav-item.active {
+        color: var(--rose);
+        background: var(--rose2);
+      }
+
+      .nav-item span:first-child {
+        font-size: 1.05rem;
+        line-height: 1;
+      }
+
+      .nav-item span:last-child {
+        font-size: .61rem;
+      }
+    }
+
+    @media (max-width: 370px) {
+
+      .brand-logo {
+        width: 36px;
+        height: 36px;
+      }
+
+      .brand-name {
+        font-size: 1.55rem;
+      }
+
+      .ctrl-btn {
+        padding: 5px 7px;
+        font-size: .62rem;
+      }
+
+      .page-intro h1 {
+        font-size: 2rem;
+      }
+
+      .send {
+        gap: 6px;
+      }
+
+      .send button {
+        min-width: 68px;
+        padding: 0 10px;
+      }
+    }
+
+    /* ================= LARGE DESKTOP ================= */
+
+    @media (min-width: 1400px) {
+
+      .wrap {
+        max-width: 1380px !important;
+        padding-top: 38px !important;
+      }
+
+      .brand-logo {
+        width: 60px;
+        height: 60px;
+      }
+
+      .brand-name {
+        font-size: 2.6rem;
+      }
+
+      .page-intro h1 {
+        font-size: 4rem;
+      }
+
+      .premium-card {
+        padding: 32px;
+      }
+
+      .chat {
+        height: 390px;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="css/app-navigation.css">
+</head>
+
+<body>
+
+  <div class="wrap">
+
+    <!-- HEADER -->
+
+    <header class="app-topbar">
+
+      <div class="brand app-brand">
+
+        <img
+          src="assets/images/20261003_115356.png"
+          class="brand-logo"
+          alt="CareX logo"
+          onerror="this.style.display='none'"
+        >
+
+        <div class="brand-name">
+          Care<span class="brand-x">X</span>
+        </div>
+
+      </div>
+
+      <!-- DESKTOP NAV -->
+
+      <nav class="desktop-nav app-desktop-nav" aria-label="Main navigation">
+
+        <a href="home.html">
+          <span>🏠</span>
+          <span data-i18n="home">Home</span>
+        </a>
+
+        <a href="track.html">
+          <span>✏️</span>
+          <span data-i18n="track">Track</span>
+        </a>
+
+        <a href="insights.html">
+          <span>📈</span>
+          <span data-i18n="insights">Insights</span>
+        </a>
+
+        <a href="assistant.html" class="active">
+          <span>💬</span>
+          <span data-i18n="assistant">Ask</span>
+        </a>
+
+        <a href="profile.html">
+          <span>👤</span>
+          <span data-i18n="profile">Profile</span>
+        </a>
+
+      </nav>
+
+      <!-- CONTROLS -->
+
+      <div class="top-controls app-controls">
+
+        <button
+          type="button"
+          class="ctrl-btn app-control"
+          onclick="setLang(getLang()==='en'?'hi':'en')"
+        >
+          🌐 <span id="lang-label">HI</span>
+        </button>
+
+        <button
+          type="button"
+          class="ctrl-btn app-control"
+          onclick="toggleTheme()"
+        >
+          ☀️ / 🌙
+        </button>
+
+        <a
+          href="profile.html"
+          class="avatar"
+          aria-label="Profile"
+        >
+          👤
+        </a>
+
+      </div>
+
+    </header>
+
+    <!-- INTRO -->
+
+    <section class="page-intro">
+
+      <h1 data-i18n="ai_name">
+        CareX AI
+      </h1>
+
+      <p id="assistant-intro">
+        Get simple, supportive menstrual-health information from CareX AI.
+      </p>
+
+    </section>
+
+    <!-- MAIN -->
+
+    <main class="assistant-layout">
+
+      <!-- AI INFORMATION -->
+
+      <section class="premium-card ai-info">
+
+        <div>
+
+          <div class="ai-icon">
+            💬
+          </div>
+
+          <h2 id="ai-heading">
+            Your personal health companion
+          </h2>
+
+          <p id="ai-description">
+            Ask questions about periods, cramps, symptoms,
+            cycle patterns and general menstrual health.
+          </p>
+
+          <div class="ai-points">
+
+            <div class="ai-point">
+              <span>✓</span>
+              <span id="point-one">
+                Simple and easy-to-understand answers
+              </span>
+            </div>
+
+            <div class="ai-point">
+              <span>✓</span>
+              <span id="point-two">
+                Supports English, Hindi and Hinglish
+              </span>
+            </div>
+
+            <div class="ai-point">
+              <span>✓</span>
+              <span id="point-three">
+                General health education, not diagnosis
+              </span>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="ai-note" id="ai-note">
+          If something feels serious or unusual, talk to
+          a trusted adult and a qualified healthcare professional.
+        </div>
+
+      </section>
+
+      <!-- CHAT -->
+
+      <section class="premium-card chat-card">
+
+        <div class="chat-header">
+
+          <div class="chat-title">
+
+            <span class="chat-status"></span>
+
+            <h2>
+              CareX AI
+            </h2>
+
+          </div>
+
+          <span
+            class="chat-status-text"
+            id="online-text"
+          >
+            Online
+          </span>
+
+        </div>
+
+        <div class="chat" id="chat">
+
+          <div
+            class="msg bot"
+            id="welcome-msg"
+          >
+            Ask CareX AI about your menstrual health.
+          </div>
+
+        </div>
+
+        <div
+          class="chips"
+          id="sugg"
+        >
+
+          <button
+            type="button"
+            class="chip"
+            onclick="askSuggestion(this)"
+            data-i18n="late_period"
+          >
+            Late period?
+          </button>
+
+          <button
+            type="button"
+            class="chip"
+            onclick="askSuggestion(this)"
+            data-i18n="ease_cramps"
+          >
+            Ease cramps
+          </button>
+
+        </div>
+
+        <form
+          class="send"
+          id="chat-form"
+        >
+
+          <input
+            id="ci"
+            data-i18n="type_question"
+            placeholder="Type your question..."
+            required
+            autocomplete="off"
+          >
+
+          <button
+            type="submit"
+            id="send-btn"
+            data-i18n="send"
+          >
+            Send
+          </button>
+
+        </form>
+
+        <p
+          class="disc"
+          data-i18n="disclaimer"
+        >
+          General education only, not a diagnosis.
+        </p>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- MOBILE NAV -->
+
+  <nav class="bottom-nav app-bottom-nav" aria-label="Main navigation">
+
+    <a href="home.html" class="nav-item">
+      <span>🏠</span>
+      <span data-i18n="home">Home</span>
+    </a>
+
+    <a href="track.html" class="nav-item">
+      <span>✏️</span>
+      <span data-i18n="track">Track</span>
+    </a>
+
+    <a href="insights.html" class="nav-item">
+      <span>📈</span>
+      <span data-i18n="insights">Insights</span>
+    </a>
+
+    <a href="assistant.html" class="nav-item active">
+      <span>💬</span>
+      <span data-i18n="assistant">Ask</span>
+    </a>
+
+    <a href="profile.html" class="nav-item">
+      <span>👤</span>
+      <span data-i18n="profile">Profile</span>
+    </a>
+
+  </nav>
+
+  <!-- SCRIPTS -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/language.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/common.js"></script>
+
+  <script>
+
+    let chatSessionId = null;
+    let chatUser = null;
+
+    function cleanAIText(text) {
+
+      return String(text || "")
+        .replace(/\*\*(.*?)\*\*/g, "$1")
+        .replace(/__(.*?)__/g, "$1")
+        .replace(/^#{1,6}\s*/gm, "")
+        .replace(/^\s*\*\s+/gm, "• ")
+        .replace(/^\s*-\s+/gm, "• ")
+        .replace(/\n{3,}/g, "\n\n")
+        .trim();
+    }
+
+    function addMessage(text, role) {
+
+      const chat = $("#chat");
+
+      const message =
+        document.createElement("div");
+
+      message.className =
+        role === "user"
+          ? "msg me"
+          : "msg bot";
+
+      message.textContent =
+        role === "bot"
+          ? cleanAIText(text)
+          : text;
+
+      chat.appendChild(message);
+
+      chat.scrollTop =
+        chat.scrollHeight;
+    }
+
+    function showLoading() {
+
+      const loading =
+        document.createElement("div");
+
+      loading.className =
+        "msg bot";
+
+      loading.id =
+        "ai-loading";
+
+      loading.textContent =
+        getLang() === "hi"
+          ? "सोच रहा हूँ..."
+          : "Thinking...";
+
+      $("#chat").appendChild(loading);
+
+      $("#chat").scrollTop =
+        $("#chat").scrollHeight;
+    }
+
+    function removeLoading() {
+
+      const loading =
+        $("#ai-loading");
+
+      if (loading) {
+        loading.remove();
+      }
+    }
+
+    async function loadChat() {
+
+      if (!chatUser) {
+        return false;
+      }
+
+      const {
+        data: sessions,
+        error
+      } = await sb
+        .from("chat_sessions")
+        .select("id")
+        .eq(
+          "user_id",
+          chatUser.id
+        )
+        .order(
+          "updated_at",
+          {
+            ascending: false
+          }
+        )
+        .limit(1);
+
+      if (
+        error ||
+        !sessions ||
+        !sessions.length
+      ) {
+        return false;
+      }
+
+      chatSessionId =
+        sessions[0].id;
+
+      const {
+        data: messages,
+        error: messageError
+      } = await sb
+        .from("chat_messages")
+        .select("role,message")
+        .eq(
+          "session_id",
+          chatSessionId
+        )
+        .eq(
+          "user_id",
+          chatUser.id
+        )
+        .order(
+          "created_at",
+          {
+            ascending: true
+          }
+        );
+
+      if (
+        messageError ||
+        !messages ||
+        !messages.length
+      ) {
+        return false;
+      }
+
+      $("#chat").innerHTML = "";
+
+      messages.forEach(item => {
+
+        addMessage(
+          item.message,
+          item.role === "user"
+            ? "user"
+            : "bot"
+        );
+
+      });
+
+      return true;
+    }
+
+    function askSuggestion(button) {
+
+      const question =
+        button.textContent.trim();
+
+      if (question) {
+        ask(question);
+      }
+    }
+
+    async function recoverChat() {
+
+      await new Promise(
+        resolve => setTimeout(
+          resolve,
+          800
+        )
+      );
+
+      return await loadChat();
+    }
+
+    async function ask(question) {
+
+      const q =
+        (question || "").trim();
+
+      if (!q || !chatUser) {
+        return;
+      }
+
+      const input =
+        $("#ci");
+
+      const button =
+        $("#send-btn");
+
+      input.value = "";
+
+      input.disabled = true;
+      button.disabled = true;
+
+      addMessage(
+        q,
+        "user"
+      );
+
+      showLoading();
+
+      try {
+
+        const {
+          data: { session },
+          error: sessionError
+        } = await sb.auth.getSession();
+
+        if (
+          sessionError ||
+          !session
+        ) {
+
+          removeLoading();
+
+          toast(
+            getLang() === "hi"
+              ? "कृपया फिर से लॉगिन करें।"
+              : "Please login again."
+          );
+
+          return;
+        }
+
+        const response =
+          await fetch(
+            `${SUPABASE_URL}/functions/v1/assistant`,
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json",
+
+                "apikey":
+                  SUPABASE_KEY,
+
+                "Authorization":
+                  `Bearer ${session.access_token}`
+              },
+
+              body: JSON.stringify({
+                message: q,
+                session_id:
+                  chatSessionId,
+                language:
+                  getLang()
+              })
+            }
+          );
+
+        let data = {};
+
+        try {
+          data =
+            await response.json();
+        } catch {
+          data = {};
+        }
+
+        removeLoading();
+
+        if (!response.ok) {
+
+          console.error(
+            "Assistant error:",
+            data
+          );
+
+          const recovered =
+            await recoverChat();
+
+          if (!recovered) {
+
+            toast(
+              data.error ||
+              (
+                getLang() === "hi"
+                  ? "AI जवाब नहीं दे पाया।"
+                  : "AI could not respond."
+              )
+            );
+          }
+
+          return;
+        }
+
+        const result =
+          data.data || data;
+
+        if (result.session_id) {
+          chatSessionId =
+            result.session_id;
+        }
+
+        if (result.reply) {
+
+          addMessage(
+            result.reply,
+            "bot"
+          );
+
+        } else {
+
+          const recovered =
+            await recoverChat();
+
+          if (!recovered) {
+
+            toast(
+              getLang() === "hi"
+                ? "AI ने कोई जवाब नहीं दिया।"
+                : "AI returned no response."
+            );
+          }
+        }
+
+      } catch (error) {
+
+        console.error(
+          "Assistant connection error:",
+          error
+        );
+
+        removeLoading();
+
+        const recovered =
+          await recoverChat();
+
+        if (!recovered) {
+
+          toast(
+            getLang() === "hi"
+              ? "CareX AI से कनेक्ट नहीं हो पाया।"
+              : "Could not connect to CareX AI."
+          );
+        }
+
+      } finally {
+
+        input.disabled = false;
+        button.disabled = false;
+
+        input.focus();
+      }
+    }
+
+    function updateAssistantLanguage() {
+
+      const lang =
+        getLang();
+
+      $("#lang-label").textContent =
+        lang === "hi" ? "EN" : "HI";
+
+      $("#assistant-intro").textContent =
+        lang === "hi"
+          ? "CareX AI से अपने मासिक स्वास्थ्य के बारे में सरल और उपयोगी जानकारी पाएं।"
+          : "Get simple, supportive menstrual-health information from CareX AI.";
+
+      $("#ai-heading").textContent =
+        lang === "hi"
+          ? "आपका हेल्थ साथी"
+          : "Your personal health companion";
+
+      $("#ai-description").textContent =
+        lang === "hi"
+          ? "पीरियड, ऐंठन, लक्षण, साइकिल पैटर्न और सामान्य मासिक स्वास्थ्य के बारे में सवाल पूछें।"
+          : "Ask questions about periods, cramps, symptoms, cycle patterns and general menstrual health.";
+
+      $("#point-one").textContent =
+        lang === "hi"
+          ? "सरल और आसानी से समझ आने वाले जवाब"
+          : "Simple and easy-to-understand answers";
+
+      $("#point-two").textContent =
+        lang === "hi"
+          ? "English, Hindi और Hinglish को सपोर्ट करता है"
+          : "Supports English, Hindi and Hinglish";
+
+      $("#point-three").textContent =
+        lang === "hi"
+          ? "सामान्य स्वास्थ्य शिक्षा, diagnosis नहीं"
+          : "General health education, not diagnosis";
+
+      $("#ai-note").textContent =
+        lang === "hi"
+          ? "अगर कोई समस्या गंभीर या असामान्य लगे, तो किसी भरोसेमंद बड़े व्यक्ति और योग्य healthcare professional से बात करें।"
+          : "If something feels serious or unusual, talk to a trusted adult and a qualified healthcare professional.";
+
+      $("#online-text").textContent =
+        lang === "hi"
+          ? "ऑनलाइन"
+          : "Online";
+
+      $("#welcome-msg").textContent =
+        lang === "hi"
+          ? "अपने मासिक स्वास्थ्य के बारे में CareX AI से पूछें।"
+          : "Ask CareX AI about your menstrual health.";
+
+      applyTranslations();
+    }
+
+    async function initAssistant() {
+
+      chatUser =
+        await requireAuth();
+
+      if (!chatUser) {
+        return;
+      }
+
+      await loadChat();
+
+      updateAssistantLanguage();
+
+      document.addEventListener(
+        "carexLanguageChanged",
+        updateAssistantLanguage
+      );
+    }
+
+    $("#chat-form")
+      .addEventListener(
+        "submit",
+        function(event) {
+
+          event.preventDefault();
+
+          ask(
+            $("#ci").value
+          );
+
+        }
+      );
+
+    initAssistant();
+
+  </script>
+
+</body>
+</html>

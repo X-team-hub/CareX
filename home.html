@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home - CareX</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+    a,
+    a:hover,
+    a:focus,
+    a:active {
+      text-decoration: none !important;
+    }
+
+    /* ================= MAIN WRAPPER ================= */
+
+    .wrap {
+      width: calc(100% - 32px) !important;
+      max-width: 1280px !important;
+      margin: 0 auto !important;
+      padding: 28px 0 35px !important;
+    }
+
+    /* ================= HEADER ================= */
+
+    header {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 25px;
+      padding-bottom: 30px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+    }
+
+    .brand-logo {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+      display: block;
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-family: "Poppins", sans-serif;
+      font-size: 2.25rem;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.07em;
+      color: var(--plum);
+      white-space: nowrap;
+    }
+
+    .brand-x {
+      color: var(--rose);
+    }
+
+    /* ================= DESKTOP NAV ================= */
+
+    .desktop-nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+      justify-self: center;
+      padding: 5px;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: var(--card);
+      box-shadow: 0 8px 24px rgba(115,67,86,.07);
+    }
+
+    .desktop-nav a {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 13px;
+      border-radius: 11px;
+      color: var(--mute);
+      font-size: .78rem;
+      font-weight: 700;
+      white-space: nowrap;
+      transition: .2s ease;
+    }
+
+    .desktop-nav a:hover,
+    .desktop-nav a.active {
+      color: var(--rose);
+      background: var(--rose2);
+      transform: translateY(-1px);
+    }
+
+    .desktop-nav a span:first-child {
+      font-size: 1rem;
+    }
+
+    /* ================= CONTROLS ================= */
+
+    .top-controls {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .ctrl-btn {
+      min-height: 40px;
+      padding: 8px 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--card);
+      color: var(--ink);
+      font-size: .78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .ctrl-btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--rose);
+      box-shadow: 0 8px 20px rgba(115,67,86,.12);
+    }
+
+    #user-avatar {
+      width: 40px !important;
+      height: 40px !important;
+      padding: 0 !important;
+      display: grid !important;
+      place-items: center !important;
+      border-radius: 50%;
+      background: var(--rose2);
+      color: var(--rose);
+      border: 1px solid var(--line);
+      font-weight: 800;
+    }
+
+    /* ================= WELCOME ================= */
+
+    .welcome-area {
+      margin: 5px 0 28px;
+    }
+
+    #greeting-text {
+      font-family: "Noto Sans Devanagari", "DM Sans", sans-serif;
+      font-size: clamp(2.4rem, 4vw, 3.7rem);
+      font-weight: 800;
+      line-height: 1.12;
+      letter-spacing: -.05em;
+      color: var(--plum);
+    }
+
+    #welcome-msg {
+      margin-top: 8px;
+      font-family: "Noto Sans Devanagari", "DM Sans", sans-serif;
+      font-size: clamp(1.1rem, 1.7vw, 1.45rem);
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    /* ================= DASHBOARD ================= */
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(300px, .75fr);
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    /* ================= CYCLE CARD ================= */
+
+    .cycle-card {
+      position: relative;
+      min-height: 445px;
+      overflow: hidden;
+      padding: 30px;
+      border-radius: 30px;
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(
+          circle at 85% 15%,
+          var(--rose2),
+          transparent 34%
+        ),
+        var(--card);
+      box-shadow: 0 20px 50px rgba(115,67,86,.10);
+    }
+
+    .cycle-card::after {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      right: -110px;
+      bottom: -110px;
+      border-radius: 50%;
+      background: var(--rose2);
+      opacity: .35;
+      pointer-events: none;
+    }
+
+    .cycle-heading {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      margin-bottom: 4px;
+    }
+
+    .cycle-heading h3 {
+      margin: 0;
+      color: var(--plum);
+      font-size: 1.05rem;
+      font-weight: 800;
+    }
+
+    .ringbox {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+    }
+
+    .ringbox svg {
+      width: min(30vw, 310px);
+      height: auto;
+      display: block;
+    }
+
+    .ringtxt {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-content: center;
+      justify-items: center;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .ringtxt .mute {
+      font-family: "Noto Sans Devanagari", "DM Sans", sans-serif;
+      font-size: .84rem;
+      font-weight: 600;
+    }
+
+    .ringtxt b {
+      margin: 5px 0 8px;
+      font-family: "Poppins", sans-serif;
+      font-size: 3.3rem;
+      line-height: 1;
+      color: var(--plum);
+    }
+
+    .phase {
+      display: inline-block;
+      padding: 6px 13px;
+      border-radius: 999px;
+      font-size: .76rem;
+      font-weight: 700;
+    }
+
+    #next {
+      position: relative;
+      z-index: 2;
+      margin: 8px 0 0 !important;
+      text-align: center;
+      color: var(--ink);
+    }
+
+    #restart-cycle-btn {
+      position: relative;
+      z-index: 2;
+      display: block;
+      margin: 14px auto 0;
+      padding: 10px 18px;
+      border: 1px solid var(--rose);
+      border-radius: 999px;
+      background: var(--rose);
+      color: #fff;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    #restart-cycle-btn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    #restart-dialog {
+      width: min(90%, 440px);
+    }
+
+    .restart-form {
+      display: grid;
+      gap: 14px;
+    }
+
+    .restart-form label {
+      display: grid;
+      gap: 6px;
+      font-weight: 700;
+    }
+
+    .restart-form input {
+      width: 100%;
+      min-height: 44px;
+      padding: 9px 11px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--bg);
+      color: var(--ink);
+      font: inherit;
+    }
+
+    .restart-form p {
+      margin: 0;
+    }
+
+    .restart-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 9px;
+    }
+
+    .restart-actions button {
+      min-height: 40px;
+      padding: 8px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--card);
+      color: var(--ink);
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .restart-actions button[type="submit"] {
+      border-color: var(--rose);
+      background: var(--rose);
+      color: #fff;
+    }
+
+    #restart-message {
+      color: var(--rose);
+      font-size: .9rem;
+    }
+
+    /* ================= SNAPSHOT ================= */
+
+    .snapshot-card {
+      padding: 28px;
+      border-radius: 30px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      box-shadow: 0 20px 45px rgba(115,67,86,.08);
+    }
+
+    .snapshot-card h3 {
+      margin: 0 0 18px;
+      color: var(--plum);
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 13px;
+    }
+
+    .stat {
+      padding: 21px;
+      border-radius: 19px;
+      background: var(--bg);
+      border: 1px solid var(--line);
+      transition: .2s ease;
+    }
+
+    .stat:hover {
+      transform: translateY(-3px);
+      border-color: var(--rose3);
+    }
+
+    .stat b {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--plum);
+      font-family: "Poppins", sans-serif;
+      font-size: 1.7rem;
+    }
+
+    .stat .mute {
+      font-family: "Noto Sans Devanagari", "DM Sans", sans-serif;
+      font-size: .78rem;
+    }
+
+    /* ================= QUICK ACTIONS ================= */
+
+    .section-title {
+      margin: 32px 0 15px;
+      color: var(--plum);
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+
+    .qa-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .qa {
+      min-width: 0;
+      min-height: 145px;
+      padding: 18px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 11px;
+      text-align: center;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--ink);
+      box-shadow: 0 10px 28px rgba(115,67,86,.06);
+      transition:
+        transform .22s ease,
+        box-shadow .22s ease,
+        border-color .22s ease;
+    }
+
+    .qa:hover {
+      transform: translateY(-6px);
+      border-color: var(--rose3);
+      box-shadow: 0 18px 38px rgba(115,67,86,.13);
+    }
+
+    .qa span:first-child {
+      font-size: 2.05rem;
+      line-height: 1;
+    }
+
+    .qa span:last-child {
+      font-family: "Noto Sans Devanagari", "DM Sans", sans-serif;
+      font-size: .84rem;
+      line-height: 1.35;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+
+    /* ================= DESKTOP FOOTER NAV ================= */
+
+    .bottom-nav {
+      display: none !important;
+    }
+
+    /* ================= TABLET ================= */
+
+    @media (max-width: 1050px) and (min-width: 701px) {
+
+      header {
+        grid-template-columns: auto 1fr;
+      }
+
+      .desktop-nav {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        justify-self: stretch;
+      }
+
+      .desktop-nav a {
+        flex: 1;
+        justify-content: center;
+      }
+
+      .top-controls {
+        justify-self: end;
+      }
+
+      .dashboard {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .cycle-card {
+        min-height: 410px;
+      }
+
+      .ringbox svg {
+        width: min(38vw, 275px);
+      }
+
+      .qa-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* ================= MOBILE ================= */
+
+    @media (max-width: 700px) {
+
+      .wrap {
+        width: calc(100% - 24px) !important;
+        max-width: none !important;
+        padding: 15px 0 95px !important;
+      }
+
+      header {
+        display: flex;
+        gap: 10px;
+        padding-bottom: 22px;
+      }
+
+      .brand-logo {
+        width: 40px;
+        height: 40px;
+      }
+
+      .brand-name {
+        font-size: 1.75rem;
+      }
+
+      /* Hide desktop navigation */
+      .desktop-nav {
+        display: none !important;
+      }
+
+      .top-controls {
+        margin-left: auto;
+        gap: 5px;
+      }
+
+      .ctrl-btn {
+        min-height: 36px;
+        padding: 6px 9px;
+        font-size: .7rem;
+      }
+
+      #user-avatar {
+        width: 36px !important;
+        height: 36px !important;
+      }
+
+      .welcome-area {
+        margin-bottom: 20px;
+      }
+
+      #greeting-text {
+        font-size: 2.2rem;
+      }
+
+      #welcome-msg {
+        font-size: 1.1rem;
+      }
+
+      /* Mobile dashboard */
+      .dashboard {
+        display: flex;
+        flex-direction: column;
+        gap: 13px;
+      }
+
+      .cycle-card {
+        min-height: 355px;
+        padding: 21px 12px;
+        border-radius: 24px;
+      }
+
+      .ringbox svg {
+        width: min(70vw, 245px);
+      }
+
+      .ringtxt b {
+        font-size: 2.65rem;
+      }
+
+      .snapshot-card {
+        padding: 18px;
+        border-radius: 22px;
+      }
+
+      .snapshot-card h3 {
+        font-size: 1.05rem;
+      }
+
+      .stats {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 7px;
+      }
+
+      .stat {
+        padding: 13px 6px;
+        border-radius: 15px;
+        text-align: center;
+      }
+
+      .stat b {
+        font-size: 1.25rem;
+      }
+
+      .stat .mute {
+        font-size: .66rem;
+      }
+
+      .section-title {
+        margin: 25px 0 13px;
+        font-size: 1.05rem;
+      }
+
+      .qa-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .qa {
+        min-height: 112px;
+        padding: 13px 8px;
+        border-radius: 17px;
+      }
+
+      .qa span:first-child {
+        font-size: 1.6rem;
+      }
+
+      .qa span:last-child {
+        font-size: .78rem;
+      }
+
+      /* Mobile bottom nav */
+      .bottom-nav {
+        position: fixed !important;
+        display: grid !important;
+        left: 10px !important;
+        right: 10px !important;
+        bottom: 10px !important;
+        width: auto !important;
+        margin: 0 !important;
+        z-index: 1000;
+
+        grid-template-columns: repeat(5, 1fr);
+        gap: 3px;
+        padding: 7px;
+
+        border-radius: 19px;
+        border: 1px solid var(--line);
+        background: var(--card);
+        box-shadow: 0 15px 35px rgba(115,67,86,.15);
+      }
+
+      .nav-item {
+        min-width: 0;
+        padding: 7px 2px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        border-radius: 14px;
+        color: var(--mute);
+      }
+
+      .nav-item:hover,
+      .nav-item.active {
+        color: var(--rose);
+        background: var(--rose2);
+      }
+
+      .nav-item span:first-child {
+        font-size: 1.05rem;
+        line-height: 1;
+      }
+
+      .nav-item span:last-child {
+        font-size: .61rem;
+      }
+    }
+
+    /* ================= SMALL PHONE ================= */
+
+    @media (max-width: 370px) {
+
+      .wrap {
+        width: calc(100% - 18px) !important;
+      }
+
+      .brand-logo {
+        width: 36px;
+        height: 36px;
+      }
+
+      .brand-name {
+        font-size: 1.55rem;
+      }
+
+      .ctrl-btn {
+        padding: 5px 7px;
+        font-size: .64rem;
+      }
+
+      #greeting-text {
+        font-size: 2rem;
+      }
+
+      .qa {
+        min-height: 100px;
+      }
+
+      .qa span:first-child {
+        font-size: 1.3rem;
+      }
+
+      .qa span:last-child {
+        font-size: .72rem;
+      }
+    }
+
+    /* ================= LARGE DESKTOP ================= */
+
+    @media (min-width: 1400px) {
+
+      .wrap {
+        max-width: 1380px !important;
+        padding-top: 38px !important;
+      }
+
+      .brand-logo {
+        width: 60px;
+        height: 60px;
+      }
+
+      .brand-name {
+        font-size: 2.6rem;
+      }
+
+      #greeting-text {
+        font-size: 4rem;
+      }
+
+      .cycle-card {
+        min-height: 475px;
+      }
+
+      .ringbox svg {
+        width: 335px;
+      }
+
+      .qa {
+        min-height: 160px;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="css/app-navigation.css">
+</head>
+
+<body>
+
+  <div class="wrap">
+
+    <!-- HEADER -->
+    <header class="app-topbar">
+
+      <div class="brand app-brand">
+
+        <img
+          src="assets/images/20261003_115356.png"
+          class="brand-logo"
+          alt="CareX logo"
+          onerror="this.style.display='none'"
+        >
+
+        <div class="brand-name">
+          Care<span class="brand-x">X</span>
+        </div>
+
+      </div>
+
+
+      <!-- DESKTOP TOP NAV -->
+      <nav class="desktop-nav app-desktop-nav" aria-label="Main navigation">
+
+        <a href="home.html" class="active">
+          <span>🏠</span>
+          <span data-i18n="home">Home</span>
+        </a>
+
+        <a href="track.html">
+          <span>✏️</span>
+          <span data-i18n="track">Track</span>
+        </a>
+
+        <a href="insights.html">
+          <span>📈</span>
+          <span data-i18n="insights">Insights</span>
+        </a>
+
+        <a href="assistant.html">
+          <span>💬</span>
+          <span data-i18n="assistant">Ask</span>
+        </a>
+
+        <a href="profile.html">
+          <span>👤</span>
+          <span data-i18n="profile">Profile</span>
+        </a>
+
+      </nav>
+
+
+      <!-- CONTROLS -->
+      <div class="top-controls app-controls">
+
+        <button
+          class="ctrl-btn app-control"
+          onclick="setLang(getLang()==='en'?'hi':'en')"
+        >
+          🌐 <span id="lang-label">HI</span>
+        </button>
+
+        <button
+          class="ctrl-btn app-control"
+          onclick="toggleTheme()"
+          aria-label="Toggle theme"
+        >
+          ☀️ / 🌙
+        </button>
+
+        <a href="profile.html" id="user-avatar">
+          👤
+        </a>
+
+      </div>
+
+    </header>
+
+
+    <!-- WELCOME -->
+    <section class="welcome-area">
+
+      <div id="greeting-text"></div>
+      <div id="welcome-msg"></div>
+
+    </section>
+
+
+    <!-- DASHBOARD -->
+    <section class="dashboard">
+
+      <!-- CYCLE -->
+      <div class="cycle-card">
+
+        <div class="cycle-heading">
+          <h3 data-i18n="cycle_day">
+            Cycle day
+          </h3>
+        </div>
+
+        <div class="ringbox">
+
+          <svg viewBox="0 0 200 200">
+
+            <circle
+              cx="100"
+              cy="100"
+              r="84"
+              fill="none"
+              stroke="var(--line)"
+              stroke-width="16"
+            />
+
+            <circle
+              id="ringp"
+              cx="100"
+              cy="100"
+              r="84"
+              fill="none"
+              stroke="var(--rose)"
+              stroke-width="16"
+              stroke-linecap="round"
+              stroke-dasharray="0 999"
+              transform="rotate(-90 100 100)"
+            />
+
+          </svg>
+
+          <div class="ringtxt">
+
+            <span
+              class="mute"
+              id="cycle-day-text"
+            >
+              Cycle day
+            </span>
+
+            <b id="day">–</b>
+
+            <span
+              class="phase"
+              id="phase"
+            ></span>
+
+          </div>
+
+        </div>
+
+        <p id="next"></p>
+
+        <button id="restart-cycle-btn" type="button" disabled>
+          Restart cycle
+        </button>
+
+      </div>
+
+
+      <!-- SNAPSHOT -->
+      <div class="snapshot-card">
+
+        <h3 data-i18n="your_patterns">
+          Your Patterns
+        </h3>
+
+        <div class="stats">
+
+          <div class="stat">
+            <b id="hc">–</b>
+            <span class="mute">
+              Avg Cycle
+            </span>
+          </div>
+
+          <div class="stat">
+            <b id="hp">–</b>
+            <span class="mute">
+              Avg Period
+            </span>
+          </div>
+
+          <div class="stat">
+            <b id="hn">–</b>
+            <span class="mute">
+              Next
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- QUICK ACTIONS -->
+    <h3
+      class="section-title"
+      id="quick-actions-title"
+    >
+      Quick Actions
+    </h3>
+
+    <div class="qa-grid">
+
+      <a href="track.html" class="qa">
+        <span>🩸</span>
+        <span data-i18n="log_period_symptoms">
+          Log Period &amp; Symptoms
+        </span>
+      </a>
+
+      <a href="self-care.html" class="qa">
+        <img src="https://cdn-icons-png.flaticon.com/512/11288/11288950.png" alt="" width="42" height="42" aria-hidden="true">
+        <span data-i18n="self_care">
+          Self Care
+        </span>
+      </a>
+
+      <a href="assistant.html" class="qa">
+        <span>💬</span>
+        <span data-i18n="ask_ai">
+          Ask CareX AI
+        </span>
+      </a>
+
+      <a href="doctors.html" class="qa">
+        <span>🩺</span>
+        <span data-i18n="book_doctor">
+          Book Doctor
+        </span>
+      </a>
+
+      <a href="medicine.html" class="qa">
+        <span>💊</span>
+        <span data-i18n="decode_medicine">
+          Medicine Decoder
+        </span>
+      </a>
+
+      <a href="insights.html" class="qa">
+        <span>📈</span>
+        <span data-i18n="see_patterns">
+          See Patterns
+        </span>
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <!-- MOBILE BOTTOM NAV -->
+  <nav class="bottom-nav app-bottom-nav" aria-label="Main navigation">
+
+    <a href="home.html" class="nav-item active">
+      <span>🏠</span>
+      <span data-i18n="home">Home</span>
+    </a>
+
+    <a href="track.html" class="nav-item">
+      <span>✏️</span>
+      <span data-i18n="track">Track</span>
+    </a>
+
+    <a href="insights.html" class="nav-item">
+      <span>📈</span>
+      <span data-i18n="insights">Insights</span>
+    </a>
+
+    <a href="assistant.html" class="nav-item">
+      <span>💬</span>
+      <span data-i18n="assistant">Ask</span>
+    </a>
+
+    <a href="profile.html" class="nav-item">
+      <span>👤</span>
+      <span data-i18n="profile">Profile</span>
+    </a>
+
+  </nav>
+
+  <dialog id="restart-dialog" aria-labelledby="restart-title">
+    <h3 id="restart-title">Restart your cycle</h3>
+
+    <form id="restart-form" class="restart-form">
+      <label for="restart-start-date" id="restart-start-label">
+        Starting date
+        <input id="restart-start-date" type="date" required>
+      </label>
+
+      <label for="restart-end-date" id="restart-end-label">
+        Ending date (optional)
+        <input id="restart-end-date" type="date">
+      </label>
+
+      <p id="restart-end-help">Leave the ending date blank if your period has not ended.</p>
+      <p id="restart-message" role="alert" hidden></p>
+
+      <div class="restart-actions">
+        <button id="restart-cancel" type="button">Cancel</button>
+        <button id="restart-submit" type="submit">Restart cycle</button>
+      </div>
+    </form>
+  </dialog>
+
+
+  <!-- SHARED JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/language.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/common.js"></script>
+
+
+  <!-- HOME LOGIC -->
+  <script>
+
+    let homeUser = null;
+    let homeCycle = null;
+    let updateHomeLanguage = () => {};
+
+    const homeTodayStr = () => {
+      const now = new Date();
+      const localDate = new Date(
+        now.getTime() - now.getTimezoneOffset() * 60000
+      );
+      return localDate.toISOString().slice(0, 10);
+    };
+
+    function openRestartDialog() {
+      const dialog = $('#restart-dialog');
+      const startInput = $('#restart-start-date');
+      const endInput = $('#restart-end-date');
+      const today = homeTodayStr();
+
+      $('#restart-message').hidden = true;
+      startInput.value = today;
+      startInput.min = homeCycle?.start_date
+        ? addDays(homeCycle.start_date, 1)
+        : '';
+      startInput.max = today;
+      endInput.value = '';
+      endInput.min = startInput.value;
+      endInput.max = today;
+      dialog.showModal();
+    }
+
+    async function restartCycle(event) {
+      event.preventDefault();
+
+      const startDate = $('#restart-start-date').value;
+      const endDate = $('#restart-end-date').value;
+      const today = homeTodayStr();
+      const message = $('#restart-message');
+      const submitButton = $('#restart-submit');
+      const lang = getLang();
+      const messages = lang === 'hi'
+        ? {
+            dateOrder: 'नई शुरुआत की तारीख पिछली cycle की शुरुआत के बाद होनी चाहिए।',
+            endBeforeStart: 'समाप्ति की तारीख शुरुआत की तारीख से पहले नहीं हो सकती।',
+            future: 'तारीख भविष्य में नहीं हो सकती।',
+            duration: 'कृपया पीरियड की अवधि की तारीखें जांचें।',
+            saved: 'Cycle सफलतापूर्वक restart हुई।',
+            failed: 'Cycle restart नहीं हो सकी। कृपया फिर कोशिश करें।'
+          }
+        : {
+            dateOrder: 'The new start date must be after the previous cycle start.',
+            endBeforeStart: 'The ending date cannot be before the starting date.',
+            future: 'Dates cannot be in the future.',
+            duration: 'Please check the period date range.',
+            saved: 'Cycle restarted successfully.',
+            failed: 'Could not restart the cycle. Please try again.'
+          };
+
+      const showMessage = text => {
+        message.textContent = text;
+        message.hidden = false;
+      };
+
+      if (homeCycle?.start_date && startDate <= homeCycle.start_date) {
+        showMessage(messages.dateOrder);
+        return;
+      }
+
+      if (endDate && endDate < startDate) {
+        showMessage(messages.endBeforeStart);
+        return;
+      }
+
+      if (startDate > today || (endDate && endDate > today)) {
+        showMessage(messages.future);
+        return;
+      }
+
+      const periodLength = endDate
+        ? diff(startDate, endDate) + 1
+        : homeCycle?.period_length || 5;
+
+      if (periodLength < 1 || periodLength > 60) {
+        showMessage(messages.duration);
+        return;
+      }
+
+      submitButton.disabled = true;
+
+      try {
+        const cycleData = {
+          user_id: homeUser.id,
+          start_date: startDate,
+          end_date: endDate || null,
+          period_length: periodLength,
+          cycle_length: homeCycle?.cycle_length || 28
+        };
+
+        const { data: existing, error: findError } = await sb
+          .from('cycle_logs')
+          .select('id')
+          .eq('user_id', homeUser.id)
+          .eq('start_date', startDate)
+          .maybeSingle();
+
+        if (findError) throw findError;
+
+        const result = existing
+          ? await sb
+              .from('cycle_logs')
+              .update(cycleData)
+              .eq('id', existing.id)
+              .eq('user_id', homeUser.id)
+          : await sb.from('cycle_logs').insert(cycleData);
+
+        if (result.error) throw result.error;
+
+        $('#restart-dialog').close();
+        toast(messages.saved);
+        await loadHome();
+      } catch (error) {
+        console.error('Restart cycle error:', error);
+        showMessage(error.message || messages.failed);
+      } finally {
+        submitButton.disabled = false;
+      }
+    }
+
+    $('#restart-cycle-btn').addEventListener('click', openRestartDialog);
+    $('#restart-cancel').addEventListener('click', () => {
+      $('#restart-dialog').close();
+    });
+    $('#restart-form').addEventListener('submit', restartCycle);
+    $('#restart-start-date').addEventListener('change', event => {
+      $('#restart-end-date').min = event.target.value;
+    });
+
+    document.addEventListener('carexLanguageChanged', () => {
+      updateHomeLanguage();
+    });
+
+    async function loadHome() {
+
+      const supabaseUser = await requireAuth();
+
+      if (!supabaseUser) return;
+      homeUser = supabaseUser;
+
+      const fullName =
+        supabaseUser.user_metadata?.full_name ||
+        supabaseUser.email?.split('@')[0] ||
+        'User';
+
+      const name =
+        fullName.trim().split(/\s+/)[0];
+
+      const { data: cycle, error } =
+        await sb
+          .from('cycle_logs')
+          .select(
+            'start_date, end_date, cycle_length, period_length'
+          )
+          .eq('user_id', supabaseUser.id)
+          .order('start_date', {
+            ascending: false
+          })
+          .limit(1)
+          .maybeSingle();
+
+      if (error) {
+        return toast('Could not load cycle data');
+      }
+
+      homeCycle = cycle;
+
+      const lastPeriod =
+        cycle?.start_date || homeTodayStr();
+
+      const cycleLen =
+        cycle?.cycle_length || 28;
+
+      const periodLen =
+        cycle?.end_date
+          ? diff(lastPeriod, cycle.end_date) + 1
+          : cycle?.period_length || 5;
+
+      const day =
+        Math.max(
+          1,
+          diff(lastPeriod, homeTodayStr()) + 1
+        );
+
+      $('#day').textContent = day;
+      $('#hc').textContent = cycleLen;
+      $('#hp').textContent = periodLen;
+
+      const phase =
+        day <= periodLen
+          ? 'period'
+          : day < 14
+            ? 'follicular'
+            : day < 16
+              ? 'fertile'
+              : 'luteal';
+
+      const next =
+        addDays(lastPeriod, cycleLen);
+
+      const late =
+        diff(next, homeTodayStr());
+
+      const phaseEl =
+        $('#phase');
+
+      phaseEl.style.cssText = `
+        background:var(--${
+          phase === 'period'
+            ? 'rose2'
+            : phase === 'fertile'
+              ? 'sun2'
+              : 'sage2'
+        });
+
+        color:var(--${
+          phase === 'period'
+            ? 'rose'
+            : phase === 'fertile'
+              ? 'sun'
+              : 'sage'
+        });
+      `;
+
+      const R =
+        2 * Math.PI * 84;
+
+      $('#ringp').setAttribute(
+        'stroke-dasharray',
+        `${Math.min(day, cycleLen) / cycleLen * R} 999`
+      );
+
+
+      updateHomeLanguage = function() {
+
+        const lang = getLang();
+        const restartText = lang === 'hi'
+          ? {
+              button: 'Cycle restart करें',
+              title: 'अपनी cycle restart करें',
+              start: 'शुरुआत की तारीख',
+              end: 'समाप्ति की तारीख (वैकल्पिक)',
+              help: 'पीरियड खत्म नहीं हुआ है तो समाप्ति की तारीख खाली छोड़ें।',
+              cancel: 'रद्द करें',
+              submit: 'Restart करें'
+            }
+          : {
+              button: 'Restart cycle',
+              title: 'Restart your cycle',
+              start: 'Starting date',
+              end: 'Ending date (optional)',
+              help: 'Leave the ending date blank if your period has not ended.',
+              cancel: 'Cancel',
+              submit: 'Restart cycle'
+            };
+
+        $('#greeting-text').textContent =
+          lang === 'hi'
+            ? 'स्वागत है 🌷'
+            : 'Welcome 🌷';
+
+        $('#welcome-msg').textContent =
+          name;
+
+        $('#user-avatar').textContent =
+          name.charAt(0).toUpperCase();
+
+        $('#lang-label').textContent =
+          lang === 'hi' ? 'EN' : 'HI';
+
+        $('#cycle-day-text').textContent =
+          lang === 'hi'
+            ? translations.hi.cycle_day
+            : translations.en.cycle_day;
+
+        $('#phase').textContent =
+          lang === 'hi'
+            ? translations.hi[phase]
+            : translations.en[phase];
+
+        $('#next').textContent =
+          late > 0
+            ? `${
+                lang === 'hi'
+                  ? translations.hi.days_late
+                  : translations.en.days_late
+              }: ${late}`
+            : `${
+                lang === 'hi'
+                  ? translations.hi.next_period
+                  : translations.en.next_period
+              }: ${fmt(next)}`;
+
+        $('#hn').textContent =
+          late > 0
+            ? late
+            : Math.abs(late);
+
+        $('#quick-actions-title').textContent =
+          lang === 'hi'
+            ? 'त्वरित विकल्प'
+            : 'Quick Actions';
+
+        $('#restart-cycle-btn').textContent = restartText.button;
+        $('#restart-title').textContent = restartText.title;
+        $('#restart-start-label').firstChild.textContent = restartText.start;
+        $('#restart-end-label').firstChild.textContent = restartText.end;
+        $('#restart-end-help').textContent = restartText.help;
+        $('#restart-cancel').textContent = restartText.cancel;
+        $('#restart-submit').textContent = restartText.submit;
+
+        applyTranslations();
+      }
+
+      $('#restart-cycle-btn').disabled = false;
+
+      updateHomeLanguage();
+
+    }
+
+    loadHome();
+
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign Up - CareX</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:#FBF7FC;
+      --card:#fff;
+      --ink:#352B3D;
+      --mute:#81758A;
+      --line:#E7DDEB;
+      --rose:#C978A5;
+      --rose2:#F5E5F0;
+      --plum:#674B70;
+      --plum2:#7B526B;
+      --shadow:0 18px 45px rgba(115,67,86,.10);
+    }
+
+    [data-theme="dark"] {
+      --bg:#170F14;
+      --card:#291B22;
+      --ink:#F8EAF0;
+      --mute:#BCA7B1;
+      --line:#3D2932;
+      --rose:#ED8CA7;
+      --rose2:#43252F;
+      --plum:#E2BFD0;
+      --plum2:#C99EB5;
+      --shadow:0 18px 45px rgba(0,0,0,.25);
+    }
+
+    * {
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    body {
+      min-height:100vh;
+      background:
+        radial-gradient(circle at 10% 0%,rgba(246,180,199,.20),transparent 30%),
+        radial-gradient(circle at 100% 100%,rgba(215,169,195,.14),transparent 30%),
+        var(--bg);
+      color:var(--ink);
+      font:16px/1.5 "DM Sans",sans-serif;
+    }
+
+    .signup-page {
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .signup-nav {
+      min-height:76px;
+      padding:10px clamp(18px,7vw,100px);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      background:var(--card);
+      border-bottom:1px solid var(--line);
+    }
+
+    .signup-nav-actions {
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:12px;
+    }
+
+    .brand {
+      display:flex;
+      align-items:center;
+      gap:9px;
+      color:var(--plum);
+      text-decoration:none;
+      font:700 30px "Fraunces",serif;
+    }
+
+    .brand img {
+      width:40px;
+      height:40px;
+      object-fit:contain;
+    }
+
+    .brand span {
+      color:var(--rose);
+    }
+
+    .nav-back {
+      color:var(--plum);
+      text-decoration:none;
+      font-weight:600;
+      white-space:nowrap;
+    }
+
+    .signup-language {
+      min-height:40px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:var(--card);
+      color:var(--ink);
+      font:inherit;
+      font-weight:700;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+
+    .signup-language:hover {
+      border-color:var(--rose);
+    }
+
+    .signup-main {
+      flex:1;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      max-width:1050px;
+      width:100%;
+      margin:auto;
+      padding:55px 25px;
+      gap:55px;
+      align-items:center;
+    }
+
+    .signup-intro {
+      padding:20px;
+    }
+
+    .tag {
+      display:inline-block;
+      padding:7px 14px;
+      border-radius:99px;
+      background:var(--card);
+      border:1px solid var(--line);
+      color:var(--rose);
+      font-size:.78rem;
+      font-weight:700;
+    }
+
+    .signup-intro h1 {
+      margin:20px 0 15px;
+      font:700 clamp(42px,5vw,65px)/1.05 "Fraunces",serif;
+    }
+
+    .signup-intro h1 em {
+      color:var(--rose);
+    }
+
+    .signup-intro p {
+      max-width:480px;
+      color:var(--mute);
+      line-height:1.75;
+    }
+
+    .signup-card {
+      padding:32px;
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:26px;
+      box-shadow:var(--shadow);
+    }
+
+    .signup-card h2 {
+      margin-bottom:5px;
+      font:700 32px "Fraunces",serif;
+      color:var(--plum);
+    }
+
+    .signup-sub {
+      margin-bottom:24px;
+      color:var(--mute);
+      font-size:.9rem;
+    }
+
+    .field {
+      margin-bottom:15px;
+    }
+
+    label {
+      display:block;
+      margin-bottom:6px;
+      color:var(--mute);
+      font-size:.84rem;
+      font-weight:600;
+    }
+
+    input {
+      width:100%;
+      padding:12px 14px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:var(--bg);
+      color:var(--ink);
+      font:inherit;
+      outline:none;
+    }
+
+    input:focus {
+      border-color:var(--rose);
+      box-shadow:0 0 0 3px var(--rose2);
+    }
+
+    .create-btn,
+    .google-btn {
+      width:100%;
+      min-height:46px;
+      border-radius:12px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .create-btn {
+      margin-top:4px;
+      border:0;
+      background:linear-gradient(135deg,var(--rose),var(--plum2));
+      color:#fff;
+    }
+
+    .divider {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin:20px 0;
+      color:var(--mute);
+      font-size:.8rem;
+    }
+
+    .divider::before,
+    .divider::after {
+      content:"";
+      height:1px;
+      flex:1;
+      background:var(--line);
+    }
+
+    .google-btn {
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      border:1px solid var(--line);
+      background:var(--card);
+      color:var(--ink);
+    }
+
+    .google-icon {
+      width:20px;
+      height:20px;
+    }
+
+    .login-link {
+      margin-top:20px;
+      text-align:center;
+      font-size:.88rem;
+      color:var(--mute);
+    }
+
+    .login-link a {
+      color:var(--rose);
+      text-decoration:none;
+      font-weight:700;
+    }
+
+    .error-msg {
+      display:none;
+      margin-bottom:15px;
+      padding:10px 12px;
+      border-radius:10px;
+      background:#FDE5EC;
+      color:#9B3D58;
+      font-size:.85rem;
+    }
+
+    .toast {
+      display:none;
+      position:fixed;
+      left:50%;
+      bottom:calc(16px + env(safe-area-inset-bottom, 0px));
+      z-index:1000;
+      width:max-content;
+      max-width:calc(100% - 32px);
+      padding:12px 16px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:var(--card);
+      color:var(--ink);
+      box-shadow:var(--shadow);
+      text-align:center;
+      transform:translateX(-50%);
+    }
+
+    .toast.show {
+      display:block;
+    }
+
+    @media (max-width:800px) {
+      .signup-main {
+        grid-template-columns:1fr;
+        max-width:600px;
+        gap:20px;
+        padding:35px 18px;
+      }
+
+      .signup-intro {
+        text-align:center;
+        padding:5px;
+      }
+
+      .signup-intro p {
+        margin:auto;
+      }
+    }
+
+    @media (max-width:500px) {
+      .signup-nav {
+        padding:8px 15px;
+      }
+
+      .brand {
+        font-size:24px;
+      }
+
+      .brand img {
+        width:34px;
+        height:34px;
+      }
+
+      .nav-back {
+        font-size:0;
+      }
+
+      .nav-back::after {
+        content:"Login";
+        font-size:.85rem;
+      }
+
+      .signup-nav-actions {
+        gap:8px;
+      }
+
+      .signup-language {
+        min-height:36px;
+        padding:7px 9px;
+        font-size:.82rem;
+      }
+
+      .signup-intro h1 {
+        font-size:42px;
+      }
+
+      .signup-card {
+        padding:22px 18px;
+        border-radius:20px;
+      }
+
+      .signup-main {
+        gap:14px;
+        padding:24px 14px 32px;
+      }
+
+      .signup-intro {
+        display:none;
+      }
+
+      .signup-intro h1 {
+        margin:12px 0 8px;
+        font-size:clamp(32px, 9vw, 38px);
+      }
+
+      .signup-intro p {
+        font-size:.88rem;
+        line-height:1.55;
+      }
+
+      .signup-card {
+        padding:20px 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="signup-page">
+
+  <header class="signup-nav">
+
+    <a href="index.html" class="brand">
+      <img src="assets/images/20261003_115356.png" alt="CareX Logo">
+      Care<span>X</span>
+    </a>
+
+    <div class="signup-nav-actions">
+      <button
+        type="button"
+        class="signup-language"
+        onclick="setLang(getLang() === 'en' ? 'hi' : 'en')"
+        aria-label="Change language">
+        🌐 <span id="lang-label">HI</span>
+      </button>
+      <a href="login.html" class="nav-back">
+        Already have an account?
+      </a>
+    </div>
+
+  </header>
+
+
+  <main class="signup-main">
+
+    <section class="signup-intro">
+
+      <span class="tag">MENSTRUAL HEALTH COMPANION</span>
+
+      <h1>
+        Create your<br>
+        <em>CareX space.</em>
+      </h1>
+
+      <p>
+        Track your cycle, understand your health patterns and access
+        helpful menstrual-health information in one calm place.
+      </p>
+
+    </section>
+
+
+    <section class="signup-card">
+
+      <h2 data-i18n="signup">Sign Up</h2>
+
+      <p class="signup-sub">
+        Create your CareX account to get started.
+      </p>
+
+      <div id="signupError" class="error-msg"></div>
+
+
+      <form onsubmit="handleSignup(event)">
+
+        <div class="field">
+          <label data-i18n="full_name">Full Name</label>
+          <input name="full_name" required>
+        </div>
+
+        <div class="field">
+          <label data-i18n="mobile">Mobile Number</label>
+          <input
+            type="tel"
+            name="mobile"
+            pattern="[0-9]{10}"
+            maxlength="10"
+            required>
+        </div>
+
+        <div class="field">
+          <label data-i18n="email">Email ID</label>
+          <input type="email" name="email" required>
+        </div>
+
+        <div class="field">
+          <label data-i18n="user_id">User ID</label>
+          <input name="user_id" required>
+        </div>
+
+        <div class="field">
+          <label data-i18n="password">Password</label>
+          <input type="password" name="password" minlength="8" required>
+        </div>
+
+        <div class="field">
+          <label data-i18n="confirm_password">Confirm Password</label>
+          <input type="password" name="confirm_password" minlength="8" required>
+        </div>
+
+        <button
+          type="submit"
+          class="create-btn"
+          data-i18n="create_account">
+          Create Account
+        </button>
+
+      </form>
+
+
+      <div class="divider">
+        <span>or</span>
+      </div>
+
+
+      <button
+        type="button"
+        class="google-btn"
+        onclick="signupWithGoogle()">
+
+        <img
+          class="google-icon"
+          src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+          alt="Google">
+
+        <span>Continue with Google</span>
+
+      </button>
+
+
+      <p class="login-link">
+        Already have an account?
+        <a href="login.html">Login</a>
+      </p>
+
+    </section>
+
+  </main>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
+<script src="js/data.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/language.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/common.js"></script>
+
+</body>
+</html>

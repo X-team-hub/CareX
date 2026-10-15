@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Profile - CareX</title>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 8% 0%,var(--rose2),transparent 30%),
+    radial-gradient(circle at 95% 8%,var(--sage2),transparent 25%),
+    var(--bg);
+  color:var(--ink);
+}
+
+html[lang="hi"] body{
+  font-family:"Noto Sans Devanagari","DM Sans",sans-serif;
+}
+
+html[lang="hi"] .profile-hero h1,
+html[lang="hi"] .card-title{
+  font-family:"Noto Sans Devanagari","DM Sans",sans-serif;
+  letter-spacing:normal;
+}
+
+html[lang="hi"] .profile-hero h1{line-height:1.25}
+
+a,button{text-decoration:none!important}
+
+button{transition:.2s ease}
+
+.profile-page{
+  width:min(1180px,calc(100% - 36px));
+  margin:auto;
+  padding:22px 0 100px;
+}
+
+#profilePage > .app-topbar{
+  width:min(1180px,calc(100% - 36px));
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:clamp(12px,1.5vw,20px);
+}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  min-width:0;
+  margin-bottom:25px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  color:var(--ink);
+  font:700 30px var(--font-head);
+}
+
+.brand img{
+  width:39px;
+  height:39px;
+  object-fit:contain;
+}
+
+.brand span{color:var(--rose)}
+
+.top-controls{
+  display:flex;
+  flex:0 0 auto;
+  justify-content:flex-end;
+  margin-left:auto;
+  gap:8px;
+}
+
+.control-btn{
+  width:auto;
+  padding:9px 13px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:var(--card);
+  color:var(--ink);
+  cursor:pointer;
+}
+
+.control-btn:hover{
+  border-color:var(--rose);
+  transform:translateY(-1px);
+}
+
+.profile-hero{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:25px;
+  padding:30px;
+  margin-bottom:20px;
+  border:1px solid var(--line);
+  border-radius:27px;
+  background:linear-gradient(135deg,var(--card),var(--rose2));
+  box-shadow:var(--shadow);
+}
+
+.profile-main{
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
+
+.avatar{
+  width:78px;
+  height:78px;
+  display:grid;
+  place-items:center;
+  border-radius:23px;
+  background:linear-gradient(135deg,var(--plum),var(--rose));
+  color:#fff;
+  font:700 30px var(--font-head);
+  box-shadow:0 12px 25px rgba(115,67,86,.16);
+}
+
+.eyebrow{
+  margin:0 0 6px;
+  color:var(--rose);
+  font-size:.72rem;
+  font-weight:700;
+  letter-spacing:.15em;
+}
+
+.profile-hero h1{
+  margin:0;
+  font:700 clamp(28px,4vw,42px)/1.05 var(--font-head);
+}
+
+.hero-sub{
+  margin:8px 0 0;
+  color:var(--mute);
+}
+
+.edit-btn{
+  width:auto;
+  flex:0 0 auto;
+  padding:11px 20px;
+}
+
+.profile-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);
+  align-items:start;
+  gap:20px;
+}
+
+.profile-overview{
+  margin-bottom:20px;
+}
+
+.profile-overview .field-grid{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+}
+
+.column{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  min-width:0;
+}
+
+.card{
+  padding:23px;
+  margin-bottom:0;
+  border:1px solid var(--line);
+  border-radius:21px;
+  background:var(--card);
+  box-shadow:var(--shadow);
+}
+
+.card-head{margin-bottom:18px}
+
+.card-title{
+  margin:0;
+  font:700 22px var(--font-head);
+}
+
+.card-sub{
+  margin:5px 0 0;
+  color:var(--mute);
+  font-size:.85rem;
+  line-height:1.5;
+}
+
+.field-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.full{grid-column:1/-1}
+
+label{
+  color:var(--mute);
+  font-size:.8rem;
+  font-weight:700;
+}
+
+.value{
+  min-height:43px;
+  padding:11px 13px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:var(--bg);
+  font-weight:600;
+  word-break:break-word;
+}
+
+input,select{
+  width:100%;
+  min-height:44px;
+  padding:10px 12px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  outline:none;
+  background:var(--card);
+  color:var(--ink);
+  font:inherit;
+}
+
+input:focus,select:focus{
+  border-color:var(--rose);
+  box-shadow:0 0 0 3px var(--rose2);
+}
+
+.edit-field,.edit-actions{display:none}
+
+.edit-mode .view{display:none}
+
+.edit-mode .edit-field{display:flex}
+
+.edit-mode .edit-actions{
+  display:flex;
+  justify-content:flex-end;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:20px;
+}
+
+.edit-mode .edit-btn{display:none}
+
+.primary{
+  width:auto;
+  background:linear-gradient(135deg,var(--rose),var(--plum));
+  color:#fff;
+  border:0;
+  cursor:pointer;
+  padding:11px 17px;
+  border-radius:12px;
+}
+
+.primary:hover{
+  transform:translateY(-2px);
+  box-shadow:0 9px 20px rgba(115,67,86,.18);
+}
+
+.secondary{
+  width:auto;
+  background:var(--rose2);
+  color:var(--plum);
+  border:1px solid var(--line);
+  cursor:pointer;
+  padding:11px 17px;
+  border-radius:12px;
+}
+
+.info{
+  margin-top:16px;
+  padding:13px 15px;
+  border-radius:14px;
+  background:var(--rose2);
+  color:var(--plum);
+  font-size:.83rem;
+  line-height:1.5;
+}
+
+.setting-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:14px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.setting-row:last-child{border-bottom:0}
+
+.setting-text strong{
+  display:block;
+  margin-bottom:3px;
+}
+
+.setting-text small{color:var(--mute)}
+
+.toggle{
+  position:relative;
+  width:47px;
+  height:26px;
+  flex:none;
+}
+
+.toggle input{display:none}
+
+.slider{
+  position:absolute;
+  inset:0;
+  border-radius:20px;
+  background:var(--line);
+  cursor:pointer;
+}
+
+.slider:before{
+  content:"";
+  position:absolute;
+  width:20px;
+  height:20px;
+  left:3px;
+  top:3px;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 2px 5px rgba(0,0,0,.15);
+  transition:.2s;
+}
+
+.toggle input:checked+.slider{background:var(--rose)}
+
+.toggle input:checked+.slider:before{
+  transform:translateX(21px);
+}
+
+.notification-box{
+  margin-top:14px;
+  padding:15px;
+  border-radius:15px;
+  background:var(--bg);
+  border:1px solid var(--line);
+}
+
+.notification-box.disabled{
+  opacity:.45;
+  pointer-events:none;
+}
+
+.times{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-top:8px;
+}
+
+.action-list{
+  display:grid;
+  gap:9px;
+}
+
+.action-list > button{
+  width:100%;
+}
+
+.ghost{
+  width:auto;
+  padding:11px 15px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:var(--card);
+  color:var(--ink);
+  cursor:pointer;
+}
+
+.ghost:hover{
+  border-color:var(--rose);
+  transform:translateY(-1px);
+}
+
+.danger{
+  color:var(--rose);
+  border-color:var(--rose);
+}
+
+@media(max-width:950px){
+
+  .profile-overview .field-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .profile-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+
+@media(max-width:650px){
+
+  .profile-page{
+    width:min(calc(100% - 20px),600px);
+    padding-top:13px;
+    padding-bottom:calc(90px + env(safe-area-inset-bottom));
+  }
+
+  #profilePage > .app-topbar{
+    width:min(calc(100% - 20px),600px);
+  }
+
+  .topbar{
+    flex-wrap:wrap;
+    margin-bottom:17px;
+  }
+
+  .brand{font-size:25px}
+
+  .top-controls{margin-left:auto}
+
+  .brand img{
+    width:34px;
+    height:34px;
+  }
+
+  .control-btn{
+    padding:8px 9px;
+    font-size:.76rem;
+  }
+
+  .profile-hero{
+    align-items:center;
+    gap:12px;
+    padding:16px;
+    margin-bottom:14px;
+    border-radius:21px;
+  }
+
+  .profile-main{
+    flex:1 1 auto;
+    width:auto;
+    min-width:0;
+    gap:12px;
+  }
+
+  .profile-main>div:last-child{min-width:0}
+
+  .profile-hero h1{
+    font-size:clamp(24px,7vw,30px);
+    overflow-wrap:anywhere;
+  }
+
+  .hero-sub{
+    font-size:.8rem;
+    line-height:1.4;
+    overflow-wrap:anywhere;
+  }
+
+  .avatar{
+    width:54px;
+    height:54px;
+    flex:none;
+    border-radius:17px;
+    font-size:22px;
+  }
+
+  .edit-btn{
+    width:auto;
+    padding:9px 11px;
+    font-size:.8rem;
+    white-space:nowrap;
+  }
+
+  .field-grid{grid-template-columns:1fr}
+
+  .profile-overview .field-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+  }
+
+  .profile-overview .field:nth-child(n+3){grid-column:1/-1}
+
+  .full{grid-column:auto}
+
+  .times{grid-template-columns:1fr}
+
+  .card{
+    padding:16px;
+    border-radius:18px;
+  }
+
+  .profile-overview,
+  .column{gap:14px}
+}
+
+@media(max-width:380px){
+  .profile-hero{
+    align-items:stretch;
+    flex-direction:column;
+  }
+
+  .profile-main{width:100%}
+
+  .edit-btn{width:100%}
+}
+
+@media(min-width:1400px){
+
+  .profile-page{
+    width:min(1300px,calc(100% - 80px));
+  }
+
+  #profilePage > .app-topbar{
+    width:min(1300px,calc(100% - 80px));
+  }
+
+}
+</style>
+<link rel="stylesheet" href="css/app-navigation.css">
+</head>
+
+<body>
+
+<div class="profile-page" id="profilePage">
+
+<header class="topbar app-topbar">
+
+<a href="home.html" class="brand app-brand">
+<img src="assets/images/20261003_115356.png" alt="CareX">
+Care<span>X</span>
+</a>
+
+<nav class="desktop-nav app-desktop-nav" aria-label="Main navigation">
+<a href="home.html"><span>🏠</span><span data-en="Home" data-hi="होम">Home</span></a>
+<a href="track.html"><span>✏️</span><span data-en="Track" data-hi="ट्रैक">Track</span></a>
+<a href="insights.html"><span>📈</span><span data-en="Insights" data-hi="इनसाइट्स">Insights</span></a>
+<a href="assistant.html"><span>💬</span><span data-en="Ask" data-hi="पूछें">Ask</span></a>
+<a href="profile.html" class="active"><span>👤</span><span data-en="Profile" data-hi="प्रोफ़ाइल">Profile</span></a>
+</nav>
+
+<div class="top-controls app-controls">
+<button class="control-btn app-control" type="button" onclick="changeLanguage()" id="langBtn" aria-label="Change language">🌐 <span id="lang-label">HI</span></button>
+<button class="control-btn app-control" type="button" onclick="toggleTheme()" aria-label="Toggle theme">☀️ / 🌙</button>
+</div>
+
+</header>
+
+<section class="profile-hero">
+
+<div class="profile-main">
+
+<div class="avatar" id="avatar">U</div>
+
+<div>
+<p class="eyebrow">CAREX PROFILE</p>
+<h1 id="profileName">User</h1>
+
+<p class="hero-sub"
+data-en="Manage your personal information and health preferences."
+data-hi="अपनी व्यक्तिगत जानकारी और स्वास्थ्य प्राथमिकताएँ प्रबंधित करें।">
+Manage your personal information and health preferences.
+</p>
+</div>
+
+</div>
+
+<button class="ghost edit-btn"
+onclick="startEdit()"
+data-en="Edit Profile"
+data-hi="प्रोफ़ाइल बदलें">
+Edit Profile
+</button>
+
+</section>
+
+<section class="card profile-overview">
+<div class="card-head">
+<h2 class="card-title" data-en="About You" data-hi="आपके बारे में">About You</h2>
+<p class="card-sub" data-en="Your basic account information." data-hi="आपकी मूल खाता जानकारी।">
+Your basic account information.
+</p>
+</div>
+
+<div class="field-grid">
+<div class="field">
+<label data-en="Name" data-hi="नाम">Name</label>
+<div class="value view" id="nameView">—</div>
+<div class="edit-field"><input id="nameInput"></div>
+</div>
+
+<div class="field">
+<label data-en="Age" data-hi="उम्र">Age</label>
+<div class="value view" id="ageView">—</div>
+<div class="edit-field"><input id="ageInput" type="number" min="8" max="70"></div>
+</div>
+
+<div class="field">
+<label data-en="Email" data-hi="ईमेल">Email</label>
+<div class="value" id="emailView">—</div>
+</div>
+
+<div class="field">
+<label data-en="User ID" data-hi="यूज़र आईडी">User ID</label>
+<div class="value" id="userIdView">—</div>
+</div>
+</div>
+
+</section>
+
+<div class="profile-grid">
+
+<div class="column">
+
+<section class="card">
+
+<div class="card-head">
+<h2 class="card-title" data-en="Health Details" data-hi="स्वास्थ्य जानकारी">Health Details</h2>
+<p class="card-sub" data-en="Optional information for your CareX experience." data-hi="CareX अनुभव के लिए वैकल्पिक जानकारी।">
+Optional information for your CareX experience.
+</p>
+</div>
+
+<div class="field-grid">
+
+<div class="field full">
+<label data-en="Allergies" data-hi="एलर्जी">Allergies</label>
+<div class="value view" id="allergyView">—</div>
+<div class="edit-field"><input id="allergyInput"></div>
+</div>
+
+<div class="field full">
+<label data-en="Regular Medicines" data-hi="नियमित दवाएँ">Regular Medicines</label>
+<div class="value view" id="medicineView">—</div>
+<div class="edit-field"><input id="medicineInput"></div>
+</div>
+
+</div>
+
+<div class="edit-actions">
+<button class="primary" id="saveBtn" onclick="saveProfile()" data-en="Save Changes" data-hi="बदलाव सेव करें">
+Save Changes
+</button>
+
+<button class="secondary" onclick="cancelEdit()" data-en="Cancel" data-hi="रद्द करें">
+Cancel
+</button>
+</div>
+</section>
+
+<section class="card">
+
+<div class="card-head">
+<h2 class="card-title" data-en="Your Data" data-hi="आपका डेटा">Your Data</h2>
+
+<p class="card-sub"
+data-en="Export your complete CareX health record as a formatted PDF."
+data-hi="अपना पूरा CareX स्वास्थ्य रिकॉर्ड व्यवस्थित PDF में एक्सपोर्ट करें।">
+Export your complete CareX health record as a formatted PDF.
+</p>
+</div>
+
+<div class="action-list">
+
+<button class="primary" onclick="exportData()" data-en="Export Complete PDF" data-hi="पूरा PDF एक्सपोर्ट करें">
+Export Complete PDF
+</button>
+
+<button class="ghost danger" onclick="deleteData()" data-en="Delete Saved Data" data-hi="सेव डेटा हटाएँ">
+Delete Saved Data
+</button>
+
+</div>
+
+</section>
+
+<section class="card">
+
+<button class="ghost danger" style="width:100%"
+onclick="logout()"
+data-en="Logout"
+data-hi="लॉग आउट">
+Logout
+</button>
+
+</section>
+
+</div>
+
+<div class="column">
+
+<section class="card">
+
+<div class="card-head">
+<h2 class="card-title" data-en="Notification Settings" data-hi="नोटिफिकेशन सेटिंग">
+Notification Settings
+</h2>
+
+<p class="card-sub"
+data-en="Control your period reminder preferences."
+data-hi="अपने पीरियड रिमाइंडर की सेटिंग नियंत्रित करें।">
+Control your period reminder preferences.
+</p>
+</div>
+
+<div class="setting-row">
+
+<div class="setting-text">
+<strong data-en="Period Reminders" data-hi="पीरियड रिमाइंडर">Period Reminders</strong>
+<small data-en="Receive reminders by email." data-hi="ईमेल द्वारा रिमाइंडर प्राप्त करें।">
+Receive reminders by email.
+</small>
+</div>
+
+<label class="toggle">
+<input type="checkbox" id="notifyEnabled" onchange="notificationState()">
+<span class="slider"></span>
+</label>
+
+</div>
+
+<div class="notification-box disabled" id="notificationBox">
+
+<div class="field">
+<label data-en="Days before expected period" data-hi="पीरियड से कितने दिन पहले">
+Days before expected period
+</label>
+
+<select id="notifyDays">
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3" selected>3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="7">7</option>
+</select>
+</div>
+
+<div class="field" style="margin-top:14px">
+<label data-en="Notifications per day" data-hi="प्रतिदिन नोटिफिकेशन">
+Notifications per day
+</label>
+
+<select id="notifyCount" onchange="renderTimes()">
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+</select>
+</div>
+
+<div class="field" style="margin-top:14px">
+<label data-en="Notification Times" data-hi="नोटिफिकेशन का समय">
+Notification Times
+</label>
+
+<div class="times" id="times"></div>
+</div>
+
+<div class="field" style="margin-top:14px">
+<label data-en="Reminder Email" data-hi="रिमाइंडर ईमेल">Reminder Email</label>
+<div class="value" id="reminderEmail">—</div>
+</div>
+
+</div>
+
+<button class="primary" style="width:100%;margin-top:14px"
+onclick="saveNotifications()"
+data-en="Save Notification Settings"
+data-hi="नोटिफिकेशन सेटिंग सेव करें">
+Save Notification Settings
+</button>
+
+<div class="info"
+data-en="Your saved setting is used by the CareX email reminder service."
+data-hi="आपकी सेव की गई सेटिंग CareX की ईमेल रिमाइंडर सेवा द्वारा उपयोग की जाती है।">
+Your saved setting is used by the CareX email reminder service.
+</div>
+
+</section>
+
+</div>
+</div>
+</div>
+
+<nav class="bottom-nav app-bottom-nav" aria-label="Main navigation">
+
+<a href="home.html" class="nav-item">
+<span>🏠</span>
+<span data-en="Home" data-hi="होम">Home</span>
+</a>
+
+<a href="track.html" class="nav-item">
+<span>✏️</span>
+<span data-en="Track" data-hi="ट्रैक">Track</span>
+</a>
+
+<a href="insights.html" class="nav-item">
+<span>📈</span>
+<span data-en="Insights" data-hi="इनसाइट्स">Insights</span>
+</a>
+
+<a href="assistant.html" class="nav-item">
+<span>💬</span>
+<span data-en="Ask" data-hi="पूछें">Ask</span>
+</a>
+
+<a href="profile.html" class="nav-item active">
+<span>👤</span>
+<span data-en="Profile" data-hi="प्रोफ़ाइल">Profile</span>
+</a>
+
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
+<script src="js/data.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/language.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/common.js"></script>
+
+<script>
+let profileUser=null;
+
+function changeLanguage(){
+  const next=getLang()==='en'?'hi':'en';
+  setLang(next);
+  applyProfileLanguage();
+  loadProfile();
+}
+
+function applyProfileLanguage(){
+  const lang=getLang();
+
+  document.documentElement.lang=lang==='hi'?'hi':'en';
+
+  document.querySelectorAll('[data-en]').forEach(el=>{
+    el.textContent=lang==='hi'?el.dataset.hi:el.dataset.en;
+  });
+
+  const langLabel=document.getElementById('lang-label');
+  if(langLabel) langLabel.textContent=lang==='hi'?'EN':'HI';
+}
+
+async function loadProfile(){
+
+  const user=await requireAuth();
+  if(!user)return;
+
+  profileUser=user;
+
+  const meta=user.user_metadata||{};
+
+  const name=meta.full_name||user.email?.split('@')[0]||'User';
+
+  document.getElementById('profileName').textContent=name;
+  document.getElementById('avatar').textContent=name.charAt(0).toUpperCase();
+
+  document.getElementById('nameView').textContent=name;
+  document.getElementById('nameInput').value=name;
+
+  document.getElementById('ageView').textContent=meta.age||'—';
+  document.getElementById('ageInput').value=meta.age||'';
+
+  document.getElementById('emailView').textContent=user.email||'—';
+  document.getElementById('userIdView').textContent=user.id||'—';
+
+  const allergies=meta.allergies||'';
+  document.getElementById('allergyView').textContent=allergies||'—';
+  document.getElementById('allergyInput').value=allergies;
+
+  const medicines=meta.medicines||'';
+  document.getElementById('medicineView').textContent=medicines||'—';
+  document.getElementById('medicineInput').value=medicines;
+
+  document.getElementById('reminderEmail').textContent=user.email||'—';
+
+  loadNotifications(meta.carex_notifications);
+
+  applyProfileLanguage();
+}
+
+function startEdit(){
+  document.body.classList.add('edit-mode');
+}
+
+function cancelEdit(){
+  document.body.classList.remove('edit-mode');
+  loadProfile();
+}
+
+async function saveProfile(){
+
+  const user=await currentUser();
+  if(!user)return;
+
+  const name=document.getElementById('nameInput').value.trim();
+  const age=document.getElementById('ageInput').value.trim();
+  const allergies=document.getElementById('allergyInput').value.trim();
+  const medicines=document.getElementById('medicineInput').value.trim();
+
+  if(!name){
+    return toast(getLang()==='hi'?'कृपया नाम भरें':'Please enter your name');
+  }
+
+  if(age&&(Number(age)<8||Number(age)>70)){
+    return toast(getLang()==='hi'?'उम्र सही भरें':'Please enter a valid age');
+  }
+
+  const button=document.getElementById('saveBtn');
+  button.disabled=true;
+
+  const {error}=await sb.auth.updateUser({
+    data:{
+      full_name:name,
+      age:age,
+      allergies:allergies,
+      medicines:medicines
+    }
+  });
+
+  button.disabled=false;
+
+  if(error)return toast(error.message);
+
+  document.body.classList.remove('edit-mode');
+
+  await loadProfile();
+
+  toast(
+    getLang()==='hi'
+      ?'प्रोफ़ाइल सेव हो गई'
+      :'Profile saved successfully'
+  );
+}
+
+function defaultNotifications(){
+  return{
+    enabled:false,
+    days_before:3,
+    per_day:1,
+    times:['09:00'],
+    email:profileUser?.email||''
+  };
+}
+
+function loadNotifications(saved){
+
+  const settings=saved||defaultNotifications();
+
+  document.getElementById('notifyEnabled').checked=
+    settings.enabled===true;
+
+  document.getElementById('notifyDays').value=
+    settings.days_before||3;
+
+  document.getElementById('notifyCount').value=
+    settings.per_day||1;
+
+  renderTimes(settings.times||['09:00']);
+
+  notificationState();
+}
+
+function notificationState(){
+
+  const enabled=document.getElementById('notifyEnabled').checked;
+
+  document.getElementById('notificationBox')
+    .classList.toggle('disabled',!enabled);
+}
+
+function renderTimes(existing){
+
+  const count=Number(document.getElementById('notifyCount').value);
+  const box=document.getElementById('times');
+
+  box.innerHTML='';
+
+  for(let i=0;i<count;i++){
+
+    const input=document.createElement('input');
+
+    input.type='time';
+
+    input.value=
+      existing?.[i]||
+      ['09:00','15:00','20:00'][i];
+
+    box.appendChild(input);
+  }
+}
+
+async function saveNotifications(){
+
+  const user=await currentUser();
+  if(!user)return;
+
+  const enabled=document.getElementById('notifyEnabled').checked;
+
+  const days=Number(document.getElementById('notifyDays').value);
+
+  const perDay=Number(document.getElementById('notifyCount').value);
+
+  const times=[
+    ...document.querySelectorAll('#times input')
+  ].map(input=>input.value);
+
+  const settings={
+    enabled,
+    days_before:days,
+    per_day:perDay,
+    times,
+    email:user.email||''
+  };
+
+  const {error}=await sb.auth.updateUser({
+    data:{
+      carex_notifications:settings
+    }
+  });
+
+  if(error)return toast(error.message);
+
+  toast(
+    getLang()==='hi'
+      ?'नोटिफिकेशन सेटिंग सेव हो गई'
+      :'Notification settings saved'
+  );
+}
+
+
+/* COMPLETE PDF EXPORT */
+
+async function exportData(){
+
+  const user=await currentUser();
+  if(!user)return;
+
+  try{
+
+    if(!window.jspdf){
+      throw new Error('PDF library not loaded');
+    }
+
+    const uid=user.id;
+
+    const [
+      profileR,
+      cycleR,
+      dailyR,
+      symptomR,
+      moodR,
+      medicineR,
+      medicineReminderR,
+      notificationR,
+      appointmentR,
+      chatR,
+      reminderLogR
+    ]=await Promise.all([
+
+      sb.from('profiles')
+        .select('*')
+        .eq('id',uid)
+        .maybeSingle(),
+
+      sb.from('cycle_logs')
+        .select('*')
+        .eq('user_id',uid)
+        .order('start_date',{ascending:true}),
+
+      sb.from('daily_logs')
+        .select('*')
+        .eq('user_id',uid),
+
+      sb.from('symptom_logs')
+        .select('*')
+        .eq('user_id',uid),
+
+      sb.from('mood_logs')
+        .select('*')
+        .eq('user_id',uid),
+
+      sb.from('medicines')
+        .select('*')
+        .eq('user_id',uid)
+        .order('created_at',{ascending:true}),
+
+      sb.from('medicine_reminders')
+        .select('*')
+        .eq('user_id',uid)
+        .order('created_at',{ascending:true}),
+
+      sb.from('notifications')
+        .select('*')
+        .eq('user_id',uid)
+        .order('created_at',{ascending:true}),
+
+      sb.from('appointments')
+        .select('*')
+        .eq('user_id',uid)
+        .order('appointment_date',{ascending:true}),
+
+      sb.from('chat_messages')
+        .select('*')
+        .eq('user_id',uid)
+        .order('created_at',{ascending:true}),
+
+      sb.from('carex_reminder_logs')
+        .select('*')
+        .eq('user_id',uid)
+        .order('scheduled_for',{ascending:true})
+    ]);
+
+    const results=[
+      profileR,
+      cycleR,
+      dailyR,
+      symptomR,
+      moodR,
+      medicineR,
+      medicineReminderR,
+      notificationR,
+      appointmentR,
+      chatR,
+      reminderLogR
+    ];
+
+    const failed=results.find(r=>r.error);
+
+    if(failed){
+      throw new Error(failed.error.message);
+    }
+
+    const profile=profileR.data||{};
+    const cycles=cycleR.data||[];
+    const daily=(dailyR.data||[]).map(d=>({
+      ...d,
+      log_date:d.log_date||d.date,
+      symptoms:Array.isArray(d.symptoms)?d.symptoms:[]
+    }));
+    const symptoms=(symptomR.data||[]).map(s=>({
+      ...s,
+      log_date:s.log_date||s.date
+    }));
+    const moods=(moodR.data||[]).map(m=>({
+      ...m,
+      log_date:m.log_date||m.date
+    }));
+    const medicines=medicineR.data||[];
+    const medicineReminders=medicineReminderR.data||[];
+    const notifications=notificationR.data||[];
+    const appointments=appointmentR.data||[];
+    const chats=chatR.data||[];
+    const reminderLogs=reminderLogR.data||[];
+
+    const {jsPDF}=window.jspdf;
+
+    const doc=new jsPDF({
+      orientation:'portrait',
+      unit:'mm',
+      format:'a4'
+    });
+
+    const rose=[201,120,165];
+    const plum=[103,75,112];
+    const ink=[53,43,61];
+    const muted=[125,112,125];
+    const light=[253,235,244];
+
+    const meta=user.user_metadata||{};
+
+    const safe=value=>
+      value===null||
+      value===undefined||
+      value===''
+        ?'—'
+        :String(value);
+
+    const date=value=>{
+
+      if(!value)return'—';
+
+      const d=new Date(
+        String(value).slice(0,10)+'T00:00:00'
+      );
+
+      return Number.isNaN(d.getTime())
+        ?String(value)
+        :d.toLocaleDateString('en-IN',{
+          day:'2-digit',
+          month:'short',
+          year:'numeric'
+        });
+    };
+
+    const dateTime=value=>{
+
+      if(!value)return'—';
+
+      const d=new Date(value);
+
+      return Number.isNaN(d.getTime())
+        ?String(value)
+        :d.toLocaleString('en-IN');
+    };
+
+    const arr=value=>
+      Array.isArray(value)&&value.length
+        ?value.join(', ')
+        :'None recorded';
+
+    function pageTitle(title,number){
+
+      doc.setFontSize(16);
+      doc.setTextColor(...plum);
+      doc.text(`${number}. ${title}`,14,20);
+
+      doc.setDrawColor(...rose);
+      doc.line(14,23,196,23);
+    }
+
+    function table(headers,rows){
+
+      if(!rows.length){
+
+        doc.setFontSize(10);
+        doc.setTextColor(...muted);
+        doc.text('No records available.',14,32);
+
+        return;
+      }
+
+      doc.autoTable({
+        startY:30,
+        head:[headers],
+        body:rows,
+        theme:'grid',
+
+        headStyles:{
+          fillColor:rose,
+          textColor:255,
+          fontStyle:'bold'
+        },
+
+        bodyStyles:{
+          textColor:ink,
+          fontSize:8
+        },
+
+        styles:{
+          cellPadding:2.5,
+          overflow:'linebreak',
+          valign:'middle'
+        },
+
+        margin:{
+          left:14,
+          right:14
+        }
+      });
+    }
+
+    /* COVER */
+
+    doc.setFillColor(...light);
+    doc.rect(0,0,210,297,'F');
+
+    doc.setTextColor(...plum);
+    doc.setFontSize(34);
+    doc.text('CareX',105,82,{align:'center'});
+
+    doc.setFontSize(20);
+    doc.text('Personal Health Report',105,98,{align:'center'});
+
+    doc.setFontSize(11);
+    doc.setTextColor(...muted);
+
+    doc.text(
+      `Prepared for ${safe(
+        profile.full_name||
+        meta.full_name||
+        user.email
+      )}`,
+      105,
+      113,
+      {align:'center'}
+    );
+
+    doc.text(
+      `Generated: ${date(new Date())}`,
+      105,
+      121,
+      {align:'center'}
+    );
+
+    doc.setFontSize(9);
+
+    doc.text(
+      'CareX is a tracking and health-education tool.',
+      105,
+      255,
+      {align:'center'}
+    );
+
+
+    /* PROFILE */
+
+    doc.addPage();
+    pageTitle('Profile Details',1);
+
+    table(
+      ['Field','Value'],
+      [
+        ['Name',safe(profile.full_name||meta.full_name)],
+        ['Email',safe(user.email)],
+        ['Mobile',safe(profile.mobile)],
+        ['Username',safe(profile.username)],
+        ['User ID',safe(user.id)],
+        ['Age',safe(meta.age)],
+        ['Language',safe(profile.language)],
+        ['Theme',safe(profile.theme)],
+        ['Last Period Start',date(meta.last_period_start)],
+        ['Usual Cycle Length',
+          meta.cycle_length
+            ?`${meta.cycle_length} days`
+            :'—'
+        ],
+        ['Usual Period Length',
+          meta.period_length
+            ?`${meta.period_length} days`
+            :'—'
+        ],
+        ['Allergies',safe(meta.allergies)],
+        ['Regular Medicines',safe(meta.medicines)]
+      ]
+    );
+
+
+    /* CYCLE HISTORY */
+
+    doc.addPage();
+    pageTitle('Cycle History',2);
+
+    table(
+      ['Start','End','Cycle Length','Period Length','Notes'],
+      cycles.map(c=>[
+        date(c.start_date),
+        date(c.end_date),
+        safe(c.cycle_length),
+        safe(c.period_length),
+        safe(c.notes)
+      ])
+    );
+
+
+    /* DAILY TRACKING */
+
+    doc.addPage();
+    pageTitle('Daily Tracking',3);
+
+    table(
+      ['Date','Symptoms','Flow','Pain','Notes'],
+      daily.map(d=>[
+        date(d.log_date),
+        arr(d.symptoms),
+        safe(d.flow),
+        safe(d.pain),
+        safe(d.notes)
+      ])
+    );
+
+
+    /* MONTHLY SYMPTOMS */
+
+    doc.addPage();
+    pageTitle('Monthly Symptom Summary',4);
+
+    const monthlyDates={};
+    const addMonthlySymptom=(dateValue,symptom)=>{
+      if(!dateValue||!symptom)return;
+      const dateKey=String(dateValue).slice(0,10);
+      const month=dateKey.slice(0,7);
+      if(!monthlyDates[month])monthlyDates[month]={};
+      if(!monthlyDates[month][dateKey]){
+        monthlyDates[month][dateKey]=new Set();
+      }
+      monthlyDates[month][dateKey].add(symptom);
+    };
+
+    daily.forEach(d=>(d.symptoms||[]).forEach(
+      symptom=>addMonthlySymptom(d.log_date,symptom)
+    ));
+    symptoms.forEach(s=>addMonthlySymptom(s.log_date,s.symptom));
+
+    const monthly={};
+    Object.entries(monthlyDates).forEach(([month,dates])=>{
+      monthly[month]={};
+      Object.values(dates).forEach(daySymptoms=>{
+        daySymptoms.forEach(symptom=>{
+          monthly[month][symptom]=(monthly[month][symptom]||0)+1;
+        });
+      });
+    });
+
+    table(
+      ['Month','Symptoms','Total Records'],
+
+      Object.entries(monthly).map(
+        ([month,data])=>{
+
+          const sorted=
+            Object.entries(data)
+              .sort((a,b)=>b[1]-a[1]);
+
+          return[
+            month,
+
+            sorted.length
+              ?sorted
+                .map(([name,count])=>`${name} (${count})`)
+                .join(', ')
+              :'None recorded',
+
+            sorted.reduce(
+              (sum,item)=>sum+item[1],
+              0
+            )
+          ];
+        }
+      )
+    );
+
+
+    /* DETAILED SYMPTOMS */
+
+    if(symptoms.length){
+
+      doc.addPage();
+      pageTitle('Detailed Symptom Logs',5);
+
+      table(
+        ['Date','Symptom','Severity'],
+        symptoms.map(s=>[
+          date(s.log_date),
+          safe(s.symptom),
+          safe(s.severity)
+        ])
+      );
+    }
+
+
+    /* MOOD */
+
+    if(moods.length){
+
+      doc.addPage();
+      pageTitle('Mood History',6);
+
+      table(
+        ['Date','Mood'],
+        moods.map(m=>[
+          date(m.log_date),
+          safe(m.mood)
+        ])
+      );
+    }
+
+
+    /* MEDICINES */
+
+    if(medicines.length){
+
+      doc.addPage();
+      pageTitle('Medicines',7);
+
+      table(
+        ['Medicine','Notes','Added'],
+        medicines.map(m=>[
+          safe(m.name),
+          safe(m.notes),
+          date(m.created_at)
+        ])
+      );
+    }
+
+
+    /* MEDICINE REMINDERS */
+
+    if(medicineReminders.length){
+
+      doc.addPage();
+      pageTitle('Medicine Reminders',8);
+
+      table(
+        ['Time','Frequency','Enabled','Notes'],
+        medicineReminders.map(r=>[
+          safe(r.schedule_time),
+          safe(r.frequency),
+          r.enabled?'Yes':'No',
+          safe(r.notes)
+        ])
+      );
+    }
+
+
+    /* NOTIFICATIONS */
+
+    if(notifications.length){
+
+      doc.addPage();
+      pageTitle('CareX Notifications',9);
+
+      table(
+        ['Date','Title','Type','Read'],
+        notifications.map(n=>[
+          dateTime(n.created_at),
+          safe(n.title),
+          safe(n.type),
+          n.read?'Yes':'No'
+        ])
+      );
+    }
+
+
+    /* APPOINTMENTS */
+
+    if(appointments.length){
+
+      doc.addPage();
+      pageTitle('Appointments',10);
+
+      table(
+        ['Date','Time','Status','Notes'],
+        appointments.map(a=>[
+          date(a.appointment_date),
+          safe(a.appointment_time),
+          safe(a.status),
+          safe(a.notes)
+        ])
+      );
+    }
+
+
+    /* AI CHAT */
+
+    if(chats.length){
+
+      doc.addPage();
+      pageTitle('CareX AI Conversation History',11);
+
+      table(
+        ['Date','Role','Message'],
+        chats.map(c=>[
+          dateTime(c.created_at),
+          safe(c.role),
+          safe(c.message)
+        ])
+      );
+    }
+
+
+    /* EMAIL REMINDERS */
+
+    if(reminderLogs.length){
+
+      doc.addPage();
+      pageTitle('Email Reminder History',12);
+
+      table(
+        ['Scheduled Date','Time','Status','Sent At'],
+        reminderLogs.map(r=>[
+          date(r.scheduled_for),
+          safe(r.notification_time),
+          safe(r.status),
+          dateTime(r.sent_at)
+        ])
+      );
+    }
+
+
+    /* FOOTER */
+
+    const totalPages=doc.internal.getNumberOfPages();
+
+    for(let i=1;i<=totalPages;i++){
+
+      doc.setPage(i);
+
+      doc.setFontSize(8);
+      doc.setTextColor(...muted);
+
+      doc.text(
+        `CareX • Page ${i} of ${totalPages}`,
+        105,
+        289,
+        {align:'center'}
+      );
+    }
+
+
+    doc.save(
+      `CareX-Health-Report-${
+        new Date().toISOString().slice(0,10)
+      }.pdf`
+    );
+
+    toast(
+      getLang()==='hi'
+        ?'पूरा PDF रिपोर्ट तैयार हो गया'
+        :'Complete PDF report generated'
+    );
+
+  }catch(error){
+
+    console.error('CareX PDF Export Error:',error);
+
+    toast(
+      getLang()==='hi'
+        ?'PDF तैयार नहीं हो सका'
+        :'Could not generate PDF'
+    );
+  }
+}
+
+
+async function deleteData(){
+
+  const message=
+    getLang()==='hi'
+      ?'क्या आप सेव किया गया CareX डेटा हटाना चाहते हैं?'
+      :'Do you want to delete your saved CareX data?';
+
+  if(!confirm(message))return;
+
+  localStorage.removeItem('carex-notifications');
+
+  toast(
+    getLang()==='hi'
+      ?'स्थानीय सेटिंग हटा दी गई'
+      :'Local settings removed'
+  );
+}
+
+loadProfile();
+</script>
+
+</body>
+</html>

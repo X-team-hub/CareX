@@ -1,0 +1,166 @@
+:root {
+  --carex-selfcare-bg: var(--bg);
+  --carex-selfcare-card: var(--card);
+  --carex-selfcare-ink: var(--plum);
+  --carex-selfcare-muted: var(--mute);
+  --carex-selfcare-line: var(--rose2);
+}
+
+body {
+  background: var(--carex-selfcare-bg) !important;
+  color: var(--carex-selfcare-ink) !important;
+  font-family: var(--font-body) !important;
+}
+
+.app {
+  min-height: 100vh;
+}
+
+header.app-topbar {
+  position: fixed !important;
+}
+
+.layout {
+  width: min(100%, 1280px);
+  margin-inline: auto;
+}
+
+.main {
+  width: 100%;
+  max-width: 1080px;
+  padding-top: 98px !important;
+  color: var(--carex-selfcare-ink);
+}
+
+.welcome h1,
+.section h2,
+.program-card h3 {
+  font-family: var(--font-head);
+}
+
+.welcome p,
+.section-head p,
+.note,
+.pose-item p,
+.footer-note {
+  color: var(--carex-selfcare-muted) !important;
+}
+
+.eyebrow {
+  color: var(--rose) !important;
+}
+
+.section {
+  scroll-margin-top: 100px;
+}
+
+.relief-card {
+  border: 1px solid var(--carex-selfcare-line) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+.yellow-card {
+  background: linear-gradient(135deg, var(--sun2), var(--rose2)) !important;
+  color: var(--carex-selfcare-ink) !important;
+}
+
+.blue-card {
+  background: linear-gradient(135deg, var(--sage2), var(--rose2)) !important;
+  color: var(--carex-selfcare-ink) !important;
+}
+
+.mat {
+  background: var(--plum) !important;
+}
+
+.bolster {
+  background: linear-gradient(180deg, var(--rose3), var(--rose)) !important;
+  box-shadow: none !important;
+}
+
+.play-bubble {
+  color: var(--rose) !important;
+}
+
+.program-card {
+  background: linear-gradient(135deg, var(--plum), var(--rose)) !important;
+  color: #fff !important;
+}
+
+.flower-stem {
+  background: var(--sage) !important;
+}
+
+.sound-card {
+  box-shadow: var(--shadow) !important;
+}
+
+.kegel-card,
+.empty-audio {
+  border: 1px solid var(--carex-selfcare-line);
+  border-radius: 18px;
+  background: var(--carex-selfcare-card) !important;
+  color: var(--carex-selfcare-ink);
+  box-shadow: var(--shadow);
+}
+
+.pose-thumb,
+.session-art,
+.session-badge {
+  background: var(--rose2) !important;
+  color: var(--plum) !important;
+}
+
+.modal {
+  background: var(--carex-selfcare-card) !important;
+  color: var(--carex-selfcare-ink);
+}
+
+.modal-hero {
+  background: linear-gradient(120deg, var(--rose2), var(--sun2)) !important;
+}
+
+.lead {
+  color: var(--carex-selfcare-muted) !important;
+}
+
+.primary {
+  background: linear-gradient(110deg, var(--rose), var(--plum)) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+.secondary,
+.white-btn {
+  border: 1px solid var(--carex-selfcare-line);
+  background: var(--carex-selfcare-card) !important;
+  color: var(--carex-selfcare-ink) !important;
+}
+
+.safety {
+  background: var(--sun2) !important;
+  color: var(--carex-selfcare-ink) !important;
+}
+
+.progress-track {
+  background: var(--rose2) !important;
+}
+
+.progress-fill {
+  background: var(--rose) !important;
+}
+
+@media (max-width: 950px) {
+  .main {
+    padding: 91px 18px calc(105px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .welcome {
+    margin-bottom: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+}

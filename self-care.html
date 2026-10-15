@@ -1,0 +1,1426 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#fff7fb" />
+    <title>Self Care · CareX</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/app-navigation.css" />
+    <link rel="stylesheet" href="css/self-care.css" />
+    <style>
+      :root {
+        --ink: #20202b;
+        --muted: #666879;
+        --pink: #f64d9b;
+        --pink2: #ff7db6;
+        --lav: #b9baff;
+        --pale: #f0efff;
+        --yellow: #ffe67c;
+        --orange: #ffb77b;
+        --line: #eceaf2;
+        --surface: #fff;
+        --shadow: 0 12px 35px #30224b0c;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        background: #fff;
+        color: var(--ink);
+        font:
+          16px/1.5 Inter,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+      }
+      button {
+        font: inherit;
+        cursor: pointer;
+      }
+      button:focus-visible,
+      a:focus-visible {
+        outline: 3px solid #6b63e8;
+        outline-offset: 3px;
+      }
+      button:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+      }
+      .app {
+        min-height: 100vh;
+      }
+      .topbar {
+        height: 82px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 clamp(20px, 5vw, 76px);
+        border-bottom: 1px solid #f4f1f6;
+        background: #fff;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 850;
+        font-size: 20px;
+        letter-spacing: -0.6px;
+      }
+      .brandmark {
+        width: 35px;
+        height: 35px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #f64d9b, #8d5cff);
+        display: grid;
+        place-items: center;
+        color: white;
+        font-size: 21px;
+      }
+      .header-title {
+        font-size: 23px;
+        font-weight: 750;
+        margin: 0 auto;
+      }
+      .pro {
+        border: 0;
+        border-radius: 999px;
+        padding: 9px 17px;
+        background: linear-gradient(110deg, #823aff, #f542a0);
+        color: white;
+        font-weight: 800;
+        box-shadow: 0 5px 15px #df4ba52a;
+      }
+      .layout {
+        display: flex;
+        max-width: 1440px;
+        margin: auto;
+      }
+      .sidebar {
+        width: 220px;
+        padding: 30px 18px;
+        border-right: 1px solid #f1edf4;
+        flex-shrink: 0;
+      }
+      .side-link {
+        width: 100%;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        border: 0;
+        background: transparent;
+        padding: 13px 14px;
+        margin-bottom: 7px;
+        border-radius: 15px;
+        color: #777887;
+        text-align: left;
+      }
+      .side-link .ico {
+        font-size: 20px;
+      }
+      .side-link.active {
+        background: #ffe0ee;
+        color: #2c2432;
+        font-weight: 750;
+      }
+      .main {
+        min-width: 0;
+        flex: 1;
+        padding: 30px clamp(20px, 4vw, 56px) 125px;
+        max-width: 1220px;
+        margin: 0 auto;
+      }
+      .welcome {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        margin-bottom: 25px;
+      }
+      .eyebrow {
+        font-size: 12px;
+        letter-spacing: 1.6px;
+        text-transform: uppercase;
+        color: #a15d85;
+        font-weight: 800;
+      }
+      .welcome h1 {
+        font-size: clamp(27px, 3vw, 36px);
+        letter-spacing: -1px;
+        margin: 2px 0 5px;
+      }
+      .welcome p {
+        margin: 0;
+        color: var(--muted);
+      }
+      .section {
+        margin: 34px 0 42px;
+        scroll-margin-top: 105px;
+      }
+      .section-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 17px;
+      }
+      .section h2 {
+        font-size: 23px;
+        letter-spacing: -0.5px;
+        margin: 0;
+      }
+      .section-head p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .relief-row {
+        display: grid;
+        grid-auto-columns: minmax(260px, 1fr);
+        grid-auto-flow: column;
+        gap: 18px;
+        overflow-x: auto;
+        padding: 0 1px 10px;
+        scroll-snap-type: x mandatory;
+      }
+      .relief-card {
+        min-height: 270px;
+        border: 0;
+        border-radius: 27px;
+        padding: 25px;
+        position: relative;
+        overflow: hidden;
+        text-align: left;
+        isolation: isolate;
+        scroll-snap-align: start;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        color: #231f2c;
+      }
+      .yellow-card {
+        background: linear-gradient(
+          125deg,
+          #ffe97f 0%,
+          #ffdf7a 55%,
+          #ffb48b 100%
+        );
+      }
+      .blue-card {
+        background: linear-gradient(125deg, #d5efff, #a4d8f3);
+      }
+      .card-title {
+        font-size: clamp(23px, 2.5vw, 29px);
+        line-height: 1.15;
+        font-weight: 850;
+        max-width: 245px;
+        z-index: 2;
+        letter-spacing: -0.6px;
+      }
+      .card-art {
+        position: absolute;
+        right: -4px;
+        bottom: 0;
+        width: 64%;
+        height: 70%;
+        display: grid;
+        place-items: center;
+        font-size: 100px;
+        opacity: 0.95;
+        z-index: -1;
+      }
+      .mat {
+        position: absolute;
+        width: 76%;
+        height: 28px;
+        bottom: 19px;
+        right: 0;
+        background: #46314e;
+        border-radius: 50%;
+        transform: skewX(-22deg);
+        opacity: 0.8;
+      }
+      .bolster {
+        position: absolute;
+        right: 15%;
+        bottom: 40px;
+        width: 53%;
+        height: 72px;
+        border-radius: 30px;
+        background: linear-gradient(180deg, #ffb23f, #e97917);
+        box-shadow: inset 0 7px 5px #ffcb7c;
+      }
+      .person {
+        position: absolute;
+        right: 6%;
+        bottom: 71px;
+        font-size: 72px;
+        filter: drop-shadow(0 4px 2px #7a4b3720);
+      }
+      .play-bubble {
+        width: 49px;
+        height: 49px;
+        border-radius: 50%;
+        background: white;
+        color: #f18b4c;
+        display: grid;
+        place-items: center;
+        font-size: 20px;
+        z-index: 2;
+        border: 0;
+        box-shadow: 0 3px 14px #b68a5620;
+      }
+      .card-action {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        z-index: 2;
+        font-weight: 750;
+      }
+      .program-card {
+        min-height: 270px;
+        border-radius: 29px;
+        background: #b9baff;
+        position: relative;
+        overflow: hidden;
+        padding: 27px 30px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+      }
+      .program-card h3 {
+        font-size: clamp(27px, 3vw, 36px);
+        line-height: 1.12;
+        max-width: 240px;
+        margin: 0;
+        letter-spacing: -0.8px;
+      }
+      .flower {
+        position: absolute;
+        right: 5%;
+        top: 9%;
+        font-size: clamp(100px, 14vw, 170px);
+        filter: drop-shadow(0 8px 5px #6f56a222);
+      }
+      .flower-stem {
+        position: absolute;
+        width: 9px;
+        height: 110px;
+        background: #438e5b;
+        right: 25%;
+        bottom: -48px;
+        transform: rotate(8deg);
+        border-radius: 8px;
+      }
+      .white-btn {
+        border: 0;
+        border-radius: 16px;
+        background: #fff;
+        padding: 13px 20px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        z-index: 1;
+        box-shadow: 0 5px 15px #504b8510;
+      }
+      .sound-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 22px;
+      }
+      .sound-card {
+        aspect-ratio: 1;
+        border-radius: 50%;
+        border: 0;
+        position: relative;
+        overflow: hidden;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 16px;
+        background: #087b70;
+        box-shadow: var(--shadow);
+        isolation: isolate;
+      }
+      .sound-card:before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        opacity: 0.95;
+      }
+      .forest:before {
+        background:
+          radial-gradient(ellipse at 25% 20%, #42c6a0 0 9%, transparent 10%),
+          linear-gradient(
+            90deg,
+            #067b68 0 18%,
+            #169b79 18% 29%,
+            #087260 29% 45%,
+            #28a77d 45% 54%,
+            #06705f 54% 73%,
+            #159a75 73% 84%,
+            #087160 84%
+          );
+      }
+      .rain:before {
+        background:
+          repeating-linear-gradient(
+            100deg,
+            transparent 0 12px,
+            #ffffff15 13px 14px
+          ),
+          linear-gradient(150deg, #07566b, #0085a4 55%, #102e69);
+      }
+      .night:before {
+        background:
+          radial-gradient(circle at 68% 22%, #fff6cc 0 5%, transparent 5.5%),
+          linear-gradient(165deg, #3b427e, #7775ae 45%, #152d53 46%, #0c1f3c);
+      }
+      .sound-play {
+        font-size: 22px;
+        margin-bottom: 9px;
+      }
+      .sound-card strong {
+        font-size: clamp(15px, 1.7vw, 22px);
+        line-height: 1.2;
+      }
+      .sound-card small {
+        font-size: 12px;
+        margin-top: 7px;
+        opacity: 0.9;
+      }
+      .sound-card.playing {
+        outline: 4px solid #ffc1dd;
+        outline-offset: 3px;
+      }
+      .note {
+        font-size: 13px;
+        color: var(--muted);
+        margin-top: 12px;
+      }
+      .bottom-nav {
+        display: none;
+      }
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: #21162c77;
+        z-index: 30;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 18px;
+      }
+      .modal-backdrop.open {
+        display: flex;
+      }
+      .modal {
+        width: min(720px, 100%);
+        max-height: min(92vh, 900px);
+        overflow: auto;
+        background: #fff;
+        border-radius: 27px;
+        box-shadow: 0 25px 90px #120b2338;
+      }
+      .modal-hero {
+        background: linear-gradient(120deg, #ffe67d, #ffbd90);
+        padding: 22px 28px 25px;
+        position: relative;
+        min-height: 175px;
+        overflow: hidden;
+      }
+      .modal-hero .back {
+        border: 0;
+        background: #ffffffb8;
+        border-radius: 50%;
+        width: 42px;
+        height: 42px;
+        font-size: 22px;
+      }
+      .hero-illustration {
+        position: absolute;
+        right: 3%;
+        bottom: -17px;
+        font-size: 105px;
+      }
+      .modal-body {
+        padding: 27px clamp(20px, 5vw, 38px) 32px;
+      }
+      .modal-body h2 {
+        font-size: clamp(26px, 4vw, 35px);
+        margin: 0 0 9px;
+        letter-spacing: -0.8px;
+      }
+      .lead {
+        font-size: 17px;
+        color: #5e5d69;
+        margin: 0 0 24px;
+      }
+      .duration {
+        font-weight: 800;
+        margin: 0 0 17px;
+        font-size: 20px;
+      }
+      .pose-list {
+        display: grid;
+        gap: 12px;
+      }
+      .pose-item {
+        display: grid;
+        grid-template-columns: 105px 1fr;
+        gap: 15px;
+        align-items: center;
+      }
+      .pose-thumb {
+        height: 83px;
+        border-radius: 15px;
+        background: #eeedff;
+        display: grid;
+        place-items: center;
+        font-size: 39px;
+      }
+      .pose-item strong {
+        font-size: 16px;
+      }
+      .pose-item p {
+        font-size: 13px;
+        color: var(--muted);
+        margin: 4px 0 0;
+      }
+      .primary {
+        border: 0;
+        background: linear-gradient(110deg, #fa4d9d, #ff6ca7);
+        color: white;
+        border-radius: 19px;
+        padding: 16px 22px;
+        font-size: 19px;
+        font-weight: 850;
+        width: 100%;
+        margin-top: 24px;
+        box-shadow: 0 9px 20px #f64d9b2c;
+      }
+      .secondary {
+        border: 1px solid var(--line);
+        background: white;
+        color: var(--ink);
+        border-radius: 13px;
+        padding: 10px 15px;
+        font-weight: 700;
+      }
+      .safety {
+        background: #fff8e6;
+        border-radius: 14px;
+        padding: 13px 15px;
+        color: #665333;
+        font-size: 13px;
+        margin-top: 19px;
+      }
+      .session {
+        text-align: center;
+      }
+      .session-badge {
+        display: inline-block;
+        background: #f0efff;
+        color: #5a4ba7;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 800;
+        margin-bottom: 13px;
+      }
+      .session-art {
+        height: 130px;
+        display: grid;
+        place-items: center;
+        background: #f0efff;
+        border-radius: 20px;
+        font-size: 75px;
+        margin: 17px 0;
+      }
+      .timer {
+        font-size: clamp(46px, 9vw, 68px);
+        font-weight: 850;
+        letter-spacing: -2px;
+        font-variant-numeric: tabular-nums;
+        line-height: 1.1;
+        margin: 15px 0;
+      }
+      .progress-track {
+        height: 8px;
+        background: #eeeaf4;
+        border-radius: 99px;
+        overflow: hidden;
+        margin: 18px 0;
+      }
+      .progress-fill {
+        height: 100%;
+        width: 0;
+        background: linear-gradient(90deg, #8d78ef, #f64d9b);
+        transition: width 0.2s;
+      }
+      .controls {
+        display: flex;
+        gap: 9px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .controls button {
+        flex: 1;
+        min-width: 110px;
+      }
+      .session-copy {
+        color: var(--muted);
+        max-width: 460px;
+        margin: 0 auto;
+      }
+      .kegel-card {
+        background: #f7f3ff;
+        border-radius: 18px;
+        padding: 18px;
+        text-align: left;
+        margin-top: 18px;
+      }
+      .kegel-phase {
+        font-size: 23px;
+        font-weight: 850;
+      }
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: 100px;
+        transform: translateX(-50%);
+        z-index: 60;
+        background: #272333;
+        color: #fff;
+        padding: 12px 18px;
+        border-radius: 14px;
+        box-shadow: var(--shadow);
+        max-width: calc(100% - 32px);
+        display: none;
+      }
+      .toast.show {
+        display: block;
+      }
+      .history {
+        font-size: 13px;
+        color: var(--muted);
+        margin-top: 16px;
+      }
+      .quick-menu {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .quick-menu button {
+        flex: 1;
+        min-width: 140px;
+      }
+      .empty-audio {
+        padding: 12px 14px;
+        background: #f7f5fb;
+        border-radius: 13px;
+        font-size: 13px;
+        color: #656071;
+        margin-top: 15px;
+      }
+      .footer-note {
+        font-size: 12px;
+        color: #8b8795;
+        text-align: center;
+        margin: 28px 0 0;
+      }
+      @media (min-width: 1100px) {
+        .relief-row {
+          grid-auto-columns: calc(50% - 9px);
+        }
+        .program-card {
+          min-height: 300px;
+        }
+        .sound-grid {
+          max-width: 750px;
+        }
+        .main {
+          padding-top: 38px;
+        }
+      }
+      @media (max-width: 760px) {
+        .topbar {
+          height: 72px;
+          padding: 0 18px;
+        }
+        .brand {
+          font-size: 0;
+        }
+        .brandmark {
+          font-size: 21px;
+        }
+        .header-title {
+          font-size: 21px;
+        }
+        .pro {
+          padding: 8px 13px;
+        }
+        .sidebar {
+          display: none;
+        }
+        .main {
+          padding: 24px 18px calc(125px + env(safe-area-inset-bottom));
+        }
+        .welcome {
+          align-items: flex-start;
+        }
+        .welcome h1 {
+          font-size: 28px;
+        }
+        .welcome p {
+          font-size: 14px;
+        }
+        .section {
+          margin: 29px 0 36px;
+        }
+        .section h2 {
+          font-size: 21px;
+        }
+        .relief-row {
+          grid-auto-columns: minmax(275px, 78vw);
+          gap: 14px;
+        }
+        .relief-card {
+          min-height: 245px;
+          padding: 23px;
+        }
+        .program-card {
+          min-height: 250px;
+          padding: 25px;
+        }
+        .sound-grid {
+          gap: 13px;
+        }
+        .sound-card {
+          padding: 10px;
+        }
+        .sound-card small {
+          font-size: 10px;
+        }
+        .bottom-nav {
+          display: flex;
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          z-index: 20;
+          background: #fbfaffed;
+          backdrop-filter: blur(15px);
+          border-top: 1px solid #e9e6ef;
+          padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+          justify-content: space-around;
+          align-items: center;
+        }
+        .bottom-nav button {
+          border: 0;
+          background: transparent;
+          color: #737482;
+          min-width: 0;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 2px;
+          padding: 5px 1px;
+          border-radius: 18px;
+          font-size: 11px;
+          font-weight: 650;
+        }
+        .bottom-nav .nav-icon {
+          font-size: 21px;
+          line-height: 1.3;
+        }
+        .bottom-nav button.active {
+          color: #30253a;
+        }
+        .bottom-nav button.active .nav-icon {
+          background: #ffc7e1;
+          color: #271d2d;
+          border-radius: 99px;
+          padding: 4px 18px;
+        }
+        .bottom-nav .add .nav-icon {
+          background: var(--pink);
+          color: white;
+          border-radius: 50%;
+          width: 49px;
+          height: 49px;
+          display: grid;
+          place-items: center;
+          font-size: 30px;
+          box-shadow: 0 5px 14px #f64d9b44;
+          margin-top: -18px;
+        }
+        .modal-backdrop {
+          padding: 0;
+          align-items: flex-end;
+        }
+        .modal {
+          border-radius: 26px 26px 0 0;
+          max-height: 94vh;
+        }
+        .modal-hero {
+          min-height: 135px;
+          padding: 16px 20px;
+        }
+        .hero-illustration {
+          font-size: 80px;
+        }
+        .modal-body {
+          padding: 23px 20px calc(25px + env(safe-area-inset-bottom));
+        }
+        .pose-item {
+          grid-template-columns: 85px 1fr;
+          gap: 12px;
+        }
+        .pose-thumb {
+          height: 75px;
+        }
+        .primary {
+          margin-top: 20px;
+        }
+        .toast {
+          bottom: 95px;
+        }
+      }
+      @media (max-width: 380px) {
+        .sound-grid {
+          gap: 9px;
+        }
+        .sound-card strong {
+          font-size: 13px;
+        }
+        .sound-card small {
+          display: none;
+        }
+        .relief-row {
+          grid-auto-columns: 84vw;
+        }
+        .section-head p {
+          display: none;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *:before,
+        *:after {
+          scroll-behavior: auto !important;
+          transition: none !important;
+          animation: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar app-topbar">
+        <a class="brand app-brand" href="home.html"
+          ><img src="assets/images/20261003_115356.png" alt="CareX" />Care<span
+            >X</span
+          ></a
+        >
+        <nav class="track-nav app-desktop-nav" aria-label="Main navigation">
+          <a href="home.html"><span>🏠</span><span>Home</span></a
+          ><a href="track.html"><span>✏️</span><span>Track</span></a
+          ><a href="insights.html"><span>📈</span><span>Insights</span></a
+          ><a href="assistant.html"><span>💬</span><span>Ask</span></a
+          ><a href="profile.html"><span>👤</span><span>Profile</span></a>
+        </nav>
+        <div class="track-controls app-controls">
+          <button
+            class="app-control"
+            type="button"
+            onclick="toggleTheme()"
+            aria-label="Toggle theme"
+          >
+            ☀️ / 🌙
+          </button>
+        </div>
+      </header>
+      <div class="layout">
+        <main class="main">
+          <div class="welcome">
+            <div>
+              <div class="eyebrow">A little time for you</div>
+              <h1>Your wellbeing, at your pace</h1>
+              <p>Gentle movement, mindful moments, and space to reset.</p>
+            </div>
+          </div>
+          <section class="section" id="relief">
+            <div class="section-head">
+              <h2>Menstrual cramps relief</h2>
+              <p>Gentle ideas for your cycle</p>
+            </div>
+            <div class="relief-row">
+              <button
+                class="relief-card yellow-card"
+                id="periodCard"
+                aria-label="Open Period pain relief"
+              >
+                <span class="card-title">Period<br />pain relief</span
+                ><span class="mat"></span><span class="bolster"></span
+                ><span class="person" aria-hidden="true">🧘🏻‍♀️</span
+                ><span class="card-action"
+                  ><span class="play-bubble">▶</span> Explore 3 gentle
+                  poses</span
+                >
+              </button>
+              <button
+                class="relief-card blue-card"
+                id="footCard"
+                aria-label="Open foot massage instructions"
+              >
+                <span class="card-title"
+                  >Foot massage<br />to relieve cramps</span
+                ><span class="card-art" aria-hidden="true">🦶</span
+                ><span class="card-action"
+                  ><span class="play-bubble">▶</span> A soothing 5-minute
+                  routine</span
+                >
+              </button>
+            </div>
+          </section>
+          <section class="section" id="programs">
+            <div class="section-head">
+              <h2>Programs for you</h2>
+              <p>Small steps count</p>
+            </div>
+            <div class="program-card">
+              <h3>Kegel<br />exercises</h3>
+              <span class="flower" aria-hidden="true">🌼</span
+              ><span class="flower-stem" aria-hidden="true"></span
+              ><button class="white-btn" id="kegelOpen">▶ &nbsp; Day 1</button>
+            </div>
+            <p class="note">
+              Beginner-friendly education. Basic content is free.
+            </p>
+          </section>
+          <section class="section" id="soundscapes">
+            <div class="section-head">
+              <h2>Soundscapes</h2>
+              <p>Choose a moment of calm</p>
+            </div>
+            <div class="sound-grid">
+              <button class="sound-card forest" data-sound="Forest Adventure">
+                <span class="sound-play">▶</span
+                ><strong>Forest<br />Adventure</strong
+                ><small>Tap to try</small></button
+              ><button class="sound-card rain" data-sound="Forest Rain">
+                <span class="sound-play">▶</span
+                ><strong>Forest<br />Rain</strong
+                ><small>Tap to try</small></button
+              ><button class="sound-card night" data-sound="Peaceful Night">
+                <span class="sound-play">▶</span
+                ><strong>Peaceful<br />Night</strong><small>Tap to try</small>
+              </button>
+            </div>
+            <div class="empty-audio" id="audioMessage" role="status">
+              Sound files aren't included in this standalone page yet. Add local
+              audio files to enable playback.
+            </div>
+          </section>
+          <section class="section" id="history">
+            <div class="section-head">
+              <h2>Your practice</h2>
+              <p>Stored on this device</p>
+            </div>
+            <div class="kegel-card">
+              <strong id="historyCount">No sessions completed yet</strong>
+              <p class="note" id="historyText">
+                Completed demo sessions are saved in this browser only. This is
+                not synced to a CareX account or database.
+              </p>
+              <button class="secondary" id="clearHistory">
+                Clear local demo history
+              </button>
+            </div>
+          </section>
+          <p class="footer-note">
+            CareX Self Care · Educational content, not a substitute for medical
+            care.
+          </p>
+        </main>
+      </div>
+      <nav class="bottom-nav app-bottom-nav" aria-label="Main navigation">
+        <a href="home.html" class="nav-item"
+          ><span>🏠</span><span data-i18n="home">Home</span></a
+        ><a href="track.html" class="nav-item"
+          ><span>✏️</span><span data-i18n="track">Track</span></a
+        ><a href="insights.html" class="nav-item"
+          ><span>📈</span><span data-i18n="insights">Insights</span></a
+        ><a href="assistant.html" class="nav-item"
+          ><span>💬</span><span data-i18n="assistant">Ask</span></a
+        ><a href="profile.html" class="nav-item"
+          ><span>👤</span><span data-i18n="profile">Profile</span></a
+        >
+      </nav>
+    </div>
+    <div class="modal-backdrop" id="modalBackdrop" role="presentation">
+      <section
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalTitle"
+      >
+        <div class="modal-hero">
+          <button class="back" id="closeModal" aria-label="Close dialog">
+            ←</button
+          ><span class="hero-illustration" id="modalArt" aria-hidden="true"
+            >🧘🏻‍♀️</span
+          >
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+      </section>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="js/theme.js"></script>
+    <script>
+      (() => {
+        "use strict";
+        const $ = (s) => document.querySelector(s),
+          $$ = (s) => [...document.querySelectorAll(s)];
+        const poses = [
+          {
+            name: "Supported child's pose",
+            icon: "🧘🏻‍♀️",
+            duration: 60,
+            instructions:
+              "Kneel on a mat, bring your big toes together, and gently widen your knees. Rest your chest and forehead on a pillow or bolster. Let your arms relax and breathe naturally.",
+          },
+          {
+            name: "Supported pigeon pose",
+            icon: "🧘🏽‍♀️",
+            duration: 60,
+            instructions:
+              "From hands and knees, bring one shin forward only as far as comfortable and extend the other leg behind you. Support your hips with cushions and keep the stretch gentle. Switch sides halfway through.",
+          },
+          {
+            name: "Supported reclining bound angle pose",
+            icon: "🧘🏻",
+            duration: 60,
+            instructions:
+              "Lie back on pillows, bring the soles of your feet together, and let your knees open only as far as comfortable. Support both thighs with cushions and breathe slowly.",
+          },
+        ];
+        let mode = null,
+          index = 0,
+          remaining = 0,
+          running = false,
+          interval = null,
+          deadline = 0,
+          kegelStep = 0,
+          kegelRemaining = 0,
+          sessionStart = 0;
+        let currentSound = null;
+        const kegelSteps = [
+          {
+            name: "Settle and breathe",
+            seconds: 30,
+            desc: "Find a comfortable position and breathe slowly. Let your abdomen, thighs, and buttocks relax.",
+          },
+          {
+            name: "Gentle pelvic floor lift",
+            seconds: 5,
+            desc: "Gently lift and squeeze the pelvic floor as if preventing gas. Keep breathing; do not clench your buttocks or thighs.",
+          },
+          {
+            name: "Fully relax",
+            seconds: 10,
+            desc: "Release completely. Relaxation is as important as the contraction.",
+          },
+          {
+            name: "Gentle pelvic floor lift",
+            seconds: 5,
+            desc: "Repeat a light, comfortable lift. Stop if you feel pain or pressure.",
+          },
+          {
+            name: "Fully relax",
+            seconds: 10,
+            desc: "Let the pelvic floor soften completely and breathe normally.",
+          },
+          {
+            name: "Finish and rest",
+            seconds: 20,
+            desc: "Relax your whole body. Do not practise by stopping your urine stream.",
+          },
+        ];
+        function toast(msg) {
+          const t = $("#toast");
+          t.textContent = msg;
+          t.classList.add("show");
+          clearTimeout(toast.timer);
+          toast.timer = setTimeout(() => t.classList.remove("show"), 3200);
+        }
+        function loadHistory() {
+          try {
+            return JSON.parse(
+              localStorage.getItem("carex-selfcare-demo-history") || "[]",
+            );
+          } catch (e) {
+            return [];
+          }
+        }
+        function saveHistory(type) {
+          try {
+            const h = loadHistory();
+            h.unshift({ type, completedAt: new Date().toISOString() });
+            localStorage.setItem(
+              "carex-selfcare-demo-history",
+              JSON.stringify(h.slice(0, 30)),
+            );
+            renderHistory();
+          } catch (e) {
+            toast(
+              "Could not save local progress. Browser storage may be disabled.",
+            );
+          }
+        }
+        function renderHistory() {
+          const h = loadHistory();
+          $("#historyCount").textContent = h.length
+            ? `${h.length} completed session${h.length === 1 ? "" : "s"}`
+            : "No sessions completed yet";
+          $("#historyText").textContent = h.length
+            ? `Most recent: ${h[0].type} · ${new Date(h[0].completedAt).toLocaleString()}. Saved in this browser only; not synced to an account.`
+            : "Completed demo sessions are saved in this browser only. This is not synced to a CareX account or database.";
+        }
+        function openModal(art, html) {
+          stopTimer();
+          $("#modalArt").textContent = art;
+          $("#modalBody").innerHTML = html;
+          $("#modalBackdrop").classList.add("open");
+          document.body.style.overflow = "hidden";
+          $("#closeModal").focus();
+        }
+        function closeModal() {
+          stopTimer();
+          $("#modalBackdrop").classList.remove("open");
+          document.body.style.overflow = "";
+          mode = null;
+        }
+        function openPeriod() {
+          mode = "period-detail";
+          openModal(
+            "🧘🏻‍♀️",
+            `<h2 id="modalTitle">Period pain relief</h2><p class="lead">Here are some easy poses to help you calm down and relieve the pain.</p><p class="duration">3 min, 3 Poses</p><div class="pose-list">${poses.map((p, i) => `<div class="pose-item"><div class="pose-thumb" aria-hidden="true">${p.icon}</div><div><strong>${p.name}</strong><p>${i === 0 ? "Rest your torso on a pillow and soften your breath." : i === 1 ? "Use cushions and keep the stretch pain-free." : "Support your knees and recline comfortably."}</p></div></div>`).join("")}</div><div class="safety"><strong>Move gently:</strong> Stop if a pose causes pain and avoid movements that feel uncomfortable. Yoga may help some people feel better, but it does not cure cramps. Seek medical advice for severe, new, or unusual menstrual pain.</div><button class="primary" id="startPeriod">▶ &nbsp; Start</button>`,
+          );
+          $("#startPeriod").onclick = startPeriod;
+        }
+        function openFoot() {
+          mode = "foot-detail";
+          openModal(
+            "🦶",
+            `<h2 id="modalTitle">Foot massage to relieve cramps</h2><p class="lead">A gentle, optional self-massage routine. Evidence that foot massage specifically relieves menstrual cramps is limited, so use it for comfort rather than as a treatment.</p><div class="pose-list"><div class="pose-item"><div class="pose-thumb">🦶</div><div><strong>1. Warm up · 1 minute</strong><p>Rub your feet gently between your palms or use a warm towel. Keep the pressure comfortable.</p></div></div><div class="pose-item"><div class="pose-thumb">🤲</div><div><strong>2. Massage the sole · 2 minutes</strong><p>Use your thumbs to make slow circles along the sole, avoiding any sore or injured areas.</p></div></div><div class="pose-item"><div class="pose-thumb">🌿</div><div><strong>3. Relax · 2 minutes</strong><p>Gently circle your ankles and stretch your toes, then rest. Stop if you feel pain, numbness, or discomfort.</p></div></div></div><div class="safety">For severe or unusual cramps, contact a qualified healthcare professional. This routine is for relaxation and is not medical treatment.</div><button class="primary" id="footDone">✓ &nbsp; Mark routine complete</button>`,
+          );
+          $("#footDone").onclick = () => {
+            saveHistory("Foot massage routine");
+            toast("Routine marked complete on this device.");
+            closeModal();
+          };
+        }
+        function timerMarkup() {
+          return `<div class="session"><span class="session-badge" id="sessionBadge"></span><h2 id="modalTitle"></h2><div class="session-art" id="sessionArt"></div><p class="session-copy" id="sessionCopy"></p><div class="timer" id="timerReadout" aria-live="off">01:00</div><div class="progress-track" role="progressbar" aria-label="Session progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressTrack"><div class="progress-fill" id="progressFill"></div></div><p class="note" id="stepLabel"></p><div class="controls"><button class="secondary" id="prevStep">← Previous</button><button class="secondary" id="pauseStep">Ⅱ Pause</button><button class="secondary" id="nextStep">Next →</button></div><button class="primary" id="endSession">End session</button><p class="safety" style="text-align:left">Stop if you feel pain, dizziness, or discomfort. Keep all movements gentle.</p></div>`;
+        }
+        function startPeriod() {
+          mode = "period";
+          index = 0;
+          remaining = poses[0].duration;
+          running = true;
+          sessionStart = Date.now();
+          openModal("🧘🏻‍♀️", timerMarkup());
+          $("#sessionBadge").textContent = "GUIDED SESSION · 3 POSES";
+          renderPose();
+          startClock();
+        }
+        function renderPose() {
+          const p = poses[index];
+          $("#modalTitle").textContent = p.name;
+          $("#sessionArt").textContent = p.icon;
+          $("#sessionCopy").textContent = p.instructions;
+          $("#stepLabel").textContent =
+            `Pose ${index + 1} of ${poses.length} · ${Math.round(p.duration / 60) || 1} minute`;
+          $("#prevStep").disabled = index === 0;
+          $("#nextStep").textContent =
+            index === poses.length - 1 ? "Finish ✓" : "Next →";
+          $("#timerReadout").textContent = formatTime(remaining);
+          updateProgress();
+          $("#pauseStep").textContent = running ? "Ⅱ Pause" : "▶ Resume";
+        }
+        function formatTime(n) {
+          n = Math.max(0, Math.ceil(n));
+          return `${String(Math.floor(n / 60)).padStart(2, "0")}:${String(n % 60).padStart(2, "0")}`;
+        }
+        function updateProgress() {
+          let total = mode === "period" ? poses.length : 1,
+            done = mode === "period" ? index / total : 0;
+          const pct =
+            mode === "period"
+              ? ((index * 60 + (60 - remaining)) / (poses.length * 60)) * 100
+              : ((kegelStep +
+                  (kegelSteps[kegelStep].seconds - kegelRemaining) /
+                    kegelSteps[kegelStep].seconds) /
+                  kegelSteps.length) *
+                100;
+          $("#progressFill").style.width =
+            `${Math.max(0, Math.min(100, pct))}%`;
+          $("#progressTrack").setAttribute(
+            "aria-valuenow",
+            String(Math.round(pct)),
+          );
+        }
+        function stopTimer() {
+          if (interval) {
+            clearInterval(interval);
+            interval = null;
+          }
+          running = false;
+        }
+        function startClock() {
+          if (interval) clearInterval(interval);
+          running = true;
+          deadline = Date.now() + remaining * 1000;
+          $("#pauseStep").textContent = "Ⅱ Pause";
+          interval = setInterval(() => {
+            remaining = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+            $("#timerReadout").textContent = formatTime(remaining);
+            updateProgress();
+            if (remaining <= 0) {
+              clearInterval(interval);
+              interval = null;
+              if (mode === "period") {
+                if (index < poses.length - 1) {
+                  index++;
+                  remaining = poses[index].duration;
+                  renderPose();
+                  startClock();
+                } else completeSession("Period pain relief");
+              } else if (mode === "kegel") {
+                if (kegelStep < kegelSteps.length - 1) {
+                  kegelStep++;
+                  kegelRemaining = kegelSteps[kegelStep].seconds;
+                  renderKegel();
+                  startClock();
+                } else completeSession("Kegel Day 1");
+              }
+            }
+          }, 200);
+        }
+        function pauseClock() {
+          if (running) {
+            remaining = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+            stopTimer();
+            $("#timerReadout").textContent = formatTime(remaining);
+            $("#pauseStep").textContent = "▶ Resume";
+          } else startClock();
+        }
+        function nextPose() {
+          if (index < poses.length - 1) {
+            index++;
+            remaining = poses[index].duration;
+            renderPose();
+            startClock();
+          } else completeSession("Period pain relief");
+        }
+        function prevPose() {
+          if (index > 0) {
+            index--;
+            remaining = poses[index].duration;
+            renderPose();
+            startClock();
+          }
+        }
+        function completeSession(name) {
+          stopTimer();
+          saveHistory(name);
+          $("#modalArt").textContent = "🌸";
+          $("#modalBody").innerHTML =
+            `<div class="session"><span class="session-badge">SESSION COMPLETE</span><h2 id="modalTitle">Well done for showing up for yourself.</h2><div class="session-art">🌸</div><p class="lead">You completed ${name}. Take a moment to notice how you feel, without pressure to feel any particular way.</p><button class="primary" id="finishClose">Done</button></div>`;
+          $("#finishClose").onclick = closeModal;
+        }
+        function openKegel() {
+          mode = "kegel-intro";
+          openModal(
+            "🌼",
+            `<h2 id="modalTitle">Kegel exercises · Day 1</h2><p class="lead">A gentle introduction to pelvic floor awareness. You should be able to breathe normally and relax fully between contractions.</p><div class="kegel-card"><strong>Today's guided practice · about 1 min 20 sec</strong><p>Start with relaxed breathing, then try two very gentle lifts with full rest between them. It is okay to skip or stop.</p></div><div class="safety"><strong>Important:</strong> Do not routinely practise Kegels by stopping your urine stream. If you have pelvic pain, pressure, or discomfort, skip the exercise and ask a qualified clinician or pelvic health physiotherapist for advice.</div><button class="primary" id="startKegel">▶ &nbsp; Start Day 1</button><button class="secondary" style="width:100%;margin-top:10px" id="skipKegel">Skip for now</button>`,
+          );
+          $("#startKegel").onclick = startKegel;
+          $("#skipKegel").onclick = closeModal;
+        }
+        function startKegel() {
+          mode = "kegel";
+          kegelStep = 0;
+          kegelRemaining = kegelSteps[0].seconds;
+          openModal("🌼", timerMarkup());
+          $("#sessionBadge").textContent = "KEGEL PROGRAM · DAY 1";
+          renderKegel();
+          startClock();
+        }
+        function renderKegel() {
+          const s = kegelSteps[kegelStep];
+          $("#modalTitle").textContent = s.name;
+          $("#sessionArt").textContent =
+            kegelStep === 1 || kegelStep === 3 ? "🌷" : "🌼";
+          $("#sessionCopy").textContent = s.desc;
+          $("#stepLabel").textContent =
+            `Step ${kegelStep + 1} of ${kegelSteps.length}`;
+          $("#prevStep").disabled = kegelStep === 0;
+          $("#nextStep").textContent =
+            kegelStep === kegelSteps.length - 1 ? "Finish ✓" : "Next →";
+          $("#timerReadout").textContent = formatTime(kegelRemaining);
+          $("#pauseStep").textContent = running ? "Ⅱ Pause" : "▶ Resume";
+          updateProgress();
+        }
+        function nextKegel() {
+          if (kegelStep < kegelSteps.length - 1) {
+            kegelStep++;
+            kegelRemaining = kegelSteps[kegelStep].seconds;
+            renderKegel();
+            startClock();
+          } else completeSession("Kegel Day 1");
+        }
+        function prevKegel() {
+          if (kegelStep > 0) {
+            kegelStep--;
+            kegelRemaining = kegelSteps[kegelStep].seconds;
+            renderKegel();
+            startClock();
+          }
+        }
+        $("#periodCard").onclick = openPeriod;
+        $("#footCard").onclick = openFoot;
+        $("#kegelOpen").onclick = openKegel;
+        $("#closeModal").onclick = closeModal;
+        $("#modalBackdrop").addEventListener("click", (e) => {
+          if (e.target === $("#modalBackdrop")) closeModal();
+        });
+        document.addEventListener("keydown", (e) => {
+          if (
+            e.key === "Escape" &&
+            $("#modalBackdrop").classList.contains("open")
+          )
+            closeModal();
+        });
+        $$("[data-sound]").forEach((b) =>
+          b.addEventListener("click", () => {
+            if (currentSound === b.dataset.sound) {
+              currentSound = null;
+              $$("[data-sound]").forEach((x) => {
+                x.classList.remove("playing");
+                x.querySelector(".sound-play").textContent = "▶";
+              });
+              $("#audioMessage").textContent =
+                "No soundscape is playing. Sound files are not included in this standalone page yet.";
+              return;
+            }
+            currentSound = b.dataset.sound;
+            $$("[data-sound]").forEach((x) => {
+              const active = x === b;
+              x.classList.toggle("playing", active);
+              x.querySelector(".sound-play").textContent = active ? "Ⅱ" : "▶";
+            });
+            $("#audioMessage").textContent =
+              `“${currentSound}” is selected, but no local audio file is available to play. Add a licensed local audio file to enable playback; this page will not pretend sound is playing.`;
+            toast("Audio unavailable: no sound file is configured.");
+          }),
+        );
+        $$("[data-route]").forEach((b) =>
+          b.addEventListener("click", () => {
+            const route = b.dataset.route;
+            if (route === "selfcare") {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+              return;
+            }
+            if (route === "add") {
+              openModal(
+                "＋",
+                `<h2 id="modalTitle">Quick action</h2><p class="lead">Choose what you'd like to do. These are standalone placeholders until connected to CareX routes.</p><div class="quick-menu"><button class="secondary" id="quickMood">♡ Note how I feel</button><button class="secondary" id="quickReminder">▦ Plan a reminder</button></div><p class="note">No health details are sent or stored by these quick actions.</p>`,
+              );
+              $("#quickMood").onclick = () =>
+                toast("Connect this action to your CareX daily log.");
+              $("#quickReminder").onclick = () =>
+                toast("Connect this action to your CareX reminder flow.");
+              return;
+            }
+            toast(
+              `The CareX “${route}” route is not configured in this standalone file.`,
+            );
+          }),
+        );
+        $("#clearHistory").onclick = () => {
+          if (
+            confirm(
+              "Clear locally stored demo session history from this browser?",
+            )
+          ) {
+            try {
+              localStorage.removeItem("carex-selfcare-demo-history");
+              renderHistory();
+              toast("Local demo history cleared.");
+            } catch (e) {
+              toast("Could not clear browser storage.");
+            }
+          }
+        };
+        renderHistory();
+        // Rebind controls after timer view creation; controls are delegated and handlers remain current.
+        // Keep a single delegated controller for dynamic session buttons.
+        $("#modalBody").addEventListener("click", (e) => {
+          const b = e.target.closest("button");
+          if (!b) return;
+          switch (b.id) {
+            case "pauseStep":
+              pauseClock();
+              break;
+            case "nextStep":
+              mode === "period"
+                ? nextPose()
+                : mode === "kegel"
+                  ? nextKegel()
+                  : null;
+              break;
+            case "prevStep":
+              mode === "period"
+                ? prevPose()
+                : mode === "kegel"
+                  ? prevKegel()
+                  : null;
+              break;
+            case "endSession":
+              stopTimer();
+              if (
+                confirm(
+                  "End this session now? Your incomplete session will not be recorded as completed.",
+                )
+              )
+                closeModal();
+              else if (mode) startClock();
+              break;
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

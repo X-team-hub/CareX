@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Doctors - CareX</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    .doctors-page {
+      max-width: 1280px;
+    }
+
+    .doctors-content {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .doc {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:16px 0;
+      border-bottom:1px solid var(--line);
+    }
+
+    .doc:last-child {
+      border-bottom:0;
+    }
+
+    .av {
+      width:50px;
+      height:50px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:var(--rose2);
+      color:var(--rose);
+      font-weight:700;
+      flex-shrink:0;
+    }
+
+    .doc-info {
+      flex:1;
+      min-width:0;
+    }
+
+    .doc-name {
+      font-weight:700;
+      font-size:1rem;
+    }
+
+    .doc-meta {
+      margin-top:4px;
+      font-size:.84rem;
+    }
+
+    .verified {
+      color:var(--sage);
+      font-size:.8rem;
+      margin-top:5px;
+    }
+
+    .doc-price {
+      text-align:right;
+      flex-shrink:0;
+    }
+
+    .doc-price button {
+      margin-top:6px;
+      padding:8px 12px;
+      font-size:.82rem;
+    }
+
+    #dlg {
+      width:min(92%,420px);
+      border:0;
+      border-radius:20px;
+      padding:22px;
+      background:var(--card);
+      color:var(--text);
+    }
+
+    #dlg::backdrop {
+      background:rgba(0,0,0,.35);
+    }
+
+    #dlg label {
+      display:block;
+      margin-top:14px;
+      margin-bottom:6px;
+      font-weight:600;
+    }
+
+    #dlg select {
+      width:100%;
+      padding:11px;
+      border:1px solid var(--line);
+      border-radius:10px;
+      background:var(--bg);
+      color:var(--text);
+    }
+  </style>
+  <link rel="stylesheet" href="css/app-navigation.css">
+</head>
+
+<body>
+
+  <div class="wrap doctors-page">
+
+    <header class="app-topbar">
+      <a href="home.html" class="app-brand">
+        <img src="assets/images/20261003_115356.png" alt="CareX">
+        Care<span>X</span>
+      </a>
+
+      <nav class="app-desktop-nav" aria-label="Main navigation">
+        <a href="home.html"><span>🏠</span> <span data-i18n="home">Home</span></a>
+        <a href="track.html"><span>✏️</span> <span data-i18n="track">Track</span></a>
+        <a href="insights.html"><span>📈</span> <span data-i18n="insights">Insights</span></a>
+        <a href="assistant.html"><span>💬</span> <span data-i18n="assistant">Ask</span></a>
+        <a href="profile.html"><span>👤</span> <span data-i18n="profile">Profile</span></a>
+      </nav>
+
+      <div class="app-controls">
+        <button class="app-control" type="button" onclick="setLang(getLang()==='en'?'hi':'en')">
+          🌐 <span id="lang-label">HI</span>
+        </button>
+        <button class="app-control" type="button" onclick="toggleTheme()" aria-label="Toggle theme">☀️ / 🌙</button>
+      </div>
+    </header>
+
+    <main class="doctors-content">
+      <h1 data-i18n="talk_to_doctor">Talk to a Doctor</h1>
+
+      <p class="sub" data-i18n="verified">
+        Verified professionals by video, audio or chat. Private by default.
+      </p>
+
+      <div class="card" id="doc-list"></div>
+
+      <p class="disc" data-i18n="emergency">
+        Emergency signs need in-person care right away.
+      </p>
+    </main>
+
+  </div>
+
+  <dialog id="dlg">
+
+    <h3 id="d-name"></h3>
+
+    <p class="mute" id="d-spec"></p>
+
+    <p id="d-info"></p>
+
+    <label data-i18n="choose_slot">
+      Choose a slot
+    </label>
+
+    <select id="d-time">
+      <option value="18:00" data-i18n="today_slot">
+        Today, 6:00 PM
+      </option>
+
+      <option value="10:30" data-i18n="tomorrow_slot">
+        Tomorrow, 10:30 AM
+      </option>
+    </select>
+
+    <label data-i18n="mode">
+      Mode
+    </label>
+
+    <select id="d-mode">
+      <option value="video" data-i18n="video">
+        Video call
+      </option>
+
+      <option value="audio" data-i18n="audio">
+        Audio call
+      </option>
+
+      <option value="chat" data-i18n="chat">
+        Chat
+      </option>
+    </select>
+
+    <div style="display:flex;gap:8px;margin-top:16px;">
+
+      <button onclick="bookNow()" data-i18n="book_consultation">
+        Book
+      </button>
+
+      <button
+        class="ghost"
+        onclick="document.getElementById('dlg').close()"
+        data-i18n="cancel">
+        Cancel
+      </button>
+
+    </div>
+
+  </dialog>
+
+  <nav class="bottom-nav app-bottom-nav" aria-label="Main navigation">
+
+    <a href="home.html" class="nav-item">
+      <span>🏠</span>
+      <span data-i18n="home">Home</span>
+    </a>
+
+    <a href="track.html" class="nav-item">
+      <span>✏️</span>
+      <span data-i18n="track">Track</span>
+    </a>
+
+    <a href="insights.html" class="nav-item">
+      <span>📈</span>
+      <span data-i18n="insights">Insights</span>
+    </a>
+
+    <a href="assistant.html" class="nav-item">
+      <span>💬</span>
+      <span data-i18n="assistant">Ask</span>
+    </a>
+
+    <a href="profile.html" class="nav-item">
+      <span>👤</span>
+      <span data-i18n="profile">Profile</span>
+    </a>
+
+  </nav>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/language.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/common.js"></script>
+
+  <script>
+    let selectedDoctor = null;
+    let bookingUser = null;
+
+    const doctors = [
+      {
+        id: '6b9a725d-d438-4a80-bcd8-aa704a53c053',
+        name: 'Dr. Ananya Rao',
+        specialization: 'Gynaecologist',
+        experience: 12,
+        languages: ['Hindi', 'English'],
+        price: 400
+      },
+      {
+        id: '6731c5ec-2599-42ae-8c5d-27dc425ac0cf',
+        name: 'Dr. Meera Iyer',
+        specialization: 'PCOS Specialist',
+        experience: 9,
+        languages: ['English', 'Tamil'],
+        price: 350
+      },
+      {
+        id: '18a58392-5aac-449e-92a9-82c745bb2967',
+        name: 'Dr. Farah Khan',
+        specialization: 'General Physician',
+        experience: 7,
+        languages: ['Hindi', 'Urdu'],
+        price: 200
+      }
+    ];
+
+    function getInitials(name) {
+      return name
+        .split(' ')
+        .slice(0, 2)
+        .map(x => x.charAt(0))
+        .join('');
+    }
+
+    function renderDoctors() {
+      const list = document.getElementById('doc-list');
+
+      list.innerHTML = doctors.map(d => `
+        <div class="doc">
+
+          <div class="av">
+            ${getInitials(d.name)}
+          </div>
+
+          <div class="doc-info">
+
+            <div class="doc-name">
+              ${d.name}
+            </div>
+
+            <div class="doc-meta mute">
+              ${d.specialization} · ${d.experience} yrs
+            </div>
+
+            <div class="doc-meta mute">
+              ${d.languages.join(', ')}
+            </div>
+
+            <div class="verified">
+              ✓ Verified
+            </div>
+
+          </div>
+
+          <div class="doc-price">
+
+            <strong>
+              ₹${d.price}
+            </strong>
+
+            <br>
+
+            <button onclick="openBook('${d.id}')">
+              Book
+            </button>
+
+          </div>
+
+        </div>
+      `).join('');
+
+      applyTranslations();
+    }
+
+    function openBook(id) {
+      selectedDoctor =
+        doctors.find(d => d.id === id);
+
+      if (!selectedDoctor) return;
+
+      document.getElementById('d-name').textContent =
+        selectedDoctor.name;
+
+      document.getElementById('d-spec').textContent =
+        selectedDoctor.specialization;
+
+      document.getElementById('d-info').textContent =
+        `${selectedDoctor.experience} years experience · ${selectedDoctor.languages.join(', ')} · ₹${selectedDoctor.price}`;
+
+      document.getElementById('dlg').showModal();
+
+      applyTranslations();
+    }
+
+    async function bookNow() {
+      if (!selectedDoctor) return;
+
+      const {
+        data,
+        error
+      } = await sb.auth.getSession();
+
+      if (error || !data.session) {
+        document.getElementById('dlg').close();
+
+        toast('Please login to book an appointment');
+
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 700);
+
+        return;
+      }
+
+      bookingUser = data.session.user;
+
+      const time =
+        document.getElementById('d-time').value;
+
+      const mode =
+        document.getElementById('d-mode').value;
+
+      const date =
+        new Date().toISOString().split('T')[0];
+
+      const { error: bookingError } =
+        await sb
+          .from('appointments')
+          .insert({
+            user_id: bookingUser.id,
+            doctor_id: selectedDoctor.id,
+            appointment_date: date,
+            appointment_time: time + ':00',
+            status: 'booked',
+            notes: 'Consultation mode: ' + mode
+          });
+
+      if (bookingError) {
+        console.error(bookingError);
+        toast('Could not book appointment');
+        return;
+      }
+
+      document.getElementById('dlg').close();
+
+      toast('Appointment booked successfully');
+    }
+
+    document.addEventListener(
+      'carexLanguageChanged',
+      () => {
+        applyTranslations();
+      }
+    );
+
+    renderDoctors();
+  </script>
+
+</body>
+</html>
