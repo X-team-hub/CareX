@@ -376,12 +376,29 @@ input:focus,select:focus{
 }
 
 .action-list{
-  display:grid;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
   gap:9px;
 }
 
 .action-list > button{
-  width:100%;
+  width:auto;
+}
+
+.logout-card{
+  display:flex;
+  justify-content:flex-end;
+}
+
+.logout-card > button,
+.notification-save{
+  width:auto;
+}
+
+.notification-save{
+  display:block;
+  margin:14px 0 0 auto;
 }
 
 .ghost{
@@ -502,6 +519,17 @@ input:focus,select:focus{
   .full{grid-column:auto}
 
   .times{grid-template-columns:1fr}
+
+  .action-list{
+    display:grid;
+    grid-template-columns:1fr;
+  }
+
+  .action-list > button,
+  .logout-card > button,
+  .notification-save{
+    width:100%;
+  }
 
   .card{
     padding:16px;
@@ -692,9 +720,9 @@ Delete Saved Data
 
 </section>
 
-<section class="card">
+<section class="card logout-card">
 
-<button class="ghost danger" style="width:100%"
+<button class="ghost danger"
 onclick="logout()"
 data-en="Logout"
 data-hi="लॉग आउट">
@@ -781,7 +809,7 @@ Notification Times
 
 </div>
 
-<button class="primary" style="width:100%;margin-top:14px"
+<button class="primary notification-save"
 onclick="saveNotifications()"
 data-en="Save Notification Settings"
 data-hi="नोटिफिकेशन सेटिंग सेव करें">
