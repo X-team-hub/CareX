@@ -2,11 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Doctor Admin - CareX</title>
 
-  <link rel="icon" type="image/png" href="../assets/images/doctor-logo.png">
+  <link
+    rel="icon"
+    type="image/png"
+    href="../assets/images/doctor-logo.png"
+  >
 
   <link
     href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=DM+Sans:wght@400;500;700&display=swap"
@@ -48,7 +52,7 @@
     .doctor-shell {
       width: min(1120px, calc(100% - 32px));
       margin: 0 auto;
-      padding-bottom: 40px;
+      padding-bottom: 50px;
     }
 
     .doctor-header {
@@ -57,7 +61,7 @@
       justify-content: space-between;
       gap: 16px;
       padding: 24px 0;
-      margin-bottom: 32px;
+      margin-bottom: 30px;
       border-bottom: 1px solid var(--border-color);
     }
 
@@ -73,8 +77,9 @@
     }
 
     .doctor-brand-logo {
+      width: 44px;
       height: 44px;
-      width: auto;
+      object-fit: cover;
       border-radius: 10px;
     }
 
@@ -85,7 +90,7 @@
       border: 1px solid var(--border-color);
       border-radius: var(--radius);
       box-shadow: var(--shadow-premium);
-      animation: fadeInUp 0.5s ease-out backwards;
+      animation: fadeInUp 0.35s ease-out;
     }
 
     .doctor-card h1,
@@ -99,6 +104,14 @@
     .doctor-card h1 {
       margin: 14px 0 10px;
       font-size: clamp(25px, 4vw, 34px);
+    }
+
+    .doctor-card h2 {
+      font-size: 25px;
+    }
+
+    .doctor-card h3 {
+      font-size: 19px;
     }
 
     .small {
@@ -120,13 +133,13 @@
       color: #fff;
       font: 700 14px "DM Sans", sans-serif;
       cursor: pointer;
-      transition: all 0.25s ease;
+      transition: all 0.2s ease;
     }
 
     .doctor-btn:hover {
       background: var(--deep-teal);
       border-color: var(--deep-teal);
-      transform: translateY(-2px);
+      transform: translateY(-1px);
     }
 
     .doctor-btn.secondary {
@@ -164,9 +177,9 @@
 
     .doctor-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
       gap: 16px;
-      margin-top: 14px;
+      margin-top: 18px;
     }
 
     .doctor-feature {
@@ -175,11 +188,6 @@
       border-radius: 12px;
       border: 1px solid var(--border-color);
       text-align: center;
-      transition: transform 0.3s;
-    }
-
-    .doctor-feature:hover {
-      transform: translateY(-3px);
     }
 
     .doctor-feature strong {
@@ -198,7 +206,7 @@
     .doc-table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 16px;
+      margin-top: 10px;
     }
 
     .doc-table th {
@@ -256,16 +264,23 @@
       border: 1px solid #FECACA;
     }
 
+    .status.draft {
+      background: #F3F4F6;
+      color: #4B5563;
+      border: 1px solid #D1D5DB;
+    }
+
     .review-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 24px;
-      margin-top: 14px;
+      margin-top: 18px;
     }
 
     .step-list {
       display: grid;
       gap: 12px;
+      margin-top: 12px;
     }
 
     .step {
@@ -326,7 +341,7 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      margin-top: 16px;
+      margin-top: 20px;
     }
 
     .doctor-field label {
@@ -337,12 +352,27 @@
 
     .doctor-field textarea {
       width: 100%;
-      min-height: 100px;
+      min-height: 110px;
       padding: 12px;
       border: 1px solid var(--border-color);
       border-radius: 10px;
       background: #FAFAFA;
+      color: var(--text-primary);
       font: 400 14px "DM Sans", sans-serif;
+      resize: vertical;
+      outline: none;
+    }
+
+    .doctor-field textarea:focus {
+      border-color: var(--healthcare-teal);
+      box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+    }
+
+    .action-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
     }
 
     .notice {
@@ -358,10 +388,26 @@
       border: 1px solid #FECACA;
     }
 
+    #doctor-toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 99999;
+      max-width: 420px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: var(--deep-teal);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.5;
+      box-shadow: 0 12px 30px rgba(0,0,0,.18);
+    }
+
     @keyframes fadeInUp {
       from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(12px);
       }
 
       to {
@@ -371,6 +417,18 @@
     }
 
     @media (max-width: 700px) {
+      .doctor-shell {
+        width: min(100% - 20px, 1120px);
+      }
+
+      .doctor-header {
+        padding: 16px 0;
+      }
+
+      .doctor-card {
+        padding: 20px;
+      }
+
       .review-grid {
         grid-template-columns: 1fr;
       }
@@ -378,6 +436,20 @@
       .doc-table {
         display: block;
         overflow-x: auto;
+      }
+
+      .file-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .step {
+        grid-template-columns: 34px minmax(0, 1fr);
+      }
+
+      .step > .status {
+        grid-column: 2;
+        width: fit-content;
       }
     }
   </style>
@@ -410,13 +482,15 @@
 
     <div id="app">
       <section class="doctor-card">
-        <div class="small">Loading admin panel...</div>
+        <div class="small">
+          Loading admin panel...
+        </div>
       </section>
     </div>
 
   </div>
 
-  <!-- IMPORTANT: correct root paths -->
+  <!-- IMPORTANT: root paths -->
   <script src="../js/config.js"></script>
   <script src="../js/supabase.js"></script>
   <script src="../js/common.js"></script>
@@ -425,33 +499,116 @@
     let admin = null;
     let selected = null;
 
+    /* =========================================================
+       SAFE HELPERS
+       ========================================================= */
+
+    function doctorEscape(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function doctorStatusLabel(status) {
+      const labels = {
+        draft: "Draft",
+        submitted: "Submitted",
+        under_review: "Under Review",
+        verified: "Verified",
+        changes_required: "Changes Required",
+        rejected: "Rejected"
+      };
+
+      return labels[status] || String(status || "Unknown");
+    }
+
+    function doctorToast(message) {
+      const oldToast = document.getElementById("doctor-toast");
+
+      if (oldToast) {
+        oldToast.remove();
+      }
+
+      const toast = document.createElement("div");
+
+      toast.id = "doctor-toast";
+      toast.textContent = String(message ?? "");
+
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.remove();
+      }, 3500);
+    }
+
+    async function doctorLogout() {
+      try {
+        if (
+          typeof carexSupabase !== "undefined" &&
+          carexSupabase &&
+          carexSupabase.auth
+        ) {
+          const { error } =
+            await carexSupabase.auth.signOut();
+
+          if (error) {
+            console.error(
+              "Doctor logout error:",
+              error
+            );
+          }
+        }
+      } catch (error) {
+        console.error(
+          "Doctor logout failed:",
+          error
+        );
+      } finally {
+        window.location.href = "./login.html";
+      }
+    }
+
     function showError(message) {
-      document.getElementById("app").innerHTML = `
+      const app = document.getElementById("app");
+
+      if (!app) {
+        return;
+      }
+
+      app.innerHTML = `
         <section class="doctor-card">
           <div class="notice danger">
-            Failed to load: ${doctorEscape(message)}
+            Failed to load:
+            ${doctorEscape(message)}
           </div>
         </section>
       `;
     }
 
+    /* =========================================================
+       LOAD ADMIN DASHBOARD
+       ========================================================= */
+
     async function load() {
       try {
-        /*
-         * CareX uses carexSupabase.
-         * Do NOT use doctorSupabase or supabase here.
-         */
-        if (!carexSupabase) {
-          showError("Supabase connection is not available.");
+
+        if (
+          typeof carexSupabase === "undefined" ||
+          !carexSupabase
+        ) {
+          showError(
+            "Supabase connection is not available."
+          );
           return;
         }
 
-        /*
-         * requireAdmin() should verify the logged-in user's
-         * CareX admin role.
-         */
         if (typeof requireAdmin !== "function") {
-          showError("Admin authentication helper is not available.");
+          showError(
+            "Admin authentication helper is not available."
+          );
           return;
         }
 
@@ -467,17 +624,24 @@
         } = await carexSupabase
           .from("carex_doctor_profiles")
           .select("*")
-          .order("updated_at", { ascending: false });
+          .order("updated_at", {
+            ascending: false
+          });
 
         if (error) {
           throw error;
         }
 
-        const ids = (docs || []).map(x => x.id);
+        const doctorList = docs || [];
+
+        const ids = doctorList.map(
+          doctor => doctor.id
+        );
 
         let steps = [];
 
         if (ids.length) {
+
           const {
             data,
             error: stepError
@@ -494,25 +658,32 @@
         }
 
         const stats = {
-          total: docs.length,
+          total: doctorList.length,
 
-          review: docs.filter(d =>
-            ["submitted", "under_review"].includes(d.status)
+          review: doctorList.filter(
+            doctor =>
+              ["submitted", "under_review"]
+                .includes(doctor.status)
           ).length,
 
-          verified: docs.filter(d =>
-            d.status === "verified"
+          verified: doctorList.filter(
+            doctor =>
+              doctor.status === "verified"
           ).length,
 
-          changes: docs.filter(d =>
-            d.status === "changes_required"
+          changes: doctorList.filter(
+            doctor =>
+              doctor.status === "changes_required"
           ).length
         };
 
         document.getElementById("app").innerHTML = `
 
           <section class="doctor-card">
-            <span class="doctor-badge">ADMIN PANEL</span>
+
+            <span class="doctor-badge">
+              ADMIN PANEL
+            </span>
 
             <h1>Doctor Verification</h1>
 
@@ -539,6 +710,7 @@
               </div>
 
             </div>
+
           </section>
 
           <section class="doctor-card">
@@ -557,54 +729,88 @@
               <tbody>
 
                 ${
-                  docs.length
-                    ? docs.map(d => {
+                  doctorList.length
 
-                        const ss = steps.filter(
-                          s => s.doctor_id === d.id
-                        );
+                    ? doctorList.map(doctor => {
 
-                        const verifiedSteps = ss.filter(
-                          s => s.status === "verified"
-                        ).length;
+                        const doctorSteps =
+                          steps.filter(
+                            step =>
+                              step.doctor_id ===
+                              doctor.id
+                          );
+
+                        const verifiedSteps =
+                          doctorSteps.filter(
+                            step =>
+                              step.status ===
+                              "verified"
+                          ).length;
 
                         const statusClass =
-                          d.status === "verified"
+                          doctor.status ===
+                          "verified"
                             ? "verified"
-                            : d.status === "changes_required"
+
+                            : doctor.status ===
+                              "changes_required"
                               ? "changes_required"
-                              : d.status === "rejected"
+
+                              : doctor.status ===
+                                "rejected"
                                 ? "rejected"
-                                : "under_review";
+
+                                : doctor.status ===
+                                  "submitted"
+                                  ? "submitted"
+
+                                  : doctor.status ===
+                                    "draft"
+                                    ? "draft"
+
+                                    : "under_review";
 
                         return `
                           <tr>
 
                             <td>
                               <strong>
-                                ${doctorEscape(d.full_name)}
+                                ${doctorEscape(
+                                  doctor.full_name
+                                )}
                               </strong>
 
                               <div class="small">
-                                ${doctorEscape(d.specialization || "")}
+                                ${doctorEscape(
+                                  doctor.specialization ||
+                                  ""
+                                )}
                               </div>
                             </td>
 
                             <td>
-                              <span class="status ${statusClass}">
-                                ${doctorEscape(d.status || "draft")}
+                              <span
+                                class="status ${statusClass}"
+                              >
+                                ${doctorEscape(
+                                  doctorStatusLabel(
+                                    doctor.status
+                                  )
+                                )}
                               </span>
                             </td>
 
                             <td>
-                              ${verifiedSteps}/${ss.length}
+                              ${verifiedSteps}/${doctorSteps.length}
                             </td>
 
                             <td>
                               <button
                                 type="button"
                                 class="doctor-btn"
-                                onclick="openDoctor('${d.id}')"
+                                onclick="openDoctor('${doctorEscape(
+                                  doctor.id
+                                )}')"
                               >
                                 Review
                               </button>
@@ -612,8 +818,8 @@
 
                           </tr>
                         `;
-
                       }).join("")
+
                     : `
                       <tr>
                         <td colspan="4">
@@ -636,20 +842,28 @@
 
       } catch (err) {
 
-        console.error("Admin load error:", err);
+        console.error(
+          "Admin load error:",
+          err
+        );
 
-        showError(err?.message || "Unknown error");
-
+        showError(
+          err?.message ||
+          "Unknown error"
+        );
       }
     }
 
+    /* =========================================================
+       OPEN DOCTOR
+       ========================================================= */
 
     async function openDoctor(id) {
 
       try {
 
         const {
-          data: d,
+          data: doctor,
           error: doctorError
         } = await carexSupabase
           .from("carex_doctor_profiles")
@@ -662,7 +876,7 @@
         }
 
         const {
-          data: s,
+          data: doctorSteps,
           error: stepError
         } = await carexSupabase
           .from("carex_doctor_verification_steps")
@@ -681,40 +895,57 @@
           .from("carex_doctor_documents")
           .select("*")
           .eq("doctor_id", id)
-          .order("uploaded_at", { ascending: false });
+          .order("uploaded_at", {
+            ascending: false
+          });
 
         if (fileError) {
           throw fileError;
         }
 
         selected = {
-          d,
-          s: s || [],
+          d: doctor,
+          s: doctorSteps || [],
           files: files || []
         };
 
-        document.getElementById("review").innerHTML = `
+        const review =
+          document.getElementById("review");
+
+        if (!review) {
+          return;
+        }
+
+        review.innerHTML = `
 
           <section class="doctor-card">
 
-            <div style="
-              display:flex;
-              justify-content:space-between;
-              gap:10px;
-              align-items:flex-start;
-              flex-wrap:wrap;
-            ">
+            <div
+              style="
+                display:flex;
+                justify-content:space-between;
+                gap:10px;
+                align-items:flex-start;
+                flex-wrap:wrap;
+              "
+            >
 
               <div>
 
                 <h2>
-                  ${doctorEscape(d.full_name)}
+                  ${doctorEscape(
+                    doctor.full_name
+                  )}
                 </h2>
 
                 <p class="small">
-                  ${doctorEscape(d.qualification || "")}
+                  ${doctorEscape(
+                    doctor.qualification || ""
+                  )}
                   ·
-                  ${doctorEscape(d.registration_number || "")}
+                  ${doctorEscape(
+                    doctor.registration_number || ""
+                  )}
                 </p>
 
               </div>
@@ -729,98 +960,163 @@
 
             </div>
 
-
             <div class="review-grid">
 
+              <!-- PROFILE -->
               <div>
 
                 <h3>Profile Details</h3>
 
                 <div
                   class="small"
-                  style="margin-top:12px;line-height:2;"
+                  style="
+                    margin-top:12px;
+                    line-height:2;
+                  "
                 >
 
                   <div>
-                    <strong>Specialization:</strong>
-                    ${doctorEscape(d.specialization || "-")}
+                    <strong>
+                      Specialization:
+                    </strong>
+                    ${doctorEscape(
+                      doctor.specialization || "-"
+                    )}
                   </div>
 
                   <div>
-                    <strong>Council:</strong>
-                    ${doctorEscape(d.registration_council || "-")}
+                    <strong>
+                      Council:
+                    </strong>
+                    ${doctorEscape(
+                      doctor.registration_council ||
+                      "-"
+                    )}
                   </div>
 
                   <div>
-                    <strong>Clinic:</strong>
-                    ${doctorEscape(d.clinic_name || "-")}
+                    <strong>
+                      Registration:
+                    </strong>
+                    ${doctorEscape(
+                      doctor.registration_number ||
+                      "-"
+                    )}
                   </div>
 
                   <div>
-                    <strong>City:</strong>
-                    ${doctorEscape(d.city || "-")}
+                    <strong>
+                      Clinic:
+                    </strong>
+                    ${doctorEscape(
+                      doctor.clinic_name || "-"
+                    )}
                   </div>
 
                   <div>
-                    <strong>Experience:</strong>
-                    ${doctorEscape(d.experience_years ?? "-")} years
+                    <strong>
+                      City:
+                    </strong>
+                    ${doctorEscape(
+                      doctor.city || "-"
+                    )}
                   </div>
 
                   <div>
-                    <strong>Bio:</strong>
-                    ${doctorEscape(d.bio || "-")}
+                    <strong>
+                      Experience:
+                    </strong>
+                    ${doctorEscape(
+                      doctor.experience_years ??
+                      "-"
+                    )}
+                    years
+                  </div>
+
+                  <div>
+                    <strong>
+                      Bio:
+                    </strong>
+                    ${doctorEscape(
+                      doctor.bio || "-"
+                    )}
                   </div>
 
                 </div>
 
               </div>
 
-
+              <!-- VERIFICATION -->
               <div>
 
-                <h3>Verification Steps</h3>
+                <h3>
+                  Verification Steps
+                </h3>
 
-                <div
-                  class="step-list"
-                  style="margin-top:12px"
-                >
+                <div class="step-list">
 
                   ${
                     selected.s.length
+
                       ? selected.s.map(step => `
-                          <div class="step">
 
-                            <div class="step-icon">
-                              ${step.status === "verified" ? "✓" : "•"}
+                        <div class="step">
+
+                          <div class="step-icon">
+                            ${
+                              step.status ===
+                              "verified"
+                                ? "✓"
+                                : "•"
+                            }
+                          </div>
+
+                          <div>
+
+                            <div class="step-title">
+                              ${doctorEscape(
+                                step.title ||
+                                step.step_key ||
+                                "Verification Step"
+                              )}
                             </div>
 
-                            <div>
-
-                              <div class="step-title">
-                                ${doctorEscape(step.title)}
-                              </div>
-
-                              <div class="step-note">
-                                ${
-                                  step.rejection_reason
-                                    ? doctorEscape(step.rejection_reason)
-                                    : "No review note"
-                                }
-                              </div>
-
+                            <div class="step-note">
+                              ${
+                                step.rejection_reason
+                                  ? doctorEscape(
+                                      step.rejection_reason
+                                    )
+                                  : "No review note"
+                              }
                             </div>
-
-                            <span class="status ${step.status}">
-                              ${doctorStatusLabel(step.status)}
-                            </span>
 
                           </div>
-                        `).join("")
+
+                          <span
+                            class="status ${
+                              doctorEscape(
+                                step.status ||
+                                "under_review"
+                              )
+                            }"
+                          >
+                            ${doctorEscape(
+                              doctorStatusLabel(
+                                step.status
+                              )
+                            )}
+                          </span>
+
+                        </div>
+
+                      `).join("")
+
                       : `
-                          <div class="notice">
-                            No verification steps found.
-                          </div>
-                        `
+                        <div class="notice">
+                          No verification steps found.
+                        </div>
+                      `
                   }
 
                 </div>
@@ -829,14 +1125,16 @@
 
             </div>
 
+            <!-- DOCUMENTS -->
 
-            <h3 style="margin:24px 0 12px;">
+            <h3 style="margin:28px 0 12px;">
               Documents
             </h3>
 
             ${
               selected.files.length
-                ? selected.files.map(f => `
+
+                ? selected.files.map(file => `
 
                     <div class="file-row">
 
@@ -844,21 +1142,37 @@
 
                         <strong>
                           ${doctorEscape(
-                            f.original_name || f.document_type
+                            file.original_name ||
+                            file.document_type ||
+                            "Document"
                           )}
                         </strong>
 
                         <div class="small">
 
-                          ${doctorEscape(f.step_key || "")}
+                          ${doctorEscape(
+                            file.step_key || ""
+                          )}
 
                           ·
 
                           <span
-                            class="status ${f.status || "under_review"}"
-                            style="font-size:10px;padding:2px 6px;"
+                            class="status ${
+                              doctorEscape(
+                                file.status ||
+                                "under_review"
+                              )
+                            }"
+                            style="
+                              font-size:10px;
+                              padding:2px 6px;
+                            "
                           >
-                            ${doctorStatusLabel(f.status)}
+                            ${doctorEscape(
+                              doctorStatusLabel(
+                                file.status
+                              )
+                            )}
                           </span>
 
                         </div>
@@ -868,7 +1182,9 @@
                       <button
                         type="button"
                         class="doctor-btn secondary"
-                        onclick="viewFile('${f.id}')"
+                        onclick="viewFile('${doctorEscape(
+                          file.id
+                        )}')"
                       >
                         View Document
                       </button>
@@ -876,6 +1192,7 @@
                     </div>
 
                   `).join("")
+
                 : `
                     <div class="notice">
                       No documents submitted yet.
@@ -883,6 +1200,7 @@
                   `
             }
 
+            <!-- REVIEW NOTE -->
 
             <div class="doctor-field">
 
@@ -897,13 +1215,9 @@
 
             </div>
 
+            <!-- ACTIONS -->
 
-            <div style="
-              display:flex;
-              gap:10px;
-              flex-wrap:wrap;
-              margin-top:16px;
-            ">
+            <div class="action-row">
 
               <button
                 type="button"
@@ -941,23 +1255,43 @@
 
       } catch (err) {
 
-        console.error("Doctor detail error:", err);
+        console.error(
+          "Doctor detail error:",
+          err
+        );
 
         doctorToast(
           "Error loading doctor details: " +
-          (err?.message || "Unknown error")
+          (
+            err?.message ||
+            "Unknown error"
+          )
         );
       }
     }
 
+    /* =========================================================
+       VIEW DOCUMENT
+       ========================================================= */
 
     async function viewFile(id) {
 
-      const f = selected?.files?.find(
-        x => x.id === id
-      );
+      const file =
+        selected?.files?.find(
+          item => item.id === id
+        );
 
-      if (!f) return;
+      if (!file) {
+        doctorToast("Document not found.");
+        return;
+      }
+
+      if (!file.file_path) {
+        doctorToast(
+          "This document does not have a file path."
+        );
+        return;
+      }
 
       try {
 
@@ -967,12 +1301,19 @@
         } = await carexSupabase.storage
           .from("doctor-verification")
           .createSignedUrl(
-            f.file_path,
+            file.file_path,
             300
           );
 
         if (error) {
           doctorToast(error.message);
+          return;
+        }
+
+        if (!data?.signedUrl) {
+          doctorToast(
+            "Unable to create document link."
+          );
           return;
         }
 
@@ -982,7 +1323,12 @@
           "noopener"
         );
 
-      } catch (e) {
+      } catch (error) {
+
+        console.error(
+          "View document error:",
+          error
+        );
 
         doctorToast(
           "Network error viewing file."
@@ -990,6 +1336,9 @@
       }
     }
 
+    /* =========================================================
+       UPDATE VERIFICATION STEP
+       ========================================================= */
 
     async function updateStep(
       stepKey,
@@ -997,11 +1346,24 @@
       note
     ) {
 
-      const step = selected.s.find(
-        x => x.step_key === stepKey
-      );
+      if (!selected) {
+        throw new Error(
+          "No doctor selected."
+        );
+      }
 
-      if (!step) return;
+      const step =
+        selected.s.find(
+          item =>
+            item.step_key === stepKey
+        );
+
+      if (!step) {
+        throw new Error(
+          "Verification step not found: " +
+          stepKey
+        );
+      }
 
       const {
         error: stepError
@@ -1009,9 +1371,12 @@
         .from("carex_doctor_verification_steps")
         .update({
           status,
-          rejection_reason: note || null,
-          reviewed_by: admin.id,
-          reviewed_at: new Date().toISOString()
+          rejection_reason:
+            note || null,
+          reviewed_by:
+            admin.id,
+          reviewed_at:
+            new Date().toISOString()
         })
         .eq("id", step.id);
 
@@ -1024,16 +1389,24 @@
       } = await carexSupabase
         .from("carex_doctor_reviews")
         .insert({
-          doctor_id: selected.d.id,
-          step_key: stepKey,
+          doctor_id:
+            selected.d.id,
+
+          step_key:
+            stepKey,
+
           action:
             status === "verified"
               ? "approved"
               : status === "changes_required"
                 ? "requested_changes"
                 : "rejected",
-          note: note || null,
-          admin_id: admin.id
+
+          note:
+            note || null,
+
+          admin_id:
+            admin.id
         });
 
       if (reviewError) {
@@ -1041,35 +1414,59 @@
       }
     }
 
+    /* =========================================================
+       APPROVE DOCTOR
+       ========================================================= */
 
     async function approveAll() {
 
+      if (!selected) {
+        doctorToast(
+          "Please select a doctor first."
+        );
+        return;
+      }
+
       const note =
-        document.getElementById("reviewNote")
-          ?.value
-          .trim() || "";
+        document.getElementById(
+          "reviewNote"
+        )?.value.trim() || "";
 
       try {
 
         for (
-          const s of selected.s.filter(
-            s => s.step_key !== "final_review"
+          const step of selected.s.filter(
+            item =>
+              item.step_key !==
+              "final_review"
           )
         ) {
+
           await updateStep(
-            s.step_key,
+            step.step_key,
             "verified",
             note
           );
         }
 
-        await updateStep(
-          "final_review",
-          "verified",
-          note
-        );
+        const finalStep =
+          selected.s.find(
+            item =>
+              item.step_key ===
+              "final_review"
+          );
 
-        const p = selected.d;
+        if (finalStep) {
+
+          await updateStep(
+            "final_review",
+            "verified",
+            note
+          );
+        }
+
+        const profile =
+          selected.d;
 
         const {
           error: profileError
@@ -1078,24 +1475,45 @@
           .update({
             status: "verified"
           })
-          .eq("id", p.id);
+          .eq("id", profile.id);
 
         if (profileError) {
           throw profileError;
         }
 
         const payload = {
-          user_id: p.id,
-          name: p.full_name,
-          specialization: p.specialization,
-          qualification: p.qualification,
-          experience: p.experience_years,
-          location: p.city,
-          bio: p.bio,
-          verified: true,
-          image_url: null,
-          languages: [],
-          price: null
+          user_id:
+            profile.id,
+
+          name:
+            profile.full_name,
+
+          specialization:
+            profile.specialization,
+
+          qualification:
+            profile.qualification,
+
+          experience:
+            profile.experience_years,
+
+          location:
+            profile.city,
+
+          bio:
+            profile.bio,
+
+          verified:
+            true,
+
+          image_url:
+            null,
+
+          languages:
+            [],
+
+          price:
+            null
         };
 
         const {
@@ -1104,7 +1522,9 @@
           .from("doctors")
           .upsert(
             payload,
-            { onConflict: "user_id" }
+            {
+              onConflict: "user_id"
+            }
           );
 
         if (directoryError) {
@@ -1116,10 +1536,17 @@
         } = await carexSupabase
           .from("carex_doctor_reviews")
           .insert({
-            doctor_id: p.id,
-            action: "final_approved",
-            note: note || null,
-            admin_id: admin.id
+            doctor_id:
+              profile.id,
+
+            action:
+              "final_approved",
+
+            note:
+              note || null,
+
+            admin_id:
+              admin.id
           });
 
         if (finalReviewError) {
@@ -1130,26 +1557,44 @@
           "Doctor verified and published to the directory."
         );
 
-        load();
+        selected = null;
+
+        await load();
 
       } catch (err) {
 
-        console.error("Approval failed:", err);
+        console.error(
+          "Approval failed:",
+          err
+        );
 
         doctorToast(
           "Approval failed: " +
-          (err?.message || "Unknown error")
+          (
+            err?.message ||
+            "Unknown error"
+          )
         );
       }
     }
 
+    /* =========================================================
+       REQUEST CHANGES
+       ========================================================= */
 
     async function requestChanges() {
 
+      if (!selected) {
+        doctorToast(
+          "Please select a doctor first."
+        );
+        return;
+      }
+
       const note =
-        document.getElementById("reviewNote")
-          ?.value
-          .trim() || "";
+        document.getElementById(
+          "reviewNote"
+        )?.value.trim() || "";
 
       if (!note) {
         doctorToast(
@@ -1165,21 +1610,28 @@
         } = await carexSupabase
           .from("carex_doctor_profiles")
           .update({
-            status: "changes_required"
+            status:
+              "changes_required"
           })
-          .eq("id", selected.d.id);
+          .eq(
+            "id",
+            selected.d.id
+          );
 
         if (error) {
           throw error;
         }
 
         for (
-          const s of selected.s.filter(
-            s => s.status !== "verified"
+          const step of selected.s.filter(
+            item =>
+              item.status !==
+              "verified"
           )
         ) {
+
           await updateStep(
-            s.step_key,
+            step.step_key,
             "changes_required",
             note
           );
@@ -1189,26 +1641,44 @@
           "Changes requested successfully."
         );
 
-        load();
+        selected = null;
+
+        await load();
 
       } catch (err) {
 
-        console.error("Request changes failed:", err);
+        console.error(
+          "Request changes failed:",
+          err
+        );
 
         doctorToast(
           "Failed to request changes: " +
-          (err?.message || "Unknown error")
+          (
+            err?.message ||
+            "Unknown error"
+          )
         );
       }
     }
 
+    /* =========================================================
+       REJECT DOCTOR
+       ========================================================= */
 
     async function rejectDoctor() {
 
+      if (!selected) {
+        doctorToast(
+          "Please select a doctor first."
+        );
+        return;
+      }
+
       const note =
-        document.getElementById("reviewNote")
-          ?.value
-          .trim() || "";
+        document.getElementById(
+          "reviewNote"
+        )?.value.trim() || "";
 
       if (!note) {
         doctorToast(
@@ -1224,21 +1694,28 @@
         } = await carexSupabase
           .from("carex_doctor_profiles")
           .update({
-            status: "rejected"
+            status:
+              "rejected"
           })
-          .eq("id", selected.d.id);
+          .eq(
+            "id",
+            selected.d.id
+          );
 
         if (error) {
           throw error;
         }
 
         for (
-          const s of selected.s.filter(
-            s => s.step_key !== "final_review"
+          const step of selected.s.filter(
+            item =>
+              item.step_key !==
+              "final_review"
           )
         ) {
+
           await updateStep(
-            s.step_key,
+            step.step_key,
             "rejected",
             note
           );
@@ -1248,24 +1725,33 @@
           "Application rejected."
         );
 
-        load();
+        selected = null;
+
+        await load();
 
       } catch (err) {
 
-        console.error("Rejection failed:", err);
+        console.error(
+          "Rejection failed:",
+          err
+        );
 
         doctorToast(
           "Rejection failed: " +
-          (err?.message || "Unknown error")
+          (
+            err?.message ||
+            "Unknown error"
+          )
         );
       }
     }
 
+    /* =========================================================
+       START ADMIN PANEL
+       ========================================================= */
 
-    /*
-     * Start admin panel.
-     */
     load();
+
   </script>
 
 </body>
