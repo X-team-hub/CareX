@@ -1,0 +1,734 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Doctor Registration - CareX</title>
+
+  <link rel="icon" type="image/png" href="../assets/images/doctor-logo.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=DM+Sans:wght@400;500;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root {
+      --deep-teal: #115E59;
+      --healthcare-teal: #0D9488;
+      --soft-mint: #E6F7F4;
+      --clean-white: #FFFFFF;
+      --bg-light: #F0FDF9;
+      --text-primary: #0F3D3A;
+      --text-secondary: #4A6B68;
+      --border-color: #CCE5E2;
+      --danger: #B42318;
+      --danger-bg: #FEF3F2;
+      --success: #15803D;
+      --success-bg: #ECFDF3;
+      --radius: 16px;
+      --shadow-premium:
+        0 20px 40px -12px rgba(17, 94, 89, 0.1),
+        0 8px 16px -8px rgba(17, 94, 89, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "DM Sans", sans-serif;
+      background: linear-gradient(
+        135deg,
+        #F0FDF9 0%,
+        #E6F7F4 100%
+      );
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .auth-wrap {
+      width: 100%;
+      max-width: 520px;
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .doctor-card {
+      background: var(--clean-white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-premium);
+      padding: 40px 36px;
+      border: 1px solid var(--border-color);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .doctor-card:hover {
+      transform: translateY(-4px);
+      box-shadow:
+        0 25px 50px -12px rgba(17, 94, 89, 0.15);
+    }
+
+    .doctor-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--deep-teal);
+      font-family: "Fraunces", serif;
+      font-weight: 700;
+      font-size: 1.25rem;
+      margin-bottom: 24px;
+    }
+
+    .doctor-brand-logo {
+      height: 40px;
+      width: auto;
+      border-radius: 8px;
+      transition: transform 0.4s
+        cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .doctor-brand:hover .doctor-brand-logo {
+      transform: scale(1.1) rotate(-3deg);
+    }
+
+    h1 {
+      font-family: "Fraunces", serif;
+      font-size: 1.75rem;
+      color: var(--deep-teal);
+      margin-bottom: 8px;
+    }
+
+    .small {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .doctor-field {
+      margin-bottom: 0;
+    }
+
+    .doctor-field.full {
+      grid-column: 1 / -1;
+    }
+
+    .doctor-field label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--deep-teal);
+      margin-bottom: 8px;
+    }
+
+    .doctor-field input {
+      width: 100%;
+      padding: 12px 16px;
+      font-size: 0.95rem;
+      font-family: "DM Sans", sans-serif;
+      border: 1.5px solid var(--border-color);
+      border-radius: 10px;
+      background: #FAFAFA;
+      color: var(--text-primary);
+      transition: all 0.2s ease;
+      outline: none;
+    }
+
+    .doctor-field input:focus {
+      background: var(--clean-white);
+      border-color: var(--healthcare-teal);
+      box-shadow:
+        0 0 0 4px rgba(13, 148, 136, 0.1);
+    }
+
+    .doctor-btn {
+      width: 100%;
+      padding: 14px;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: "DM Sans", sans-serif;
+      color: white;
+      background: var(--deep-teal);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 24px;
+    }
+
+    .doctor-btn:hover:not(:disabled) {
+      background: var(--healthcare-teal);
+      transform: translateY(-2px);
+      box-shadow:
+        0 6px 16px rgba(13, 148, 136, 0.3);
+    }
+
+    .doctor-btn:disabled {
+      background: #94A3A0;
+      cursor: not-allowed;
+    }
+
+    .doctor-link {
+      color: var(--healthcare-teal);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .doctor-link:hover {
+      color: var(--deep-teal);
+      text-decoration: underline;
+    }
+
+    .notice {
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-top: 16px;
+      animation: slideIn 0.3s ease;
+    }
+
+    .notice.danger {
+      background: var(--danger-bg);
+      color: var(--danger);
+      border: 1px solid #FECACA;
+    }
+
+    .notice.success {
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid #BBF7D0;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    @media (max-width: 600px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .doctor-card {
+        padding: 30px 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="auth-wrap">
+
+    <section class="doctor-card auth-card">
+
+      <a class="doctor-brand" href="./index.html">
+
+        <img
+          src="../assets/images/doctor-logo.png"
+          alt="CareX Logo"
+          class="doctor-brand-logo"
+        >
+
+        CareX Doctors
+
+      </a>
+
+      <h1>Create your doctor account</h1>
+
+      <p class="small">
+        Create the account first. Email confirmation and mobile
+        verification are completed inside the doctor portal.
+      </p>
+
+      <form id="registerForm" novalidate>
+
+        <div class="form-grid">
+
+          <div class="doctor-field full">
+            <label for="full_name">Full name</label>
+
+            <input
+              id="full_name"
+              name="full_name"
+              autocomplete="name"
+              required
+              placeholder="Dr. Your Name"
+            >
+          </div>
+
+          <div class="doctor-field">
+            <label for="email">Email</label>
+
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              required
+              placeholder="doctor@example.com"
+            >
+          </div>
+
+          <div class="doctor-field">
+            <label for="mobile">Mobile</label>
+
+            <input
+              id="mobile"
+              name="mobile"
+              type="tel"
+              inputmode="tel"
+              autocomplete="tel"
+              placeholder="+91XXXXXXXXXX"
+              required
+            >
+          </div>
+
+          <div class="doctor-field">
+            <label for="password">Password</label>
+
+            <input
+              id="password"
+              name="password"
+              type="password"
+              minlength="8"
+              autocomplete="new-password"
+              required
+              placeholder="Min 8 characters"
+            >
+          </div>
+
+          <div class="doctor-field">
+            <label for="confirm">Confirm password</label>
+
+            <input
+              id="confirm"
+              name="confirm"
+              type="password"
+              minlength="8"
+              autocomplete="new-password"
+              required
+              placeholder="Re-enter password"
+            >
+          </div>
+
+        </div>
+
+        <button
+          type="submit"
+          class="doctor-btn"
+          id="registerBtn"
+        >
+          <span id="btnText">Create doctor account</span>
+        </button>
+
+      </form>
+
+      <p
+        class="small"
+        style="margin-top: 20px; text-align: center;"
+      >
+        Already registered?
+
+        <a
+          class="doctor-link"
+          href="./login.html"
+        >
+          Doctor login
+        </a>
+      </p>
+
+      <div
+        id="msg"
+        class="notice"
+        hidden
+      ></div>
+
+    </section>
+
+  </main>
+
+  <!-- CareX configuration -->
+  <script src="../js/config.js"></script>
+
+  <!-- CareX Supabase client -->
+  <script src="../js/supabase.js"></script>
+
+  <!-- Optional common utilities -->
+  <script src="../js/common.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+      const registerForm =
+        document.getElementById("registerForm");
+
+      const registerBtn =
+        document.getElementById("registerBtn");
+
+      const btnText =
+        document.getElementById("btnText");
+
+      const msgDiv =
+        document.getElementById("msg");
+
+
+      function showMessage(message, type = "danger") {
+        msgDiv.textContent = message;
+        msgDiv.className = `notice ${type}`;
+        msgDiv.hidden = false;
+      }
+
+
+      function setLoading(isLoading) {
+
+        if (isLoading) {
+
+          registerBtn.disabled = true;
+
+          btnText.innerHTML =
+            '<div class="spinner"></div> Creating account...';
+
+        } else {
+
+          registerBtn.disabled = false;
+
+          btnText.textContent =
+            "Create doctor account";
+        }
+      }
+
+
+      registerForm.addEventListener(
+        "submit",
+        async (e) => {
+
+          e.preventDefault();
+
+          msgDiv.hidden = true;
+
+
+          const fullName =
+            document
+              .getElementById("full_name")
+              .value
+              .trim();
+
+
+          /*
+           * Convert email to lowercase and remove
+           * accidental spaces.
+           */
+          const email =
+            document
+              .getElementById("email")
+              .value
+              .trim()
+              .toLowerCase();
+
+
+          const mobile =
+            document
+              .getElementById("mobile")
+              .value
+              .trim();
+
+
+          const password =
+            document
+              .getElementById("password")
+              .value;
+
+
+          const confirm =
+            document
+              .getElementById("confirm")
+              .value;
+
+
+          /* ------------------------------
+             VALIDATION
+          ------------------------------ */
+
+          if (
+            !fullName ||
+            !email ||
+            !mobile ||
+            !password ||
+            !confirm
+          ) {
+
+            showMessage(
+              "Please fill in all fields."
+            );
+
+            return;
+          }
+
+
+          if (!email.includes("@")) {
+
+            showMessage(
+              "Please enter a valid email address."
+            );
+
+            return;
+          }
+
+
+          if (password.length < 8) {
+
+            showMessage(
+              "Password must be at least 8 characters."
+            );
+
+            return;
+          }
+
+
+          if (password !== confirm) {
+
+            showMessage(
+              "Passwords do not match."
+            );
+
+            return;
+          }
+
+
+          /* ------------------------------
+             SUPABASE CHECK
+          ------------------------------ */
+
+          if (
+            typeof carexSupabase === "undefined" ||
+            !carexSupabase
+          ) {
+
+            console.error(
+              "CareX Supabase client is not available."
+            );
+
+            showMessage(
+              "Database connection is not initialized. Please check the CareX configuration."
+            );
+
+            return;
+          }
+
+
+          setLoading(true);
+
+
+          try {
+
+            console.log(
+              "EMAIL BEING SENT TO SUPABASE:",
+              email
+            );
+
+
+            /* ------------------------------
+               CREATE DOCTOR AUTH ACCOUNT
+            ------------------------------ */
+
+            const {
+              data,
+              error
+            } = await carexSupabase.auth.signUp({
+
+              email: email,
+
+              password: password,
+
+              options: {
+
+                /*
+                 * IMPORTANT:
+                 *
+                 * The existing CareX database trigger
+                 * checks account_type === "doctor".
+                 *
+                 * Without this value, the Auth user can
+                 * be created but the doctor profile/role
+                 * will NOT be created automatically.
+                 */
+                data: {
+                  account_type: "doctor",
+                  full_name: fullName,
+                  mobile: mobile
+                }
+
+              }
+
+            });
+
+
+            /* ------------------------------
+               ERROR HANDLING
+            ------------------------------ */
+
+            if (error) {
+
+              console.error(
+                "Supabase registration error:",
+                error
+              );
+
+
+              const errorMessage =
+                String(error.message || "")
+                  .toLowerCase();
+
+
+              if (
+                errorMessage.includes(
+                  "already registered"
+                ) ||
+                errorMessage.includes(
+                  "already exists"
+                ) ||
+                errorMessage.includes(
+                  "user already registered"
+                )
+              ) {
+
+                showMessage(
+                  "यह email पहले से registered है। कृपया Doctor Login से login करें या कोई दूसरा email इस्तेमाल करें।"
+                );
+
+                return;
+              }
+
+
+              if (
+                errorMessage.includes(
+                  "invalid email"
+                )
+              ) {
+
+                showMessage(
+                  "कृपया सही email address डालें।"
+                );
+
+                return;
+              }
+
+
+              showMessage(
+                error.message ||
+                "Unable to create the account. Please try again."
+              );
+
+              return;
+            }
+
+
+            /* ------------------------------
+               SUCCESS
+            ------------------------------ */
+
+            console.log(
+              "Doctor registration successful:",
+              data
+            );
+
+
+            showMessage(
+              "Account created successfully! Please check your email for the verification link.",
+              "success"
+            );
+
+
+            registerForm.reset();
+
+
+          } catch (err) {
+
+            console.error(
+              "Registration error:",
+              err
+            );
+
+            showMessage(
+              err?.message ||
+              "Unable to create the account. Please try again."
+            );
+
+
+          } finally {
+
+            setLoading(false);
+
+          }
+
+        }
+      );
+
+    });
+  </script>
+
+</body>
+
+</html>

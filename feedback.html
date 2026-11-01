@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Feedback | CareX</title>
+<link rel="icon" type="image/png" href="assets\images\20261003_115356.png">
+  <link rel="stylesheet" href="css/common.css">
+
+  <style>
+    :root {
+      --feedback-bg: #fbf7fc;
+      --feedback-card: #ffffff;
+      --feedback-text: #352b3d;
+      --feedback-muted: #81758a;
+      --feedback-border: #e7ddea;
+      --feedback-primary: #c978a5;
+      --feedback-primary-light: #f5e5f0;
+      --feedback-plum: #674b70;
+      --feedback-success: #287348;
+      --feedback-error: #a33a4f;
+    }
+
+    [data-theme="dark"] {
+      --feedback-bg: #170f14;
+      --feedback-card: #291b22;
+      --feedback-text: #f8eaf0;
+      --feedback-muted: #bca7b1;
+      --feedback-border: #3d2932;
+      --feedback-primary: #ed8ca7;
+      --feedback-primary-light: #43252f;
+      --feedback-plum: #e2bfd0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--feedback-bg);
+      color: var(--feedback-text);
+      font-family: "DM Sans", Arial, sans-serif;
+    }
+
+    .feedback-wrapper {
+      width: min(720px, 92%);
+      margin: 60px auto 80px;
+    }
+
+    .feedback-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .feedback-header .tag {
+      display: inline-block;
+      padding: 7px 15px;
+      border-radius: 999px;
+      background: var(--feedback-primary-light);
+      color: var(--feedback-primary);
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .feedback-header h1 {
+      margin: 0 0 12px;
+      font-family: Georgia, serif;
+      font-size: clamp(38px, 6vw, 58px);
+      line-height: 1.05;
+      color: var(--feedback-text);
+    }
+
+    .feedback-header h1 span {
+      color: var(--feedback-primary);
+    }
+
+    .feedback-header p {
+      max-width: 570px;
+      margin: auto;
+      color: var(--feedback-muted);
+      line-height: 1.7;
+    }
+
+    .feedback-card {
+      background: var(--feedback-card);
+      border: 1px solid var(--feedback-border);
+      border-radius: 26px;
+      padding: 32px;
+      box-shadow: 0 10px 35px rgba(100, 70, 100, 0.08);
+    }
+
+    .form-group {
+      margin-bottom: 22px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--feedback-plum);
+      font-weight: 700;
+    }
+
+    .optional {
+      color: var(--feedback-muted);
+      font-size: 12px;
+      font-weight: 400;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 13px 15px;
+      border: 1px solid var(--feedback-border);
+      border-radius: 13px;
+      background: var(--feedback-bg);
+      color: var(--feedback-text);
+      font: inherit;
+      outline: none;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--feedback-primary);
+      box-shadow: 0 0 0 3px var(--feedback-primary-light);
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    /* Rating */
+
+    .rating {
+      display: flex;
+      gap: 8px;
+    }
+
+    .rating input {
+      display: none;
+    }
+
+    .rating label {
+      width: 46px;
+      height: 46px;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--feedback-border);
+      border-radius: 12px;
+      background: var(--feedback-bg);
+      color: #c9b9c7;
+      font-size: 25px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .rating label:hover,
+    .rating label:hover ~ label,
+    .rating input:checked ~ label {
+      color: var(--feedback-primary);
+      background: var(--feedback-primary-light);
+      border-color: var(--feedback-primary);
+    }
+
+    /* Notice */
+
+    .feedback-notice {
+      margin: 22px 0;
+      padding: 15px 17px;
+      border-radius: 13px;
+      background: var(--feedback-primary-light);
+      color: var(--feedback-muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .feedback-notice strong {
+      color: var(--feedback-plum);
+    }
+
+    /* Button */
+
+    .submit-btn {
+      width: 100%;
+      border: 0;
+      border-radius: 999px;
+      padding: 14px 22px;
+      background: linear-gradient(135deg, #c978a5, #7b526b);
+      color: white;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .status {
+      display: none;
+      margin-top: 16px;
+      padding: 13px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .status.success {
+      display: block;
+      background: #e8f6ed;
+      color: var(--feedback-success);
+    }
+
+    .status.error {
+      display: block;
+      background: #fce8ec;
+      color: var(--feedback-error);
+    }
+
+    .back-home {
+      display: block;
+      width: fit-content;
+      margin: 25px auto 0;
+      color: var(--feedback-primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    @media (max-width: 600px) {
+      .feedback-wrapper {
+        margin-top: 35px;
+      }
+
+      .feedback-card {
+        padding: 22px 18px;
+      }
+
+      .rating label {
+        width: 40px;
+        height: 40px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="feedback-wrapper">
+
+    <section class="feedback-header">
+      <div class="tag">CareX Feedback</div>
+
+      <h1>
+        We'd love to hear
+        <span>from you.</span>
+      </h1>
+
+      <p>
+        Your feedback helps us make CareX simpler, safer and more useful.
+      </p>
+    </section>
+
+
+    <form id="feedbackForm" class="feedback-card">
+
+      <!-- Name -->
+      <div class="form-group">
+        <label for="name">
+          Name
+          <span class="optional">(optional)</span>
+        </label>
+
+        <input
+          type="text"
+          id="name"
+          maxlength="100"
+          placeholder="Your name">
+      </div>
+
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">
+          Email
+          <span class="optional">(optional)</span>
+        </label>
+
+        <input
+          type="email"
+          id="email"
+          maxlength="150"
+          placeholder="you@example.com">
+      </div>
+
+
+      <!-- Category -->
+      <div class="form-group">
+        <label for="category">
+          What is your feedback about?
+        </label>
+
+        <select id="category" required>
+          <option value="">Select a category</option>
+          <option value="website">Website</option>
+          <option value="doctor">Doctor section</option>
+          <option value="health-info">Health information</option>
+          <option value="period-tracking">Period tracking</option>
+          <option value="medicine">Medicine information</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+
+      <!-- Rating -->
+      <div class="form-group">
+        <label>How would you rate CareX?</label>
+
+        <div class="rating">
+
+          <input type="radio" id="star5" name="rating" value="5">
+          <label for="star5">★</label>
+
+          <input type="radio" id="star4" name="rating" value="4">
+          <label for="star4">★</label>
+
+          <input type="radio" id="star3" name="rating" value="3">
+          <label for="star3">★</label>
+
+          <input type="radio" id="star2" name="rating" value="2">
+          <label for="star2">★</label>
+
+          <input type="radio" id="star1" name="rating" value="1">
+          <label for="star1">★</label>
+
+        </div>
+      </div>
+
+
+      <!-- Message -->
+      <div class="form-group">
+        <label for="message">
+          Your feedback
+        </label>
+
+        <textarea
+          id="message"
+          maxlength="2000"
+          required
+          placeholder="Tell us what you think..."></textarea>
+      </div>
+
+
+      <!-- Safety notice -->
+      <div class="feedback-notice">
+        <strong>Please note:</strong>
+        This form is for website feedback only.
+        Please do not share passwords, private medical records
+        or emergency information here.
+      </div>
+
+
+      <button
+        type="submit"
+        id="submitButton"
+        class="submit-btn">
+        Send Feedback
+      </button>
+
+      <div id="statusMessage" class="status"></div>
+
+    </form>
+
+
+    <a href="index.html" class="back-home">
+      ← Back to CareX
+    </a>
+
+  </main>
+
+
+  <!-- Supabase library FIRST -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Existing CareX configuration -->
+  <script src="js/config.js"></script>
+
+  <!-- Existing CareX Supabase client -->
+  <script src="js/supabase.js"></script>
+
+  <!-- Feedback logic -->
+  <script src="js/feedback.js"></script>
+
+</body>
+</html>

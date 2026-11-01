@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Doctor Verification - CareX</title>
+<link rel="icon" type="image/png" href="../assets/images/doctor-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root {
+    --deep-teal: #115E59; --healthcare-teal: #0D9488; --soft-mint: #E6F7F4; --clean-white: #FFFFFF;
+    --bg-light: #F0FDF9; --text-primary: #0F3D3A; --text-secondary: #4A6B68; --border-color: #CCE5E2;
+    --danger: #B42318; --danger-bg: #FEF3F2; --success: #15803D; --success-bg: #ECFDF3; --warning: #A16207; --warning-bg: #FFFBEB;
+    --radius: 16px; --shadow-premium: 0 20px 40px -12px rgba(17, 94, 89, 0.1), 0 8px 16px -8px rgba(17, 94, 89, 0.06);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg-light); color: var(--text-primary); font-family: "DM Sans", sans-serif; -webkit-font-smoothing: antialiased; }
+  .doctor-shell { width: min(1120px, calc(100% - 32px)); margin: 0 auto; padding-bottom: 40px; }
+  .doctor-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 24px 0; margin-bottom: 32px; border-bottom: 1px solid var(--border-color); }
+  .doctor-brand { display: inline-flex; align-items: center; gap: 12px; color: var(--deep-teal); font-weight: 700; font-size: 1.35rem; text-decoration: none; font-family: 'Fraunces', serif; }
+  .doctor-brand-logo { height: 44px; width: auto; border-radius: 10px; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease; }
+  .doctor-brand:hover .doctor-brand-logo { transform: scale(1.08) rotate(-3deg); box-shadow: 0 8px 20px rgba(13, 148, 136, 0.25); }
+  
+  .doctor-card { padding: 28px; margin-bottom: 24px; background: var(--clean-white); border: 1px solid var(--border-color); border-radius: var(--radius); box-shadow: var(--shadow-premium); transition: transform 0.3s ease, box-shadow 0.3s ease; animation: fadeInUp 0.5s ease-out backwards; }
+  .doctor-card:hover { transform: translateY(-3px); box-shadow: 0 25px 50px -12px rgba(17, 94, 89, 0.12); }
+  .doctor-card h1, .doctor-card h2 { color: var(--deep-teal); font-family: "Fraunces", serif; font-weight: 700; letter-spacing: -0.5px; }
+  .doctor-card h1 { margin: 14px 0 10px; font-size: clamp(25px, 4vw, 34px); }
+  .doctor-card h2 { font-size: 23px; margin-bottom: 16px; }
+  .small { color: var(--text-secondary); font-size: 13px; line-height: 1.65; }
+  
+  .doctor-btn { display: inline-flex; justify-content: center; align-items: center; gap: 8px; min-height: 43px; padding: 11px 18px; border: 1px solid var(--healthcare-teal); border-radius: 10px; background: var(--healthcare-teal); color: #ffffff; font: 700 14px "DM Sans", sans-serif; cursor: pointer; transition: all 0.25s ease; }
+  .doctor-btn:hover { background: var(--deep-teal); border-color: var(--deep-teal); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25); }
+  .doctor-btn.secondary { background: #ffffff; color: var(--deep-teal); border-color: var(--border-color); }
+  .doctor-btn.secondary:hover { background: var(--soft-mint); border-color: var(--healthcare-teal); }
+  
+  .doctor-badge { display: inline-flex; align-items: center; padding: 6px 11px; border: 1px solid var(--border-color); border-radius: 999px; background: var(--soft-mint); color: var(--deep-teal); font-size: 12px; font-weight: 700; text-transform: capitalize; }
+  
+  .progress-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 24px; margin-bottom: 10px; color: var(--text-secondary); font-size: 13px; }
+  .progress-meta strong { color: var(--deep-teal); font-size: 16px; }
+  .progress-wrap { width: 100%; height: 9px; overflow: hidden; border-radius: 999px; background: #E6F7F4; }
+  .progress-bar { height: 100%; border-radius: inherit; background: linear-gradient(90deg, #0D9488, #14B8A6); transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+  
+  .step-list { display: grid; gap: 12px; }
+  .step { display: grid; grid-template-columns: 38px minmax(0, 1fr) auto; align-items: start; gap: 13px; padding: 17px; border: 1px solid var(--border-color); border-radius: 13px; background: #ffffff; transition: all 0.3s ease; }
+  .step:hover { border-color: var(--healthcare-teal); background: var(--soft-mint); transform: translateX(4px); }
+  .step-icon { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 11px; background: var(--soft-mint); color: var(--deep-teal); font-size: 14px; font-weight: 700; }
+  .step.verified .step-icon { background: var(--success-bg); color: var(--success); }
+  .step-title { margin: 2px 0 5px; color: var(--text-primary); font-size: 14px; font-weight: 700; }
+  .step-note { color: var(--text-secondary); font-size: 12px; line-height: 1.65; }
+  
+  .status { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: capitalize; }
+  .status.verified { background: var(--success-bg); color: var(--success); border: 1px solid #BBF7D0; }
+  .status.submitted { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; }
+  .status.changes_required { background: var(--warning-bg); color: var(--warning); border: 1px solid #FDE68A; }
+  .status.rejected { background: var(--danger-bg); color: var(--danger); border: 1px solid #FECACA; }
+  
+  .notice { padding: 13px 15px; border-radius: 11px; font-size: 13px; line-height: 1.65; margin-top: 8px; }
+  .notice.success { background: var(--success-bg); color: #166534; border: 1px solid #BBF7D0; }
+  .notice.warning { background: var(--warning-bg); color: #92400E; border: 1px solid #FDE68A; }
+  .notice.danger { background: var(--danger-bg); color: var(--danger); border: 1px solid #FECACA; }
+  
+  .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 16px; }
+  .doctor-field { display: flex; flex-direction: column; gap: 8px; }
+  .doctor-field.full { grid-column: 1 / -1; }
+  .doctor-field label { color: var(--text-primary); font-size: 13px; font-weight: 700; }
+  .doctor-field input, .doctor-field textarea { box-sizing: border-box; width: 100%; min-height: 45px; padding: 11px 13px; border: 1px solid var(--border-color); border-radius: 10px; background: #FAFAFA; color: var(--text-primary); font: 400 14px "DM Sans", sans-serif; transition: all 0.2s ease; }
+  .doctor-field textarea { min-height: 115px; resize: vertical; }
+  .doctor-field input:focus, .doctor-field textarea:focus { outline: none; background: var(--clean-white); border-color: var(--healthcare-teal); box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.1); }
+  
+  .file-row { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 19px 0; border-bottom: 1px solid var(--border-color); transition: background 0.2s; }
+  .file-row:hover { background: var(--soft-mint); margin: 0 -15px; padding: 19px 15px; border-radius: 8px; border-bottom-color: transparent; }
+  .file-row:last-child { border-bottom: none; }
+  .file-row strong { display: block; margin-bottom: 5px; color: var(--text-primary); font-size: 14px; }
+  .file-row input[type="file"] { display: block; width: 100%; max-width: 320px; color: var(--text-secondary); font: 12px "DM Sans", sans-serif; margin-top: 8px; }
+  
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @media (max-width: 700px) { .form-grid { grid-template-columns: 1fr; } .file-row { flex-direction: column; align-items: stretch; } }
+</style>
+</head>
+<body class="doctor-body">
+<div class="doctor-shell">
+  <header class="doctor-header">
+    <a class="doctor-brand" href="./index.html">
+      <img src="../assets/images/doctor-logo.png" alt="CareX Logo" class="doctor-brand-logo">
+      CareX Doctors
+    </a>
+    <div class="doctor-actions">
+      <button class="doctor-btn secondary" onclick="doctorLogout()">Logout</button>
+    </div>
+  </header>
+  <div id="page"></div>
+</div>
+
+<script src="../js/config.js"></script>
+<script src="./js/supabase.js"></script>
+<script src="./js/common.js"></script>
+<script>
+const stepTitles={account:'Account verification',identity:'Identity verification',qualification:'Medical qualification',registration:'Medical registration',professional:'Professional details',final_review:'Final admin review'};
+const stepDescriptions={account:'Confirm your email and mobile number.',identity:'Submit a government identity document.',qualification:'Add your medical qualification and certificate.',registration:'Provide your medical council registration details.',professional:'Complete practice and professional information.',final_review:'Admin completes the final review after all required checks.'};
+const fileSteps=['identity','qualification','registration'];
+let user, profile, steps=[];
+
+async function load(){
+  try {
+    if (typeof supabase === 'undefined') { document.getElementById('page').innerHTML = '<div class="doctor-card"><div class="notice danger">Database connection failed. Please refresh.</div></div>'; return; }
+    user = await requireDoctor(); if(!user) return;
+    
+    const [{data:p, error: pErr}, {data:s, error: sErr}] = await Promise.all([
+      doctorSupabase.from('carex_doctor_profiles').select('*').eq('id',user.id).single(),
+      doctorSupabase.from('carex_doctor_verification_steps').select('*').eq('doctor_id',user.id).order('created_at')
+    ]);
+    
+    if(pErr || sErr) throw new Error(pErr?.message || sErr?.message);
+    profile = p; steps = s || [];
+    await syncAccountStep();
+    render();
+  } catch(err) {
+    console.error("Dashboard load error:", err);
+    document.getElementById('page').innerHTML = `<div class="doctor-card"><div class="notice danger">Failed to load data: ${err.message}</div></div>`;
+  }
+}
+
+async function syncAccountStep(){
+  const emailOk=!!user.email_confirmed_at, phoneOk=!!user.phone_confirmed_at;
+  const status=emailOk&&phoneOk?'verified':(emailOk||phoneOk?'submitted':'not_started');
+  const existing=steps.find(x=>x.step_key==='account');
+  if(existing && existing.status!==status){
+    await doctorSupabase.from('carex_doctor_verification_steps').update({status,submitted_at:status!=='not_started'?new Date().toISOString():null}).eq('id',existing.id);
+    existing.status=status;
+  }
+}
+
+function render(){
+  const verified=steps.filter(s=>s.status==='verified').length, total=steps.length, percent=Math.round(verified/Math.max(total,1)*100);
+  const p=profile||{};
+  document.getElementById('page').innerHTML=`
+  <section class="doctor-card" style="animation-delay: 0.1s"><span class="doctor-badge">${doctorStatusLabel(p.status||'draft')}</span><h1>Welcome, ${doctorEscape(p.full_name||'Doctor')}</h1><p class="small">Your verification progress stays visible here. Complete a step only when you have the requested information ready.</p>
+  <div class="progress-meta"><span>${verified} of ${total} steps verified</span><strong>${percent}%</strong></div><div class="progress-wrap"><div class="progress-bar" style="width:${percent}%"></div></div></section>
+  
+  <section class="doctor-card" style="animation-delay: 0.2s"><h2>Verification checklist</h2><div class="step-list">${steps.map((s,i)=>`<div class="step ${s.status}"><div class="step-icon">${s.status==='verified'?'✓':i+1}</div><div><div class="step-title">${doctorEscape(stepTitles[s.step_key]||s.title)}</div><div class="step-note">${doctorEscape(stepDescriptions[s.step_key]||'')}</div>${s.rejection_reason?`<div class="notice danger" style="margin-top:8px">${doctorEscape(s.rejection_reason)}</div>`:''}</div><span class="status ${s.status}">${doctorStatusLabel(s.status)}</span></div>`).join('')}</div></section>
+  
+  <section class="doctor-card" style="animation-delay: 0.3s"><h2>Account verification</h2>
+  <div class="notice ${user.email_confirmed_at?'success':'warning'}">${user.email_confirmed_at?'✓ Email verified':'Email not verified yet. Check your inbox.'}</div>
+  <div class="notice ${user.phone_confirmed_at?'success':'warning'}" style="margin-top:8px">${user.phone_confirmed_at?'✓ Mobile verified':'Mobile verification is pending.'}</div>
+  ${!user.email_confirmed_at?`<button class="doctor-btn secondary" style="margin-top:10px" onclick="resendEmail()">Resend verification email</button>`:''}
+  ${!user.phone_confirmed_at?`<div class="form-grid" style="margin-top:14px"><div class="doctor-field"><label>Mobile number</label><input id="phone" value="${doctorEscape(p.phone||'')}" placeholder="+91XXXXXXXXXX"></div><div class="doctor-field"><label>OTP</label><input id="otp" inputmode="numeric" maxlength="6" placeholder="6-digit code"></div></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="doctor-btn" onclick="sendPhoneOtp()">Send OTP</button><button class="doctor-btn secondary" onclick="verifyPhoneOtp()">Verify OTP</button></div>`:''}
+  </section>
+  
+  <section class="doctor-card" style="animation-delay: 0.4s"><h2>Professional information</h2>
+  <div class="form-grid"><div class="doctor-field"><label>Full name</label><input id="full_name" value="${doctorEscape(p.full_name||'')}"></div><div class="doctor-field"><label>Specialization</label><input id="specialization" value="${doctorEscape(p.specialization||'')}"></div><div class="doctor-field"><label>Qualification</label><input id="qualification" value="${doctorEscape(p.qualification||'')}"></div><div class="doctor-field"><label>Experience (years)</label><input id="experience" type="number" min="0" value="${p.experience_years??''}"></div><div class="doctor-field"><label>Registration council</label><input id="council" value="${doctorEscape(p.registration_council||'')}"></div><div class="doctor-field"><label>Registration number</label><input id="regno" value="${doctorEscape(p.registration_number||'')}"></div><div class="doctor-field"><label>Clinic / hospital</label><input id="clinic" value="${doctorEscape(p.clinic_name||'')}"></div><div class="doctor-field"><label>City</label><input id="city" value="${doctorEscape(p.city||'')}"></div><div class="doctor-field full"><label>Professional bio</label><textarea id="bio">${doctorEscape(p.bio||'')}</textarea></div></div><button class="doctor-btn" style="margin-top:14px" onclick="saveProfile()">Save information</button></section>
+  
+  <section class="doctor-card" style="animation-delay: 0.5s"><h2>Document submission</h2><p class="small">PDF, JPG or PNG. Keep documents clear and readable.</p>
+  ${fileSteps.map(k=>`<div class="file-row"><div><strong>${stepTitles[k]}</strong><div class="small">Upload the document requested for this step.</div></div><div><input id="file_${k}" type="file" accept=".pdf,.jpg,.jpeg,.png"><button class="doctor-btn secondary" style="margin-top:7px" onclick="uploadDoc('${k}')">Upload</button></div></div>`).join('')}
+  </section>`;
+}
+
+// Helper functions preserved from your original code with added safety
+async function resendEmail(){
+  try {
+    const {error}=await doctorSupabase.auth.resend({type:'signup',email:user.email,options:{emailRedirectTo:new URL('./dashboard.html',location.href).href}});
+    doctorToast(error?error.message:'Verification email sent.');
+  } catch(e) { doctorToast('Network error while resending.'); }
+}
+async function sendPhoneOtp(){
+  const phone=document.getElementById('phone').value.trim(); if(!phone)return doctorToast('Enter your mobile number.');
+  try {
+    const {error}=await doctorSupabase.auth.updateUser({phone});
+    if(error)return doctorToast(error.message);
+    await doctorSupabase.from('carex_doctor_profiles').update({phone}).eq('id',user.id);
+    doctorToast('OTP sent. Enter the code to verify.');
+  } catch(e) { doctorToast('Network error.'); }
+}
+async function verifyPhoneOtp(){
+  const phone=document.getElementById('phone').value.trim(), token=document.getElementById('otp').value.trim();
+  if(!phone||!token)return doctorToast('Enter mobile number and OTP.');
+  try {
+    const {error}=await doctorSupabase.auth.verifyOtp({phone,token,type:'phone_change'});
+    if(error)return doctorToast(error.message);
+    doctorToast('Mobile number verified.');
+    setTimeout(load,500);
+  } catch(e) { doctorToast('Network error.'); }
+}
+async function saveProfile(){
+  const payload={full_name:document.getElementById('full_name').value.trim(),specialization:document.getElementById('specialization').value.trim(),qualification:document.getElementById('qualification').value.trim(),experience_years:Number(document.getElementById('experience').value)||null,registration_council:document.getElementById('council').value.trim(),registration_number:document.getElementById('regno').value.trim(),clinic_name:document.getElementById('clinic').value.trim(),city:document.getElementById('city').value.trim(),bio:document.getElementById('bio').value.trim()};
+  try {
+    const {error}=await doctorSupabase.from('carex_doctor_profiles').update(payload).eq('id',user.id);
+    if(error)return doctorToast(error.message);
+    doctorToast('Profile information saved.');
+    load();
+  } catch(e) { doctorToast('Network error while saving.'); }
+}
+async function uploadDoc(stepKey){
+  const input=document.getElementById('file_'+stepKey),file=input.files[0]; if(!file)return doctorToast('Choose a file first.');
+  if(file.size>10*1024*1024)return doctorToast('Maximum file size is 10 MB.');
+  const ext=(file.name.split('.').pop()||'bin').toLowerCase(),path=`${user.id}/${stepKey}/${crypto.randomUUID()}.${ext}`;
+  try {
+    const {error:up}=await doctorSupabase.storage.from('doctor-verification').upload(path,file,{upsert:false});
+    if(up)return doctorToast(up.message);
+    const {error:ins}=await doctorSupabase.from('carex_doctor_documents').insert({doctor_id:user.id,step_key:stepKey,document_type:stepKey,file_path:path,original_name:file.name,status:'submitted'});
+    if(ins){await doctorSupabase.storage.from('doctor-verification').remove([path]);return doctorToast(ins.message);}
+    await doctorSupabase.from('carex_doctor_verification_steps').update({status:'submitted',submitted_at:new Date().toISOString(),rejection_reason:null}).eq('doctor_id',user.id).eq('step_key',stepKey);
+    doctorToast('Document submitted for review.');
+    load();
+  } catch(e) { doctorToast('Network error during upload.'); }
+}
+load();
+</script>
+</body>
+</html>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Doctor Login | CareX</title>
+
+  <link rel="icon" type="image/png" href="../assets/images/doctor-logo.png">
+
+  <style>
+    :root {
+      --deep-teal: #115E59;
+      --healthcare-teal: #0D9488;
+      --soft-mint: #E6F7F4;
+      --clean-white: #FFFFFF;
+      --bg-light: #F0FDF9;
+      --text-primary: #0F3D3A;
+      --text-secondary: #4A6B68;
+      --border-color: #CCE5E2;
+      --danger: #B42318;
+      --success: #15803D;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg-light);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 430px;
+    }
+
+    .login-card {
+      background: var(--clean-white);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 36px;
+      box-shadow: 0 12px 35px rgba(15, 61, 58, 0.10);
+    }
+
+    .logo-section {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .logo {
+      width: 72px;
+      height: 72px;
+      object-fit: contain;
+      margin-bottom: 14px;
+    }
+
+    .logo-section h1 {
+      color: var(--deep-teal);
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .logo-section p {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      font-size: 15px;
+      color: var(--text-primary);
+      background: #fff;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus {
+      border-color: var(--healthcare-teal);
+      box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
+    }
+
+    .login-button {
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      background: var(--healthcare-teal);
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .login-button:hover {
+      background: var(--deep-teal);
+    }
+
+    .login-button:active {
+      transform: translateY(1px);
+    }
+
+    .login-button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .message {
+      display: none;
+      margin-bottom: 18px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .message.error {
+      display: block;
+      color: var(--danger);
+      background: #FEF3F2;
+      border: 1px solid #FECACA;
+    }
+
+    .message.success {
+      display: block;
+      color: var(--success);
+      background: #F0FDF4;
+      border: 1px solid #BBF7D0;
+    }
+
+    .footer-links {
+      text-align: center;
+      margin-top: 22px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .footer-links a {
+      color: var(--healthcare-teal);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 16px;
+      }
+
+      .login-card {
+        padding: 28px 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="login-container">
+    <section class="login-card">
+
+      <div class="logo-section">
+        <img
+          src="../assets/images/doctor-logo.png"
+          alt="CareX Doctor"
+          class="logo"
+        >
+
+        <h1>Doctor Login</h1>
+        <p>Sign in to access your CareX doctor account.</p>
+      </div>
+
+      <div id="message" class="message"></div>
+
+      <form id="loginForm">
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Enter your email"
+            autocomplete="email"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+            required
+          >
+        </div>
+
+        <button
+          type="submit"
+          id="loginButton"
+          class="login-button"
+        >
+          Sign In
+        </button>
+
+      </form>
+
+      <div class="footer-links">
+        Don't have a doctor account?
+        <a href="./register.html">Register here</a>
+      </div>
+
+    </section>
+  </main>
+
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- CareX configuration -->
+  <script src="../js/config.js"></script>
+
+  <!-- CareX Supabase client -->
+  <script src="../js/supabase.js"></script>
+
+  <!-- Common utilities -->
+  <script src="../js/common.js"></script>
+
+
+  <script>
+    const loginForm = document.getElementById('loginForm');
+    const loginButton = document.getElementById('loginButton');
+    const messageBox = document.getElementById('message');
+
+    function showMessage(message, type = 'error') {
+      messageBox.textContent = message;
+      messageBox.className = 'message ' + type;
+    }
+
+    function setLoading(isLoading) {
+      loginButton.disabled = isLoading;
+      loginButton.textContent = isLoading ? 'Signing In...' : 'Sign In';
+    }
+
+    loginForm.addEventListener('submit', async function (event) {
+      event.preventDefault();
+
+      showMessage('', 'error');
+      messageBox.style.display = 'none';
+
+      /*
+       * IMPORTANT:
+       * The Supabase client in js/supabase.js is named:
+       * carexSupabase
+       *
+       * It is NOT window.supabase.
+       */
+      if (typeof carexSupabase === 'undefined' || !carexSupabase) {
+        showMessage(
+          'Database connection is not available. Please refresh the page and try again.',
+          'error'
+        );
+        return;
+      }
+
+      const email = document
+        .getElementById('email')
+        .value
+        .trim();
+
+      const password = document
+        .getElementById('password')
+        .value;
+
+      if (!email || !password) {
+        showMessage(
+          'Please enter your email address and password.',
+          'error'
+        );
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        const { data, error } =
+          await carexSupabase.auth.signInWithPassword({
+            email: email,
+            password: password
+          });
+
+        if (error) {
+          console.error('Supabase login error:', error);
+
+          let message = 'Unable to sign in. Please check your email and password.';
+
+          if (error.message) {
+            if (
+              error.message.toLowerCase().includes('email not confirmed')
+            ) {
+              message = 'Please confirm your email address before signing in.';
+            } else if (
+              error.message.toLowerCase().includes('invalid login credentials')
+            ) {
+              message = 'Invalid email or password.';
+            } else {
+              message = error.message;
+            }
+          }
+
+          showMessage(message, 'error');
+          return;
+        }
+
+        if (!data || !data.user) {
+          showMessage(
+            'Login could not be completed. Please try again.',
+            'error'
+          );
+          return;
+        }
+
+        console.log('Doctor login successful:', data.user.id);
+
+        showMessage(
+          'Login successful. Redirecting to your dashboard...',
+          'success'
+        );
+
+        /*
+         * Give the success message a moment to appear,
+         * then open the doctor dashboard.
+         */
+        setTimeout(() => {
+          window.location.href = './dashboard.html';
+        }, 700);
+
+      } catch (error) {
+        console.error('Login crash:', error);
+
+        showMessage(
+          'An unexpected error occurred. Please try again.',
+          'error'
+        );
+      } finally {
+        setLoading(false);
+      }
+    });
+  </script>
+
+</body>
+</html>

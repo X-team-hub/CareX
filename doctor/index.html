@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CareX for Doctors - Verified Professional Network</title>
+  <link rel="icon" type="image/png" href="../assets/images/doctor-logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --deep-teal: #115E59;
+      --healthcare-teal: #0D9488;
+      --soft-mint: #E6F7F4;
+      --clean-white: #FFFFFF;
+      --bg-light: #F0FDF9;
+      --text-primary: #0F3D3A;
+      --text-secondary: #4A6B68;
+      --border-color: #CCE5E2;
+      --radius: 16px;
+      --radius-sm: 10px;
+      --shadow-premium: 0 20px 40px -12px rgba(17, 94, 89, 0.1), 0 8px 16px -8px rgba(17, 94, 89, 0.06);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg-light); color: var(--text-primary); line-height: 1.6; }
+    h1, h2, h3 { font-family: 'Fraunces', serif; color: var(--deep-teal); line-height: 1.15; letter-spacing: -0.02em; }
+    a { text-decoration: none; transition: all 0.2s ease; }
+    
+    .doctor-shell { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    
+    .doctor-header { display: flex; align-items: center; justify-content: space-between; padding: 24px 0; margin-bottom: 40px; border-bottom: 1px solid var(--border-color); }
+    .doctor-brand { display: inline-flex; align-items: center; gap: 12px; color: var(--deep-teal); font-family: 'Fraunces', serif; font-weight: 700; font-size: 1.35rem; }
+    .doctor-brand-logo { height: 44px; width: auto; object-fit: contain; border-radius: 10px; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease; }
+    .doctor-brand:hover .doctor-brand-logo { transform: scale(1.08) rotate(-3deg); box-shadow: 0 8px 20px rgba(13, 148, 136, 0.25); }
+    
+    .doctor-btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 24px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 600; border-radius: var(--radius-sm); cursor: pointer; transition: all 0.3s ease; border: 1.5px solid transparent; }
+    .doctor-btn.primary { background: var(--deep-teal); color: white; border-color: var(--deep-teal); }
+    .doctor-btn.primary:hover { background: var(--healthcare-teal); border-color: var(--healthcare-teal); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(13, 148, 136, 0.3); }
+    .doctor-btn.secondary { background: var(--clean-white); color: var(--deep-teal); border-color: var(--border-color); }
+    .doctor-btn.secondary:hover { background: var(--soft-mint); border-color: var(--healthcare-teal); transform: translateY(-2px); }
+
+    .doctor-hero { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; margin-bottom: 80px; animation: fadeInUp 0.6s ease-out; }
+    .doctor-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--soft-mint); color: var(--deep-teal); font-size: 0.85rem; font-weight: 600; padding: 6px 14px; border-radius: 50px; margin-bottom: 24px; border: 1px solid var(--border-color); }
+    .doctor-hero h1 { font-size: clamp(2.2rem, 4vw, 3.2rem); margin-bottom: 20px; }
+    .doctor-hero p { font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 32px; max-width: 540px; line-height: 1.7; }
+    .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
+
+    .process-card { background: var(--clean-white); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow-premium); border: 1px solid var(--border-color); animation: fadeInUp 0.6s ease-out 0.1s backwards; }
+    .process-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); }
+    .process-card-header strong { font-family: 'Fraunces', serif; font-size: 1.25rem; color: var(--deep-teal); }
+    .step-list { display: flex; flex-direction: column; gap: 16px; }
+    .step { display: flex; align-items: flex-start; gap: 16px; position: relative; padding: 12px; border-radius: var(--radius-sm); transition: all 0.3s ease; }
+    .step:hover { background: var(--soft-mint); transform: translateX(4px); }
+    .step:not(:last-child)::before { content: ''; position: absolute; left: 27px; top: 40px; bottom: -20px; width: 2px; background: var(--border-color); }
+    .step-icon { width: 32px; height: 32px; border-radius: 50%; background: var(--soft-mint); color: var(--healthcare-teal); font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 2px solid var(--clean-white); z-index: 1; }
+    .step-title { font-weight: 600; color: var(--deep-teal); font-size: 0.95rem; margin-bottom: 2px; }
+    .step-note { font-size: 0.85rem; color: var(--text-secondary); }
+
+    .doctor-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 80px; }
+    .doctor-feature { background: var(--clean-white); padding: 32px; border-radius: var(--radius); border: 1px solid var(--border-color); transition: all 0.3s ease; animation: fadeInUp 0.6s ease-out 0.2s backwards; }
+    .doctor-feature:hover { transform: translateY(-6px); box-shadow: var(--shadow-premium); border-color: var(--healthcare-teal); }
+    .feature-icon { width: 48px; height: 48px; background: var(--soft-mint); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: var(--healthcare-teal); }
+    .doctor-feature strong { display: block; font-family: 'Fraunces', serif; font-size: 1.25rem; color: var(--deep-teal); margin-bottom: 10px; }
+    .doctor-feature span { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; }
+
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 900px) { .doctor-hero { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) { .doctor-header { flex-direction: column; gap: 20px; align-items: flex-start; } .doctor-actions { width: 100%; } .doctor-actions .doctor-btn { flex: 1; text-align: center; } }
+  </style>
+</head>
+<body>
+  <div class="doctor-shell">
+    <header class="doctor-header">
+      <a class="doctor-brand" href="./index.html">
+        <img src="../assets/images/doctor-logo.png" alt="CareX Logo" class="doctor-brand-logo">
+        CareX Doctors
+      </a>
+      <div class="doctor-actions">
+        <a class="doctor-btn secondary" href="./login.html">Login</a>
+        <a class="doctor-btn primary" href="./register.html">Register</a>
+      </div>
+    </header>
+
+    <section class="doctor-hero">
+      <div class="hero-content">
+        <span class="doctor-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          Verified professionals
+        </span>
+        <h1>Build trust with a structured doctor verification process.</h1>
+        <p>CareX doctors complete account, identity, qualification, medical registration, and professional checks. Admin review happens step-by-step.</p>
+        <div class="hero-buttons">
+          <a class="doctor-btn primary" href="./register.html">Start Registration</a>
+          <a class="doctor-btn secondary" href="./login.html">Track Verification</a>
+        </div>
+      </div>
+
+      <div class="process-card">
+        <div class="process-card-header">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--healthcare-teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          <strong>6 Verification Stages</strong>
+        </div>
+        <div class="step-list">
+          <div class="step"><div class="step-icon">1</div><div><div class="step-title">Account Setup</div><div class="step-note">Email & mobile verification</div></div></div>
+          <div class="step"><div class="step-icon">2</div><div><div class="step-title">Identity Proof</div><div class="step-note">Government-issued ID document</div></div></div>
+          <div class="step"><div class="step-icon">3</div><div><div class="step-title">Qualification</div><div class="step-note">Medical degree & certificates</div></div></div>
+          <div class="step"><div class="step-icon">4</div><div><div class="step-title">Medical Registration</div><div class="step-note">State/National medical council ID</div></div></div>
+          <div class="step"><div class="step-icon">5</div><div><div class="step-title">Professional Details</div><div class="step-note">Clinic/hospital practice details</div></div></div>
+          <div class="step"><div class="step-icon">6</div><div><div class="step-title">Final Admin Review</div><div class="step-note">Manual approval & activation</div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="doctor-grid">
+      <div class="doctor-feature">
+        <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></div>
+        <strong>Transparent Status</strong>
+        <span>See exactly which steps are verified, under review, or need changes in real-time.</span>
+      </div>
+      <div class="doctor-feature">
+        <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>
+        <strong>Secure Documents</strong>
+        <span>Verification documents are encrypted and stored in a private Supabase Storage bucket.</span>
+      </div>
+      <div class="doctor-feature">
+        <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 12 15 16 10"></polyline></svg></div>
+        <strong>Public Trust</strong>
+        <span>Only doctors approved through this rigorous workflow appear as "Verified".</span>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

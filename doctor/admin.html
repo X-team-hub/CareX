@@ -1,0 +1,1272 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Doctor Admin - CareX</title>
+
+  <link rel="icon" type="image/png" href="../assets/images/doctor-logo.png">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=DM+Sans:wght@400;500;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    :root {
+      --deep-teal: #115E59;
+      --healthcare-teal: #0D9488;
+      --soft-mint: #E6F7F4;
+      --clean-white: #FFFFFF;
+      --bg-light: #F0FDF9;
+      --text-primary: #0F3D3A;
+      --text-secondary: #4A6B68;
+      --border-color: #CCE5E2;
+      --danger: #B42318;
+      --danger-bg: #FEF3F2;
+      --success: #15803D;
+      --success-bg: #ECFDF3;
+      --radius: 16px;
+      --shadow-premium:
+        0 20px 40px -12px rgba(17, 94, 89, 0.1),
+        0 8px 16px -8px rgba(17, 94, 89, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-light);
+      color: var(--text-primary);
+      font-family: "DM Sans", sans-serif;
+    }
+
+    .doctor-shell {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding-bottom: 40px;
+    }
+
+    .doctor-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 24px 0;
+      margin-bottom: 32px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .doctor-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--deep-teal);
+      font-weight: 700;
+      font-size: 1.35rem;
+      text-decoration: none;
+      font-family: "Fraunces", serif;
+    }
+
+    .doctor-brand-logo {
+      height: 44px;
+      width: auto;
+      border-radius: 10px;
+    }
+
+    .doctor-card {
+      padding: 28px;
+      margin-bottom: 24px;
+      background: var(--clean-white);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-premium);
+      animation: fadeInUp 0.5s ease-out backwards;
+    }
+
+    .doctor-card h1,
+    .doctor-card h2,
+    .doctor-card h3 {
+      color: var(--deep-teal);
+      font-family: "Fraunces", serif;
+      font-weight: 700;
+    }
+
+    .doctor-card h1 {
+      margin: 14px 0 10px;
+      font-size: clamp(25px, 4vw, 34px);
+    }
+
+    .small {
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .doctor-btn {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      min-height: 43px;
+      padding: 11px 18px;
+      border: 1px solid var(--healthcare-teal);
+      border-radius: 10px;
+      background: var(--healthcare-teal);
+      color: #fff;
+      font: 700 14px "DM Sans", sans-serif;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .doctor-btn:hover {
+      background: var(--deep-teal);
+      border-color: var(--deep-teal);
+      transform: translateY(-2px);
+    }
+
+    .doctor-btn.secondary {
+      background: #fff;
+      color: var(--deep-teal);
+      border-color: var(--border-color);
+    }
+
+    .doctor-btn.secondary:hover {
+      background: var(--soft-mint);
+      border-color: var(--healthcare-teal);
+    }
+
+    .doctor-btn.danger {
+      background: var(--danger);
+      border-color: var(--danger);
+    }
+
+    .doctor-btn.danger:hover {
+      background: #991B1B;
+      border-color: #991B1B;
+    }
+
+    .doctor-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 11px;
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      background: var(--soft-mint);
+      color: var(--deep-teal);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .doctor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+
+    .doctor-feature {
+      background: var(--soft-mint);
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      text-align: center;
+      transition: transform 0.3s;
+    }
+
+    .doctor-feature:hover {
+      transform: translateY(-3px);
+    }
+
+    .doctor-feature strong {
+      display: block;
+      font-size: 2rem;
+      color: var(--deep-teal);
+      font-family: "Fraunces", serif;
+    }
+
+    .doctor-feature span {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+
+    .doc-table th {
+      text-align: left;
+      padding: 12px;
+      color: var(--text-secondary);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    .doc-table td {
+      padding: 16px 12px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: middle;
+    }
+
+    .doc-table tr:hover td {
+      background: var(--soft-mint);
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: capitalize;
+    }
+
+    .status.verified {
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid #BBF7D0;
+    }
+
+    .status.changes_required {
+      background: #FFFBEB;
+      color: #A16207;
+      border: 1px solid #FDE68A;
+    }
+
+    .status.under_review,
+    .status.submitted {
+      background: #EFF6FF;
+      color: #1D4ED8;
+      border: 1px solid #BFDBFE;
+    }
+
+    .status.rejected {
+      background: var(--danger-bg);
+      color: var(--danger);
+      border: 1px solid #FECACA;
+    }
+
+    .review-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 14px;
+    }
+
+    .step-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 38px minmax(0, 1fr) auto;
+      align-items: start;
+      gap: 13px;
+      padding: 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 13px;
+      background: #fff;
+    }
+
+    .step-icon {
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 11px;
+      background: var(--soft-mint);
+      color: var(--deep-teal);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .step-title {
+      margin: 2px 0 5px;
+      color: var(--text-primary);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .step-note {
+      color: var(--text-secondary);
+      font-size: 12px;
+      line-height: 1.65;
+    }
+
+    .file-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      padding: 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+
+    .file-row strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--text-primary);
+      font-size: 14px;
+    }
+
+    .doctor-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .doctor-field label {
+      color: var(--text-primary);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .doctor-field textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: #FAFAFA;
+      font: 400 14px "DM Sans", sans-serif;
+    }
+
+    .notice {
+      padding: 13px 15px;
+      border-radius: 11px;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .notice.danger {
+      background: var(--danger-bg);
+      color: var(--danger);
+      border: 1px solid #FECACA;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .review-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .doc-table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+
+<body class="doctor-body">
+
+  <div class="doctor-shell">
+
+    <header class="doctor-header">
+
+      <a class="doctor-brand" href="./index.html">
+        <img
+          src="../assets/images/doctor-logo.png"
+          alt="CareX Logo"
+          class="doctor-brand-logo"
+        >
+        Doctor Admin
+      </a>
+
+      <button
+        type="button"
+        class="doctor-btn secondary"
+        onclick="doctorLogout()"
+      >
+        Logout
+      </button>
+
+    </header>
+
+    <div id="app">
+      <section class="doctor-card">
+        <div class="small">Loading admin panel...</div>
+      </section>
+    </div>
+
+  </div>
+
+  <!-- IMPORTANT: correct root paths -->
+  <script src="../js/config.js"></script>
+  <script src="../js/supabase.js"></script>
+  <script src="../js/common.js"></script>
+
+  <script>
+    let admin = null;
+    let selected = null;
+
+    function showError(message) {
+      document.getElementById("app").innerHTML = `
+        <section class="doctor-card">
+          <div class="notice danger">
+            Failed to load: ${doctorEscape(message)}
+          </div>
+        </section>
+      `;
+    }
+
+    async function load() {
+      try {
+        /*
+         * CareX uses carexSupabase.
+         * Do NOT use doctorSupabase or supabase here.
+         */
+        if (!carexSupabase) {
+          showError("Supabase connection is not available.");
+          return;
+        }
+
+        /*
+         * requireAdmin() should verify the logged-in user's
+         * CareX admin role.
+         */
+        if (typeof requireAdmin !== "function") {
+          showError("Admin authentication helper is not available.");
+          return;
+        }
+
+        admin = await requireAdmin();
+
+        if (!admin) {
+          return;
+        }
+
+        const {
+          data: docs,
+          error
+        } = await carexSupabase
+          .from("carex_doctor_profiles")
+          .select("*")
+          .order("updated_at", { ascending: false });
+
+        if (error) {
+          throw error;
+        }
+
+        const ids = (docs || []).map(x => x.id);
+
+        let steps = [];
+
+        if (ids.length) {
+          const {
+            data,
+            error: stepError
+          } = await carexSupabase
+            .from("carex_doctor_verification_steps")
+            .select("*")
+            .in("doctor_id", ids);
+
+          if (stepError) {
+            throw stepError;
+          }
+
+          steps = data || [];
+        }
+
+        const stats = {
+          total: docs.length,
+
+          review: docs.filter(d =>
+            ["submitted", "under_review"].includes(d.status)
+          ).length,
+
+          verified: docs.filter(d =>
+            d.status === "verified"
+          ).length,
+
+          changes: docs.filter(d =>
+            d.status === "changes_required"
+          ).length
+        };
+
+        document.getElementById("app").innerHTML = `
+
+          <section class="doctor-card">
+            <span class="doctor-badge">ADMIN PANEL</span>
+
+            <h1>Doctor Verification</h1>
+
+            <div class="doctor-grid">
+
+              <div class="doctor-feature">
+                <strong>${stats.total}</strong>
+                <span>Total Applications</span>
+              </div>
+
+              <div class="doctor-feature">
+                <strong>${stats.review}</strong>
+                <span>Need Review</span>
+              </div>
+
+              <div class="doctor-feature">
+                <strong>${stats.verified}</strong>
+                <span>Verified</span>
+              </div>
+
+              <div class="doctor-feature">
+                <strong>${stats.changes}</strong>
+                <span>Changes Required</span>
+              </div>
+
+            </div>
+          </section>
+
+          <section class="doctor-card">
+
+            <table class="doc-table">
+
+              <thead>
+                <tr>
+                  <th>Doctor</th>
+                  <th>Status</th>
+                  <th>Steps</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                ${
+                  docs.length
+                    ? docs.map(d => {
+
+                        const ss = steps.filter(
+                          s => s.doctor_id === d.id
+                        );
+
+                        const verifiedSteps = ss.filter(
+                          s => s.status === "verified"
+                        ).length;
+
+                        const statusClass =
+                          d.status === "verified"
+                            ? "verified"
+                            : d.status === "changes_required"
+                              ? "changes_required"
+                              : d.status === "rejected"
+                                ? "rejected"
+                                : "under_review";
+
+                        return `
+                          <tr>
+
+                            <td>
+                              <strong>
+                                ${doctorEscape(d.full_name)}
+                              </strong>
+
+                              <div class="small">
+                                ${doctorEscape(d.specialization || "")}
+                              </div>
+                            </td>
+
+                            <td>
+                              <span class="status ${statusClass}">
+                                ${doctorEscape(d.status || "draft")}
+                              </span>
+                            </td>
+
+                            <td>
+                              ${verifiedSteps}/${ss.length}
+                            </td>
+
+                            <td>
+                              <button
+                                type="button"
+                                class="doctor-btn"
+                                onclick="openDoctor('${d.id}')"
+                              >
+                                Review
+                              </button>
+                            </td>
+
+                          </tr>
+                        `;
+
+                      }).join("")
+                    : `
+                      <tr>
+                        <td colspan="4">
+                          <div class="small">
+                            No doctor applications found.
+                          </div>
+                        </td>
+                      </tr>
+                    `
+                }
+
+              </tbody>
+
+            </table>
+
+          </section>
+
+          <div id="review"></div>
+        `;
+
+      } catch (err) {
+
+        console.error("Admin load error:", err);
+
+        showError(err?.message || "Unknown error");
+
+      }
+    }
+
+
+    async function openDoctor(id) {
+
+      try {
+
+        const {
+          data: d,
+          error: doctorError
+        } = await carexSupabase
+          .from("carex_doctor_profiles")
+          .select("*")
+          .eq("id", id)
+          .single();
+
+        if (doctorError) {
+          throw doctorError;
+        }
+
+        const {
+          data: s,
+          error: stepError
+        } = await carexSupabase
+          .from("carex_doctor_verification_steps")
+          .select("*")
+          .eq("doctor_id", id)
+          .order("created_at");
+
+        if (stepError) {
+          throw stepError;
+        }
+
+        const {
+          data: files,
+          error: fileError
+        } = await carexSupabase
+          .from("carex_doctor_documents")
+          .select("*")
+          .eq("doctor_id", id)
+          .order("uploaded_at", { ascending: false });
+
+        if (fileError) {
+          throw fileError;
+        }
+
+        selected = {
+          d,
+          s: s || [],
+          files: files || []
+        };
+
+        document.getElementById("review").innerHTML = `
+
+          <section class="doctor-card">
+
+            <div style="
+              display:flex;
+              justify-content:space-between;
+              gap:10px;
+              align-items:flex-start;
+              flex-wrap:wrap;
+            ">
+
+              <div>
+
+                <h2>
+                  ${doctorEscape(d.full_name)}
+                </h2>
+
+                <p class="small">
+                  ${doctorEscape(d.qualification || "")}
+                  ·
+                  ${doctorEscape(d.registration_number || "")}
+                </p>
+
+              </div>
+
+              <button
+                type="button"
+                class="doctor-btn secondary"
+                onclick="load()"
+              >
+                Close Review
+              </button>
+
+            </div>
+
+
+            <div class="review-grid">
+
+              <div>
+
+                <h3>Profile Details</h3>
+
+                <div
+                  class="small"
+                  style="margin-top:12px;line-height:2;"
+                >
+
+                  <div>
+                    <strong>Specialization:</strong>
+                    ${doctorEscape(d.specialization || "-")}
+                  </div>
+
+                  <div>
+                    <strong>Council:</strong>
+                    ${doctorEscape(d.registration_council || "-")}
+                  </div>
+
+                  <div>
+                    <strong>Clinic:</strong>
+                    ${doctorEscape(d.clinic_name || "-")}
+                  </div>
+
+                  <div>
+                    <strong>City:</strong>
+                    ${doctorEscape(d.city || "-")}
+                  </div>
+
+                  <div>
+                    <strong>Experience:</strong>
+                    ${doctorEscape(d.experience_years ?? "-")} years
+                  </div>
+
+                  <div>
+                    <strong>Bio:</strong>
+                    ${doctorEscape(d.bio || "-")}
+                  </div>
+
+                </div>
+
+              </div>
+
+
+              <div>
+
+                <h3>Verification Steps</h3>
+
+                <div
+                  class="step-list"
+                  style="margin-top:12px"
+                >
+
+                  ${
+                    selected.s.length
+                      ? selected.s.map(step => `
+                          <div class="step">
+
+                            <div class="step-icon">
+                              ${step.status === "verified" ? "✓" : "•"}
+                            </div>
+
+                            <div>
+
+                              <div class="step-title">
+                                ${doctorEscape(step.title)}
+                              </div>
+
+                              <div class="step-note">
+                                ${
+                                  step.rejection_reason
+                                    ? doctorEscape(step.rejection_reason)
+                                    : "No review note"
+                                }
+                              </div>
+
+                            </div>
+
+                            <span class="status ${step.status}">
+                              ${doctorStatusLabel(step.status)}
+                            </span>
+
+                          </div>
+                        `).join("")
+                      : `
+                          <div class="notice">
+                            No verification steps found.
+                          </div>
+                        `
+                  }
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <h3 style="margin:24px 0 12px;">
+              Documents
+            </h3>
+
+            ${
+              selected.files.length
+                ? selected.files.map(f => `
+
+                    <div class="file-row">
+
+                      <div>
+
+                        <strong>
+                          ${doctorEscape(
+                            f.original_name || f.document_type
+                          )}
+                        </strong>
+
+                        <div class="small">
+
+                          ${doctorEscape(f.step_key || "")}
+
+                          ·
+
+                          <span
+                            class="status ${f.status || "under_review"}"
+                            style="font-size:10px;padding:2px 6px;"
+                          >
+                            ${doctorStatusLabel(f.status)}
+                          </span>
+
+                        </div>
+
+                      </div>
+
+                      <button
+                        type="button"
+                        class="doctor-btn secondary"
+                        onclick="viewFile('${f.id}')"
+                      >
+                        View Document
+                      </button>
+
+                    </div>
+
+                  `).join("")
+                : `
+                    <div class="notice">
+                      No documents submitted yet.
+                    </div>
+                  `
+            }
+
+
+            <div class="doctor-field">
+
+              <label for="reviewNote">
+                Admin Review Note
+              </label>
+
+              <textarea
+                id="reviewNote"
+                placeholder="Explain approval, rejection, or requested changes..."
+              ></textarea>
+
+            </div>
+
+
+            <div style="
+              display:flex;
+              gap:10px;
+              flex-wrap:wrap;
+              margin-top:16px;
+            ">
+
+              <button
+                type="button"
+                class="doctor-btn"
+                onclick="approveAll()"
+              >
+                Approve Verified Steps
+              </button>
+
+              <button
+                type="button"
+                class="doctor-btn secondary"
+                onclick="requestChanges()"
+              >
+                Request Changes
+              </button>
+
+              <button
+                type="button"
+                class="doctor-btn danger"
+                onclick="rejectDoctor()"
+              >
+                Reject Application
+              </button>
+
+            </div>
+
+          </section>
+        `;
+
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: "smooth"
+        });
+
+      } catch (err) {
+
+        console.error("Doctor detail error:", err);
+
+        doctorToast(
+          "Error loading doctor details: " +
+          (err?.message || "Unknown error")
+        );
+      }
+    }
+
+
+    async function viewFile(id) {
+
+      const f = selected?.files?.find(
+        x => x.id === id
+      );
+
+      if (!f) return;
+
+      try {
+
+        const {
+          data,
+          error
+        } = await carexSupabase.storage
+          .from("doctor-verification")
+          .createSignedUrl(
+            f.file_path,
+            300
+          );
+
+        if (error) {
+          doctorToast(error.message);
+          return;
+        }
+
+        window.open(
+          data.signedUrl,
+          "_blank",
+          "noopener"
+        );
+
+      } catch (e) {
+
+        doctorToast(
+          "Network error viewing file."
+        );
+      }
+    }
+
+
+    async function updateStep(
+      stepKey,
+      status,
+      note
+    ) {
+
+      const step = selected.s.find(
+        x => x.step_key === stepKey
+      );
+
+      if (!step) return;
+
+      const {
+        error: stepError
+      } = await carexSupabase
+        .from("carex_doctor_verification_steps")
+        .update({
+          status,
+          rejection_reason: note || null,
+          reviewed_by: admin.id,
+          reviewed_at: new Date().toISOString()
+        })
+        .eq("id", step.id);
+
+      if (stepError) {
+        throw stepError;
+      }
+
+      const {
+        error: reviewError
+      } = await carexSupabase
+        .from("carex_doctor_reviews")
+        .insert({
+          doctor_id: selected.d.id,
+          step_key: stepKey,
+          action:
+            status === "verified"
+              ? "approved"
+              : status === "changes_required"
+                ? "requested_changes"
+                : "rejected",
+          note: note || null,
+          admin_id: admin.id
+        });
+
+      if (reviewError) {
+        throw reviewError;
+      }
+    }
+
+
+    async function approveAll() {
+
+      const note =
+        document.getElementById("reviewNote")
+          ?.value
+          .trim() || "";
+
+      try {
+
+        for (
+          const s of selected.s.filter(
+            s => s.step_key !== "final_review"
+          )
+        ) {
+          await updateStep(
+            s.step_key,
+            "verified",
+            note
+          );
+        }
+
+        await updateStep(
+          "final_review",
+          "verified",
+          note
+        );
+
+        const p = selected.d;
+
+        const {
+          error: profileError
+        } = await carexSupabase
+          .from("carex_doctor_profiles")
+          .update({
+            status: "verified"
+          })
+          .eq("id", p.id);
+
+        if (profileError) {
+          throw profileError;
+        }
+
+        const payload = {
+          user_id: p.id,
+          name: p.full_name,
+          specialization: p.specialization,
+          qualification: p.qualification,
+          experience: p.experience_years,
+          location: p.city,
+          bio: p.bio,
+          verified: true,
+          image_url: null,
+          languages: [],
+          price: null
+        };
+
+        const {
+          error: directoryError
+        } = await carexSupabase
+          .from("doctors")
+          .upsert(
+            payload,
+            { onConflict: "user_id" }
+          );
+
+        if (directoryError) {
+          throw directoryError;
+        }
+
+        const {
+          error: finalReviewError
+        } = await carexSupabase
+          .from("carex_doctor_reviews")
+          .insert({
+            doctor_id: p.id,
+            action: "final_approved",
+            note: note || null,
+            admin_id: admin.id
+          });
+
+        if (finalReviewError) {
+          throw finalReviewError;
+        }
+
+        doctorToast(
+          "Doctor verified and published to the directory."
+        );
+
+        load();
+
+      } catch (err) {
+
+        console.error("Approval failed:", err);
+
+        doctorToast(
+          "Approval failed: " +
+          (err?.message || "Unknown error")
+        );
+      }
+    }
+
+
+    async function requestChanges() {
+
+      const note =
+        document.getElementById("reviewNote")
+          ?.value
+          .trim() || "";
+
+      if (!note) {
+        doctorToast(
+          "Please add a reason for requested changes."
+        );
+        return;
+      }
+
+      try {
+
+        const {
+          error
+        } = await carexSupabase
+          .from("carex_doctor_profiles")
+          .update({
+            status: "changes_required"
+          })
+          .eq("id", selected.d.id);
+
+        if (error) {
+          throw error;
+        }
+
+        for (
+          const s of selected.s.filter(
+            s => s.status !== "verified"
+          )
+        ) {
+          await updateStep(
+            s.step_key,
+            "changes_required",
+            note
+          );
+        }
+
+        doctorToast(
+          "Changes requested successfully."
+        );
+
+        load();
+
+      } catch (err) {
+
+        console.error("Request changes failed:", err);
+
+        doctorToast(
+          "Failed to request changes: " +
+          (err?.message || "Unknown error")
+        );
+      }
+    }
+
+
+    async function rejectDoctor() {
+
+      const note =
+        document.getElementById("reviewNote")
+          ?.value
+          .trim() || "";
+
+      if (!note) {
+        doctorToast(
+          "Please add a reason for rejection."
+        );
+        return;
+      }
+
+      try {
+
+        const {
+          error
+        } = await carexSupabase
+          .from("carex_doctor_profiles")
+          .update({
+            status: "rejected"
+          })
+          .eq("id", selected.d.id);
+
+        if (error) {
+          throw error;
+        }
+
+        for (
+          const s of selected.s.filter(
+            s => s.step_key !== "final_review"
+          )
+        ) {
+          await updateStep(
+            s.step_key,
+            "rejected",
+            note
+          );
+        }
+
+        doctorToast(
+          "Application rejected."
+        );
+
+        load();
+
+      } catch (err) {
+
+        console.error("Rejection failed:", err);
+
+        doctorToast(
+          "Rejection failed: " +
+          (err?.message || "Unknown error")
+        );
+      }
+    }
+
+
+    /*
+     * Start admin panel.
+     */
+    load();
+  </script>
+
+</body>
+</html>
