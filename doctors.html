@@ -74,116 +74,6 @@
       font-size:.82rem;
     }
 
-    .doctor-tabs {
-      position:relative;
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:4px;
-      padding:5px;
-      margin:0 0 20px;
-      border:1px solid var(--line);
-      border-radius:16px;
-      background:var(--card);
-      box-shadow:var(--shadow);
-      isolation:isolate;
-    }
-
-    .doctor-tabs::before {
-      position:absolute;
-      z-index:-1;
-      inset:5px auto 5px 5px;
-      width:calc(50% - 2px);
-      border-radius:11px;
-      background:linear-gradient(135deg,var(--rose),var(--plum2));
-      content:"";
-      transition:transform .28s cubic-bezier(.2,.8,.2,1);
-    }
-
-    .doctor-tabs[data-active-tab="find"]::before {
-      transform:translateX(100%);
-    }
-
-    .doctor-tab {
-      min-height:46px;
-      padding:10px 12px;
-      border:0;
-      border-radius:11px;
-      background:transparent;
-      color:var(--mute);
-      font-weight:700;
-      transition:color .2s ease,transform .2s ease;
-    }
-
-    .doctor-tab[aria-selected="true"] {
-      color:#fff;
-    }
-
-    .doctor-tab:hover {
-      transform:translateY(-1px);
-    }
-
-    .doctor-tab-count {
-      display:inline-grid;
-      min-width:21px;
-      height:21px;
-      margin-left:5px;
-      padding:0 5px;
-      place-items:center;
-      border-radius:999px;
-      background:rgba(255,255,255,.2);
-      font-size:.75rem;
-    }
-
-    .doctor-tab[aria-selected="false"] .doctor-tab-count {
-      background:var(--rose2);
-      color:var(--plum);
-    }
-
-    #doc-list {
-      animation:doctor-panel-in .24s ease both;
-    }
-
-    @keyframes doctor-panel-in {
-      from { opacity:0; transform:translateY(7px); }
-      to { opacity:1; transform:translateY(0); }
-    }
-
-    .doc-status {
-      display:inline-flex;
-      align-items:center;
-      margin-top:6px;
-      padding:4px 9px;
-      border-radius:999px;
-      background:var(--sage2);
-      color:var(--sage);
-      font-size:.76rem;
-      font-weight:700;
-    }
-
-    .doc-status.booked {
-      background:var(--sage2);
-      color:var(--sage);
-    }
-
-    .appointment-meta {
-      margin-top:6px;
-      font-size:.84rem;
-    }
-
-    .doc-price button:disabled {
-      cursor:not-allowed;
-      opacity:.72;
-    }
-
-    @media (prefers-reduced-motion:reduce) {
-      .doctor-tabs::before,
-      .doctor-tab,
-      #doc-list {
-        animation:none;
-        transition:none;
-      }
-    }
-
     #dlg {
       width:min(92%,420px);
       border:0;
@@ -243,25 +133,13 @@
     </header>
 
     <main class="doctors-content">
-      <div class="doctor-tabs" role="tablist" aria-label="Doctor lists" data-active-tab="find">
-        <button class="doctor-tab" id="your-doctors-tab" type="button" role="tab" aria-selected="false" aria-controls="doc-list" tabindex="-1" data-doctor-tab="your">
-          <span data-i18n="your_doctor">Your Doctor</span>
-          <span class="doctor-tab-count" id="your-doctor-count" aria-label="Booked doctors">0</span>
-        </button>
-        <button class="doctor-tab" id="find-doctor-tab" type="button" role="tab" aria-selected="true" aria-controls="doc-list" tabindex="0" data-doctor-tab="find">
-          <span data-i18n="find_doctor">Find Doctor</span>
-        </button>
-      </div>
-
       <h1 data-i18n="talk_to_doctor">Talk to a Doctor</h1>
 
-      <p class="sub" id="doctor-list-description">
+      <p class="sub" data-i18n="verified">
         Verified professionals by video, audio or chat. Private by default.
       </p>
 
-      <div class="card" id="doc-list" role="tabpanel" aria-labelledby="find-doctor-tab" tabindex="0" aria-live="polite">
-        <div class="notice" data-i18n="loading_doctors">Loading doctors…</div>
-      </div>
+      <div class="card" id="doc-list"></div>
 
       <p class="disc" data-i18n="emergency">
         Emergency signs need in-person care right away.
@@ -369,7 +247,180 @@
   <script src="js/language.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/common.js"></script>
-  <script src="js/doctors.js"></script>
+
+  <script>
+    let selectedDoctor = null;
+    let bookingUser = null;
+
+    const doctors = [
+      {
+        id: '6b9a725d-d438-4a80-bcd8-aa704a53c053',
+        name: 'Dr. Ananya Rao',
+        specialization: 'Gynaecologist',
+        experience: 12,
+        languages: ['Hindi', 'English'],
+        price: 400
+      },
+      {
+        id: '6731c5ec-2599-42ae-8c5d-27dc425ac0cf',
+        name: 'Dr. Meera Iyer',
+        specialization: 'PCOS Specialist',
+        experience: 9,
+        languages: ['English', 'Tamil'],
+        price: 350
+      },
+      {
+        id: '18a58392-5aac-449e-92a9-82c745bb2967',
+        name: 'Dr. Farah Khan',
+        specialization: 'General Physician',
+        experience: 7,
+        languages: ['Hindi', 'Urdu'],
+        price: 200
+      }
+    ];
+
+    function getInitials(name) {
+      return name
+        .split(' ')
+        .slice(0, 2)
+        .map(x => x.charAt(0))
+        .join('');
+    }
+
+    function renderDoctors() {
+      const list = document.getElementById('doc-list');
+
+      list.innerHTML = doctors.map(d => `
+        <div class="doc">
+
+          <div class="av">
+            ${getInitials(d.name)}
+          </div>
+
+          <div class="doc-info">
+
+            <div class="doc-name">
+              ${d.name}
+            </div>
+
+            <div class="doc-meta mute">
+              ${d.specialization} · ${d.experience} yrs
+            </div>
+
+            <div class="doc-meta mute">
+              ${d.languages.join(', ')}
+            </div>
+
+            <div class="verified">
+              ✓ Verified
+            </div>
+
+          </div>
+
+          <div class="doc-price">
+
+            <strong>
+              ₹${d.price}
+            </strong>
+
+            <br>
+
+            <button onclick="openBook('${d.id}')">
+              Book
+            </button>
+
+          </div>
+
+        </div>
+      `).join('');
+
+      applyTranslations();
+    }
+
+    function openBook(id) {
+      selectedDoctor =
+        doctors.find(d => d.id === id);
+
+      if (!selectedDoctor) return;
+
+      document.getElementById('d-name').textContent =
+        selectedDoctor.name;
+
+      document.getElementById('d-spec').textContent =
+        selectedDoctor.specialization;
+
+      document.getElementById('d-info').textContent =
+        `${selectedDoctor.experience} years experience · ${selectedDoctor.languages.join(', ')} · ₹${selectedDoctor.price}`;
+
+      document.getElementById('dlg').showModal();
+
+      applyTranslations();
+    }
+
+    async function bookNow() {
+      if (!selectedDoctor) return;
+
+      const {
+        data,
+        error
+      } = await sb.auth.getSession();
+
+      if (error || !data.session) {
+        document.getElementById('dlg').close();
+
+        toast('Please login to book an appointment');
+
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 700);
+
+        return;
+      }
+
+      bookingUser = data.session.user;
+
+      const time =
+        document.getElementById('d-time').value;
+
+      const mode =
+        document.getElementById('d-mode').value;
+
+      const date =
+        new Date().toISOString().split('T')[0];
+
+      const { error: bookingError } =
+        await sb
+          .from('appointments')
+          .insert({
+            user_id: bookingUser.id,
+            doctor_id: selectedDoctor.id,
+            appointment_date: date,
+            appointment_time: time + ':00',
+            status: 'booked',
+            notes: 'Consultation mode: ' + mode
+          });
+
+      if (bookingError) {
+        console.error(bookingError);
+        toast('Could not book appointment');
+        return;
+      }
+
+      document.getElementById('dlg').close();
+
+      toast('Appointment booked successfully');
+    }
+
+    document.addEventListener(
+      'carexLanguageChanged',
+      () => {
+        applyTranslations();
+      }
+    );
+
+    renderDoctors();
+  </script>
 
 </body>
 </html>
+<script src="js/doctors.js"></script>
