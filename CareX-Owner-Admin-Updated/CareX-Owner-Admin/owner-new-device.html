@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#171A20">
+<title>Device Verification | CareX Owner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+<link rel="stylesheet" href="css/owner-welcome.css">
+<link rel="stylesheet" href="css/owner-login.css">
+<link rel="stylesheet" href="css/owner-auth.css">
+</head>
+<body data-page="device">
+<div class="glow" aria-hidden="true"></div>
+<main class="stage">
+  <header class="brand reveal" style="--d:0">
+    <svg class="mark" viewBox="0 0 48 48" aria-hidden="true">
+      <rect class="tile" x="1" y="1" width="46" height="46" rx="11" pathLength="1" />
+      <path class="heart" pathLength="1" d="M24 37S9 28 9 18a7.5 7.5 0 0 1 15-2 7.5 7.5 0 0 1 15 2c0 10-15 19-15 19z" />
+    </svg>
+    <span class="wordmark">CareX <em>Owner</em></span>
+  </header>
+  <section class="login" aria-label="Device Verification">
+    <div class="card reveal" style="--d:1">
+      <p class="badge">DEMO &middot; SIMULATED</p>
+      <h1 id="title" tabindex="-1">Verify This Device</h1>
+      <p class="sub">We don&rsquo;t recognize this browser. Confirm it&rsquo;s you to continue.</p>
+      <p class="status warn" id="devStatus" role="status" aria-live="polite"><span class="dot"></span><span id="devStatusText">Unrecognized device &ndash; verification required</span></p>
+      <dl class="info" id="devInfo">
+        <div><dt>Browser</dt><dd id="dBrowser"></dd></div>
+        <div><dt>Operating system</dt><dd id="dOs"></dd></div>
+        <div><dt>Language</dt><dd id="dLang"></dd></div>
+        <div><dt>Time zone</dt><dd id="dTz"></dd></div>
+        <div><dt>Screen</dt><dd id="dScreen"></dd></div>
+        <div><dt>Local time</dt><dd id="dTime"></dd></div>
+        <div><dt>Network location</dt><dd>Determined by the server (not available in demo)</dd></div>
+      </dl>
+      <p class="hint">Read from your browser for this preview only. Nothing is stored or sent.</p>
+      <button type="button" class="cta" id="continueBtn"><span>CONTINUE</span></button>
+      <a href="owner-login.html" class="cta ghost" id="cancelBtn"><span>CANCEL</span></a>
+      <a href="owner-2fa.html" class="back" id="backLink"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Back</a>
+    </div>
+    <p class="secure sec-note">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 4.5 5.5v5.8c0 4.6 3.1 8.6 7.5 10.2 4.4-1.6 7.5-5.6 7.5-10.2V5.5L12 2.5Z"/><path d="m8.8 12 2.3 2.3 4.2-4.6"/></svg>
+      <span>If you do not recognize this sign-in attempt, cancel and contact CareX security.</span>
+    </p>
+  </section>
+</main>
+<footer class="foot reveal" style="--d:2">
+  <span class="foot-brand">CareX</span>
+  <span>&copy; <span id="year">2026</span> CareX. All rights reserved.</span>
+</footer>
+<script src="js/owner-auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>CareX Doctor Administration | Doctor Verification & Management</title>
+  
+  <!-- Exact required CareX doctor logo for browser tab -->
+  <link rel="icon" type="image/png" href="../assets/images/doctor-logo.png">
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
+  
+  <!-- Separate CSS file as required -->
+  <link rel="stylesheet" href="./admin.css">
+</head>
+<body class="doctor-admin-body">
+
+  <!-- Mobile Overlay Backdrop -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop" aria-hidden="true"></div>
+
+  <!-- App Shell -->
+  <div class="app-layout">
+    
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" id="sidebar" aria-label="Main Navigation">
+      <div class="sidebar-brand">
+        <a href="./admin.html" class="brand-link" aria-label="CareX Doctor Admin Home">
+          <!-- Exact required CareX doctor logo as main visible page logo -->
+          <img src="../assets/images/doctor-logo.png" alt="CareX Doctor" class="brand-logo" onerror="this.onerror=null; this.src='../assets/images/carex-logo.svg'">
+          <div class="brand-text">
+            <span class="brand-title">CareX</span>
+            <span class="brand-badge">Doctor Admin</span>
+          </div>
+        </a>
+        <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close navigation menu">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav" id="sidebarNav">
+        <div class="nav-section-label">Management Core</div>
+        <button class="nav-item active" data-view="all" id="navAllDoctors">
+          <i data-lucide="stethoscope"></i>
+          <span>Doctor Directory</span>
+          <span class="nav-counter" id="countAllNav">7</span>
+        </button>
+        <button class="nav-item" data-view="pending" id="navPending">
+          <i data-lucide="shield-alert"></i>
+          <span>Verification Queue</span>
+          <span class="nav-counter alert" id="countPendingNav">2</span>
+        </button>
+        <button class="nav-item" data-view="verified" id="navVerified">
+          <i data-lucide="badge-check"></i>
+          <span>Verified Doctors</span>
+          <span class="nav-counter success" id="countVerifiedNav">4</span>
+        </button>
+        <button class="nav-item" data-view="suspended" id="navSuspended">
+          <i data-lucide="user-x"></i>
+          <span>Suspended & On-Hold</span>
+          <span class="nav-counter" id="countSuspendedNav">1</span>
+        </button>
+
+        <div class="nav-section-label">Clinical Operations</div>
+        <button class="nav-item" data-view="departments" id="navDepts">
+          <i data-lucide="layers"></i>
+          <span>Departments & Fees</span>
+        </button>
+        <button class="nav-item" data-view="performance" id="navPerformance">
+          <i data-lucide="trending-up"></i>
+          <span>Performance & Ratings</span>
+        </button>
+        <button class="nav-item" data-view="payouts" id="navPayouts">
+          <i data-lucide="banknote"></i>
+          <span>Doctor Token Claims</span>
+        </button>
+        <button class="nav-item" data-view="audit" id="navAudit">
+          <i data-lucide="history"></i>
+          <span>Admin Audit Trail</span>
+        </button>
+      </nav>
+
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+        <a href="../CareX-Owner-Admin/index.html" class="nav-external-link" id="returnOwnerConsoleLink">
+          <i data-lucide="arrow-left"></i>
+          <span>Owner Console</span>
+        </a>
+        <div class="system-status-indicator">
+          <span class="status-dot online"></span>
+          <div class="status-info">
+            <span class="status-name">CareX Platform</span>
+            <span class="status-mode" id="platformModeLabel">Production Ready</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="app-main">
+      
+      <!-- Top Header -->
+      <header class="admin-header" role="banner">
+        <div class="header-left">
+          <button class="mobile-toggle-btn" id="mobileMenuBtn" aria-label="Open navigation menu">
+            <i data-lucide="menu"></i>
+          </button>
+          
+          <div class="breadcrumb-container">
+            <nav aria-label="Breadcrumb">
+              <ol class="breadcrumb-list">
+                <li class="breadcrumb-item"><a href="../CareX-Owner-Admin/index.html">Platform Owner</a></li>
+                <li class="breadcrumb-separator"><i data-lucide="chevron-right"></i></li>
+                <li class="breadcrumb-item current" aria-current="page" id="breadcrumbCurrent">Doctor Directory</li>
+              </ol>
+            </nav>
+            <h1 class="page-header-title" id="pageHeaderTitle">Doctor Verification & Account Admin</h1>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <button class="btn-icon" id="quickRefreshBtn" title="Refresh records" aria-label="Refresh doctor directory">
+            <i data-lucide="refresh-cw"></i>
+          </button>
+          
+          <button class="btn-icon notifications-btn" id="headerNotificationsBtn" title="System alerts" aria-label="View system notifications">
+            <i data-lucide="bell"></i>
+            <span class="notification-badge" id="headerNotificationBadge">2</span>
+          </button>
+
+          <div class="header-user-profile" id="userProfileChip">
+            <div class="user-avatar" id="headerUserAvatar">SA</div>
+            <div class="user-meta">
+              <span class="user-name" id="headerUserName">Dr. Meera Iyer</span>
+              <span class="user-role" id="headerUserRole">Super Admin · Platform Owner</span>
+            </div>
+            <button class="btn-icon-subtle" id="logoutBtn" title="Sign out" aria-label="Log out of admin console">
+              <i data-lucide="log-out"></i>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Container -->
+      <main class="admin-content" id="mainContent" role="main">
+        
+        <!-- Top Flash / Notification Banner -->
+        <div class="notice-banner" id="noticeBanner" role="status">
+          <i data-lucide="info" class="notice-icon"></i>
+          <div class="notice-content">
+            <strong>CareX Doctor Administration Panel:</strong>
+            <span>Review doctor medical licenses, verify council credentials, approve registrations, configure consultation token fees, and audit doctor performance scores.</span>
+          </div>
+          <button class="notice-dismiss" id="dismissNoticeBtn" aria-label="Dismiss banner">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <!-- Dashboard KPI Statistics Cards -->
+        <section class="kpi-grid" aria-label="Doctor Key Performance Indicators">
+          <div class="kpi-card" data-kpi="total">
+            <div class="kpi-icon-wrapper teal">
+              <i data-lucide="stethoscope"></i>
+            </div>
+            <div class="kpi-body">
+              <span class="kpi-label">Total Doctors</span>
+              <div class="kpi-value-row">
+                <span class="kpi-value" id="kpiTotalDocs">1,284</span>
+                <span class="kpi-badge positive">+12 this wk</span>
+              </div>
+              <span class="kpi-subtext">Active registry network</span>
+            </div>
+          </div>
+
+          <div class="kpi-card highlight-amber" data-kpi="pending">
+            <div class="kpi-icon-wrapper amber">
+              <i data-lucide="shield-alert"></i>
+            </div>
+            <div class="kpi-body">
+              <span class="kpi-label">Pending Verification</span>
+              <div class="kpi-value-row">
+                <span class="kpi-value alert-text" id="kpiPendingDocs">2</span>
+                <span class="kpi-badge warning">Action Required</span>
+              </div>
+              <span class="kpi-subtext">Credentials awaiting review</span>
+            </div>
+          </div>
+
+          <div class="kpi-card" data-kpi="verified">
+            <div class="kpi-icon-wrapper green">
+              <i data-lucide="badge-check"></i>
+            </div>
+            <div class="kpi-body">
+              <span class="kpi-label">Verified Doctors</span>
+              <div class="kpi-value-row">
+                <span class="kpi-value" id="kpiVerifiedDocs">1,102</span>
+                <span class="kpi-badge positive">94.8% Active</span>
+              </div>
+              <span class="kpi-subtext">Clinically certified</span>
+            </div>
+          </div>
+
+          <div class="kpi-card" data-kpi="rating">
+            <div class="kpi-icon-wrapper indigo">
+              <i data-lucide="star"></i>
+            </div>
+            <div class="kpi-body">
+              <span class="kpi-label">Average Rating</span>
+              <div class="kpi-value-row">
+                <span class="kpi-value" id="kpiAvgRating">4.76</span>
+                <span class="kpi-rating-stars">★★★★★</span>
+              </div>
+              <span class="kpi-subtext">From 19,740 consultations</span>
+            </div>
+          </div>
+
+          <div class="kpi-card" data-kpi="fee">
+            <div class="kpi-icon-wrapper cyan">
+              <i data-lucide="coins"></i>
+            </div>
+            <div class="kpi-body">
+              <span class="kpi-label">Avg. Consultation Fee</span>
+              <div class="kpi-value-row">
+                <span class="kpi-value" id="kpiAvgFee">514</span>
+                <span class="kpi-badge neutral">tokens (~₹51)</span>
+              </div>
+              <span class="kpi-subtext">80% doctor / 20% CareX</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Main Workspace Section -->
+        <section class="admin-workspace-card">
+          
+          <!-- Workspace Header & Controls Bar -->
+          <div class="workspace-header">
+            <div class="workspace-tabs-group" role="tablist" aria-label="Doctor Views">
+              <button class="ws-tab active" role="tab" aria-selected="true" data-tab="all" id="tabAll">
+                All Doctors
+                <span class="tab-pill" id="tabCountAll">7</span>
+              </button>
+              <button class="ws-tab" role="tab" aria-selected="false" data-tab="Pending" id="tabPending">
+                Needs Verification
+                <span class="tab-pill alert" id="tabCountPending">2</span>
+              </button>
+              <button class="ws-tab" role="tab" aria-selected="false" data-tab="Verified" id="tabVerified">
+                Verified
+                <span class="tab-pill" id="tabCountVerified">4</span>
+              </button>
+              <button class="ws-tab" role="tab" aria-selected="false" data-tab="Suspended" id="tabSuspended">
+                Suspended / Inactive
+                <span class="tab-pill" id="tabCountSuspended">1</span>
+              </button>
+            </div>
+
+            <div class="workspace-actions">
+              <button class="btn btn-secondary" id="exportDirectoryBtn">
+                <i data-lucide="download"></i>
+                <span>Export CSV</span>
+              </button>
+              <button class="btn btn-primary" id="openAddDoctorModalBtn">
+                <i data-lucide="user-plus"></i>
+                <span>Add Doctor</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Search, Filtering and View Controls -->
+          <div class="filter-toolbar">
+            <div class="search-input-wrapper">
+              <i data-lucide="search" class="search-icon"></i>
+              <input 
+                type="text" 
+                id="doctorSearchInput" 
+                class="form-control search-input" 
+                placeholder="Search by doctor name, ID, specialization, license #…" 
+                aria-label="Search doctors"
+              >
+              <button class="search-clear-btn" id="searchClearBtn" aria-label="Clear search" hidden>
+                <i data-lucide="x"></i>
+              </button>
+            </div>
+
+            <div class="filter-dropdowns">
+              <div class="select-wrapper">
+                <select id="specialtyFilter" class="form-control form-select" aria-label="Filter by specialization">
+                  <option value="">All Specializations</option>
+                  <option value="Cardiology">Cardiology</option>
+                  <option value="General Medicine">General Medicine</option>
+                  <option value="Dermatology">Dermatology</option>
+                  <option value="Pediatrics">Pediatrics</option>
+                  <option value="Gynecology">Gynecology</option>
+                  <option value="Orthopedics">Orthopedics</option>
+                  <option value="Psychiatry">Psychiatry</option>
+                </select>
+              </div>
+
+              <div class="select-wrapper">
+                <select id="statusFilter" class="form-control form-select" aria-label="Filter by verification status">
+                  <option value="">All Statuses</option>
+                  <option value="Verified">Verified</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Suspended">Suspended</option>
+                  <option value="Rejected">Rejected</option>
+                </select>
+              </div>
+
+              <div class="select-wrapper">
+                <select id="sortFilter" class="form-control form-select" aria-label="Sort doctors">
+                  <option value="name-asc">Sort: Name (A-Z)</option>
+                  <option value="name-desc">Sort: Name (Z-A)</option>
+                  <option value="rating-desc">Sort: Highest Rated</option>
+                  <option value="fee-asc">Sort: Lowest Fee</option>
+                  <option value="fee-desc">Sort: Highest Fee</option>
+                  <option value="exp-desc">Sort: Most Experienced</option>
+                </select>
+              </div>
+
+              <div class="view-switch-group" role="group" aria-label="Change layout view">
+                <button class="view-btn active" id="viewModeTable" title="Table View" aria-pressed="true">
+                  <i data-lucide="list"></i>
+                </button>
+                <button class="view-btn" id="viewModeGrid" title="Card View" aria-pressed="false">
+                  <i data-lucide="layout-grid"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Filter Chips / Summary -->
+          <div class="active-filters-bar" id="activeFiltersBar" hidden>
+            <span class="active-filters-label">Active filters:</span>
+            <div class="filter-chips-list" id="filterChipsList"></div>
+            <button class="clear-all-filters-btn" id="clearAllFiltersBtn">Reset all</button>
+          </div>
+
+          <!-- Loading State Indicator -->
+          <div class="loading-state-wrapper" id="tableLoadingState" hidden>
+            <div class="spinner"></div>
+            <p>Loading doctor records from CareX registry…</p>
+          </div>
+
+          <!-- Empty State Indicator -->
+          <div class="empty-state-card" id="tableEmptyState" hidden>
+            <div class="empty-icon-wrap">
+              <i data-lucide="user-search"></i>
+            </div>
+            <h3 class="empty-title">No doctors found</h3>
+            <p class="empty-description">We couldn't find any doctor matching your current search or filter criteria. Try adjusting your search term or clearing filters.</p>
+            <button class="btn btn-secondary" id="emptyResetFiltersBtn">Reset Filters</button>
+          </div>
+
+          <!-- Table View Container -->
+          <div class="table-responsive-container" id="tableViewContainer">
+            <table class="carex-table doctor-table" id="doctorsTable" aria-label="Doctor Directory Table">
+              <thead>
+                <tr>
+                  <th scope="col" class="th-checkbox">
+                    <input type="checkbox" id="selectAllCheckbox" aria-label="Select all doctors in view">
+                  </th>
+                  <th scope="col" class="th-doctor">Doctor / Practitioner</th>
+                  <th scope="col" class="th-specialty">Specialization</th>
+                  <th scope="col" class="th-fee">Fee (Tokens)</th>
+                  <th scope="col" class="th-status">Status</th>
+                  <th scope="col" class="th-rating">Rating</th>
+                  <th scope="col" class="th-exp">Experience</th>
+                  <th scope="col" class="th-actions text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="doctorsTableBody">
+                <!-- Injected dynamically by admin.js -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Grid Cards View Container -->
+          <div class="doctor-grid-container" id="gridViewContainer" hidden>
+            <!-- Injected dynamically by admin.js -->
+          </div>
+
+          <!-- Table / Workspace Pagination & Footer -->
+          <div class="workspace-footer">
+            <div class="footer-meta">
+              Showing <span id="showingCount">7</span> of <span id="totalCount">7</span> registered doctors
+            </div>
+            <div class="footer-pagination">
+              <button class="btn-page" id="prevPageBtn" disabled aria-label="Previous page">
+                <i data-lucide="chevron-left"></i>
+              </button>
+              <span class="page-indicator">Page <b id="currentPageNum">1</b> of <b id="totalPagesNum">1</b></span>
+              <button class="btn-page" id="nextPageBtn" disabled aria-label="Next page">
+                <i data-lucide="chevron-right"></i>
+              </button>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- Secondary Operational Modules Grid -->
+        <section class="secondary-modules-grid">
+          
+          <!-- Verification Queue Quick-Review Card -->
+          <div class="module-card">
+            <div class="module-header">
+              <div class="module-title-wrap">
+                <i data-lucide="file-check-2" class="module-icon teal"></i>
+                <h2 class="module-title">Credential Verification Queue</h2>
+              </div>
+              <span class="badge badge-amber" id="pendingQueueCountBadge">2 Awaiting Review</span>
+            </div>
+            <div class="module-body">
+              <p class="module-desc">Doctors awaiting medical council registration check and identity clearance before being allowed to take live consultations.</p>
+              <div class="queue-list" id="quickVerificationList">
+                <!-- Injected dynamically by admin.js -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Specialization & Department Economics -->
+          <div class="module-card">
+            <div class="module-header">
+              <div class="module-title-wrap">
+                <i data-lucide="layers" class="module-icon indigo"></i>
+                <h2 class="module-title">Departments & Fee Ranges</h2>
+              </div>
+              <button class="btn btn-sm btn-secondary" id="manageDeptsBtn">Add Department</button>
+            </div>
+            <div class="module-body">
+              <div class="department-chips-grid" id="departmentStatsList">
+                <!-- Injected dynamically by admin.js -->
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+      </main>
+
+      <!-- App Footer -->
+      <footer class="admin-app-footer">
+        <div class="footer-left">
+          <span>&copy; <span id="currentYear">2026</span> CareX Healthcare System · Doctor Administration Console</span>
+        </div>
+        <div class="footer-right">
+          <span class="footer-tagline">Standard of Care · Clinical Integrity · Provider Security</span>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <!-- Modal Backdrop & Containers -->
+  <div class="modal-overlay" id="modalOverlay" aria-hidden="true">
+    <div class="modal-dialog" id="modalDialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <i data-lucide="stethoscope" class="modal-title-icon" id="modalTitleIcon"></i>
+          <h2 class="modal-title" id="modalTitle">Doctor Details</h2>
+        </div>
+        <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close dialog">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <!-- Injected dynamically by admin.js -->
+      </div>
+      <div class="modal-footer" id="modalFooter">
+        <!-- Injected dynamically by admin.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Reusable CareX Scripts (loaded safely if available) -->
+  <script src="../js/config.js"></script>
+  <script src="../js/supabase.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/common.js"></script>
+
+  <!-- Main Separate JavaScript file as required -->
+  <script src="./admin.js"></script>
+</body>
+</html>

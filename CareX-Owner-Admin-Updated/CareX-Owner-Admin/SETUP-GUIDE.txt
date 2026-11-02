@@ -1,0 +1,34 @@
+CAREX OWNER ADMIN PANEL - SETUP GUIDE
+=====================================
+
+1. OPEN THE DEMO
+   - Extract CareX-Owner-Admin.zip.
+   - Open CareX-Owner-Admin/index.html in Chrome, Edge, Firefox or Safari.
+   - Keep the css/, js/ and assets/ folders next to index.html.
+
+2. INTERNET NOTE
+   Chart.js, Lucide icons and the web font load from CDNs. Offline, the panel still
+   works but charts/icons will not draw.
+
+3. LOCAL SERVER (OPTIONAL)
+   cd CareX-Owner-Admin
+   python3 -m http.server 8080
+   Open http://localhost:8080
+
+4. WHAT TO TRY
+   - Click every sidebar item; use the tabs, search boxes and status filters.
+   - Complaint Investigation > Actions > "Investigate / decide" > Valid:
+     tokens are reversed to the user wallet and an adjustment ledger entry is added.
+   - 15-Day Doctor Payouts: change the conversion rate, approve or reject a claim.
+   - Token Package Configuration: create, edit, disable, feature, delete packages.
+   Reloading the page resets all demo data.
+
+5. IMPORTANT - THIS IS A DEMO
+   - No real login, no real security, no real money movement.
+   - Do not deploy this as an owner panel without a backend, database,
+     authentication and payment gateway integration. See README.md.
+
+6. EDITING
+   - Styles: css/style.css
+   - Data, pages and logic: js/app.js (integration points are listed at the top)
+   - Structure: index.html

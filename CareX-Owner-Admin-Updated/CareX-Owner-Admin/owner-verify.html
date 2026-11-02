@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#171A20">
+<title>Identity Verification | CareX Owner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+<link rel="stylesheet" href="css/owner-welcome.css">
+<link rel="stylesheet" href="css/owner-login.css">
+<link rel="stylesheet" href="css/owner-auth.css">
+</head>
+<body data-page="verify">
+<div class="glow" aria-hidden="true"></div>
+<main class="stage">
+  <header class="brand reveal" style="--d:0">
+    <svg class="mark" viewBox="0 0 48 48" aria-hidden="true">
+      <rect class="tile" x="1" y="1" width="46" height="46" rx="11" pathLength="1" />
+      <path class="heart" pathLength="1" d="M24 37S9 28 9 18a7.5 7.5 0 0 1 15-2 7.5 7.5 0 0 1 15 2c0 10-15 19-15 19z" />
+    </svg>
+    <span class="wordmark">CareX <em>Owner</em></span>
+  </header>
+  <section class="login" aria-label="Identity Verification">
+    <div class="card reveal" style="--d:1">
+      <p class="badge">DEMO &middot; SIMULATED</p>
+      <div id="stLoading" class="state" aria-live="polite">
+        <span class="spin" aria-hidden="true"></span>
+        <h1 tabindex="-1">Verifying Securely</h1>
+        <p class="sub">Please wait while we confirm your identity and permissions.</p>
+        <ol class="steps" id="steps">
+          <li>Checking owner identity</li>
+          <li>Confirming Owner role</li>
+          <li>Reviewing permissions</li>
+        </ol>
+      </div>
+      <div id="stOk" class="state" hidden>
+        <span class="ico ok" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span>
+        <h1 tabindex="-1">Owner Identity Confirmed</h1>
+        <p class="sub">Your Owner role and permissions were confirmed.</p>
+        <p class="notice demo-note"><b>Demo:</b> this result is simulated in your browser. In the live portal, only the server can grant Owner access.</p>
+        <a href="index.html" class="cta" id="dashBtn"><span>CONTINUE TO DASHBOARD</span></a>
+      </div>
+      <div id="stDenied" class="state" hidden>
+        <span class="ico lock" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>
+        <h1 tabindex="-1">Unauthorized Role</h1>
+        <p class="sub">This account does not hold the Owner role required for this portal.</p>
+        <a href="owner-access-denied.html" class="cta"><span>VIEW ACCESS DETAILS</span></a>
+      </div>
+      <div id="stExpired" class="state" hidden>
+        <span class="ico clock" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+        <h1 tabindex="-1">Session Expired</h1>
+        <p class="sub">Your session ended before verification finished.</p>
+        <a href="owner-session-expired.html" class="cta"><span>CONTINUE</span></a>
+      </div>
+      <div class="demo-bar" role="group" aria-label="Demo scenario">
+        <span>Preview scenario</span>
+        <button type="button" data-s="owner" aria-pressed="true">Verified owner</button>
+        <button type="button" data-s="denied" aria-pressed="false">Unauthorized role</button>
+        <button type="button" data-s="expired" aria-pressed="false">Session expired</button>
+      </div>
+      <a href="owner-login.html" class="back" id="backLink"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Cancel and return to login</a>
+    </div>
+    <p class="secure sec-note">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 4.5 5.5v5.8c0 4.6 3.1 8.6 7.5 10.2 4.4-1.6 7.5-5.6 7.5-10.2V5.5L12 2.5Z"/><path d="m8.8 12 2.3 2.3 4.2-4.6"/></svg>
+      <span>Owner access is confirmed on the server in the live portal, never by this page.</span>
+    </p>
+  </section>
+</main>
+<footer class="foot reveal" style="--d:2">
+  <span class="foot-brand">CareX</span>
+  <span>&copy; <span id="year">2026</span> CareX. All rights reserved.</span>
+</footer>
+<script src="js/owner-auth.js"></script>
+</body>
+</html>

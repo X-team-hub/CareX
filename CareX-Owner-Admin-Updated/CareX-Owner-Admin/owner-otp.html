@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#171A20">
+<title>Email Verification | CareX Owner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+<link rel="stylesheet" href="css/owner-welcome.css">
+<link rel="stylesheet" href="css/owner-login.css">
+<link rel="stylesheet" href="css/owner-auth.css">
+</head>
+<body data-page="otp">
+<div class="glow" aria-hidden="true"></div>
+<main class="stage">
+  <header class="brand reveal" style="--d:0">
+    <svg class="mark" viewBox="0 0 48 48" aria-hidden="true">
+      <rect class="tile" x="1" y="1" width="46" height="46" rx="11" pathLength="1" />
+      <path class="heart" pathLength="1" d="M24 37S9 28 9 18a7.5 7.5 0 0 1 15-2 7.5 7.5 0 0 1 15 2c0 10-15 19-15 19z" />
+    </svg>
+    <span class="wordmark">CareX <em>Owner</em></span>
+  </header>
+  <section class="login" aria-label="Email Verification">
+    <div class="card reveal" style="--d:1">
+      <p class="badge">DEMO &middot; SIMULATED</p>
+      <div id="stForm">
+        <h1 id="title" tabindex="-1">Verify Your Email</h1>
+        <p class="sub" id="otpSub">Enter the 6-digit code to continue.</p>
+        <p class="notice demo-note">Demo mode: no code was sent. Enter <b>123456</b> to preview success, <b>000000</b> for an expired code, or any other code for an invalid code.</p>
+        <form id="otpForm" novalidate>
+          <div class="field">
+            <label id="otpLabel">Six-digit verification code</label>
+            <div class="otp" id="otp" role="group" aria-labelledby="otpLabel"></div>
+            <p class="err" id="otpErr" role="alert"></p>
+          </div>
+          <button type="submit" class="cta" id="submitBtn"><span>VERIFY CODE</span></button>
+          <p id="notice" class="notice" role="status" aria-live="polite" hidden></p>
+        </form>
+        <div class="row resend">
+          <span id="resendText" class="muted">Resend available in 0:30</span>
+          <button type="button" class="link linkbtn" id="resendBtn" disabled>Resend code</button>
+        </div>
+        <div class="row"><a href="owner-login.html" class="link" id="changeEmail">Change email</a></div>
+      </div>
+      <div id="stDone" class="state" hidden>
+        <span class="ico ok" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span>
+        <h1 tabindex="-1">Code Verified</h1>
+        <p class="sub"><strong>Demo:</strong> verification simulated. The password reset step will be added with the secure backend.</p>
+        <a href="owner-login.html" class="cta"><span>RETURN TO LOGIN</span></a>
+      </div>
+      <a href="owner-login.html" class="back" id="backLink"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Back to Login</a>
+    </div>
+    <p class="secure sec-note">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 4.5 5.5v5.8c0 4.6 3.1 8.6 7.5 10.2 4.4-1.6 7.5-5.6 7.5-10.2V5.5L12 2.5Z"/><path d="m8.8 12 2.3 2.3 4.2-4.6"/></svg>
+      <span>Never share a verification code with anyone, including people claiming to be CareX staff.</span>
+    </p>
+  </section>
+</main>
+<footer class="foot reveal" style="--d:2">
+  <span class="foot-brand">CareX</span>
+  <span>&copy; <span id="year">2026</span> CareX. All rights reserved.</span>
+</footer>
+<script src="js/owner-auth.js"></script>
+</body>
+</html>

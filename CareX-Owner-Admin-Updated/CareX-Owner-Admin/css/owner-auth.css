@@ -1,0 +1,83 @@
+/* CareX Owner auth flow screens. Builds on owner-welcome.css and owner-login.css. */
+[hidden]{display:none!important}
+.muted{color:var(--cx-muted)}
+.hint{margin:8px 0 0;font-size:.78rem;line-height:1.5;color:rgba(250,247,240,.5)}
+
+.badge{display:inline-flex;align-items:center;gap:8px;margin:0 0 20px;padding:5px 10px;border:1px solid var(--cx-line);
+  border-radius:2px;font-size:.66rem;font-weight:700;letter-spacing:.16em;color:var(--cx-gold)}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--cx-gold)}
+.demo-note{margin:0 0 22px!important;font-size:.82rem!important;line-height:1.55}
+.demo-note b{color:var(--cx-gold);font-weight:600}
+.card h1:focus{outline:none}
+
+/* Buttons: anchors styled as the primary button, plus a ghost variant */
+a.cta{display:flex;align-items:center;justify-content:center;text-decoration:none}
+.card .cta+.cta{margin-top:12px}
+.cta.ghost{background:transparent;color:var(--cx-gold)}
+.cta.ghost:hover{background:rgba(198,161,90,.1);box-shadow:none}
+.cta:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.linkbtn{border:0;padding:0 0 2px;cursor:pointer;font-family:inherit}
+.linkbtn:disabled{opacity:.4;cursor:not-allowed;background-size:0 1px}
+.card .row+.row{margin-top:14px}
+.resend{margin-top:22px}
+.resend .muted{font-size:.82rem}
+
+/* Six-digit code boxes */
+.otp{display:flex;gap:clamp(6px,2vw,10px)}
+.field .otp input{flex:1;min-width:0;width:100%;height:58px;padding:0;text-align:center;
+  font:600 1.5rem var(--sans);caret-color:var(--cx-gold)}
+.hint+.err,.err+.hint{margin-top:6px}
+
+/* Status illustrations */
+.state{text-align:center}
+.state .sub{margin-left:auto;margin-right:auto;max-width:32em}
+.state .cta{margin-top:8px}
+.state h1{font-size:clamp(1.9rem,6vw,2.4rem)}
+.ico{display:grid;place-items:center;width:64px;height:64px;margin:0 auto 20px;border-radius:50%;
+  border:1px solid var(--cx-line);background:rgba(198,161,90,.08);color:var(--cx-gold);animation:pop .6s var(--ease)}
+.ico svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.ico.bad,.ico.lock{color:#EBA597;border-color:rgba(224,138,122,.45);background:rgba(224,138,122,.08)}
+.ico.clock{color:var(--cx-gold)}
+@keyframes pop{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:none}}
+.spin{display:block;width:56px;height:56px;margin:0 auto 22px;border-radius:50%;
+  border:2px solid var(--cx-line);border-top-color:var(--cx-gold);animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.warn-box{margin:0 0 22px!important;text-align:left}
+.warn-box b{color:#EBA597}
+
+/* Verification steps */
+.steps{list-style:none;margin:22px 0 4px;padding:0;text-align:left;display:inline-block}
+.steps li{position:relative;padding:6px 0 6px 30px;font-size:.88rem;color:rgba(250,247,240,.4);transition:color .4s}
+.steps li::before{content:"";position:absolute;left:2px;top:50%;width:14px;height:14px;margin-top:-7px;border-radius:50%;
+  border:1px solid rgba(250,247,240,.3);transition:.4s}
+.steps li.done{color:var(--cx-ivory)}
+.steps li.done::before{background:var(--cx-gold);border-color:var(--cx-gold)}
+
+/* Device information */
+.status{display:flex;align-items:center;gap:10px;margin:0 0 20px;padding:10px 14px;font-size:.85rem;font-weight:500;
+  border:1px solid var(--cx-line);border-radius:3px;background:rgba(198,161,90,.07)}
+.status .dot{flex:none;width:8px;height:8px;border-radius:50%;background:var(--cx-gold)}
+.status.ok .dot{box-shadow:0 0 0 4px rgba(198,161,90,.2)}
+.status.busy .dot{animation:blink 1s ease-in-out infinite}
+@keyframes blink{50%{opacity:.25}}
+.info{margin:0 0 6px}
+.info div{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid rgba(250,247,240,.08);font-size:.85rem}
+.info dt{flex:none;color:var(--cx-muted)}
+.info dd{margin:0;text-align:right;color:var(--cx-ivory);overflow-wrap:anywhere}
+#devInfo+.hint{margin:10px 0 4px}
+#continueBtn{margin-top:22px}
+
+/* Demo scenario switcher (verification page) */
+.demo-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;margin-top:26px;padding-top:18px;
+  border-top:1px solid rgba(250,247,240,.08);font-size:.76rem;color:var(--cx-muted)}
+.demo-bar span{width:100%;text-align:center}
+.demo-bar button{cursor:pointer;padding:8px 12px;font:500 .76rem var(--sans);color:var(--cx-ivory);background:transparent;
+  border:1px solid rgba(250,247,240,.2);border-radius:2px;transition:.25s}
+.demo-bar button:hover{border-color:var(--cx-gold)}
+.demo-bar button[aria-pressed="true"]{color:#171A20;background:var(--cx-gold);border-color:var(--cx-gold)}
+.demo-bar button:focus-visible{outline:2px solid var(--cx-gold);outline-offset:3px}
+
+@media (max-width:520px){.field .otp input{height:52px;font-size:1.3rem}.info div{flex-direction:column;gap:2px}.info dd{text-align:left}}
+@media (prefers-reduced-motion:reduce){.steps li,.steps li::before{transition:none}}
+.card>.row{margin-top:18px}
+@media (max-width:520px){.card .cta{letter-spacing:.13em;padding-left:16px;padding-right:16px}}

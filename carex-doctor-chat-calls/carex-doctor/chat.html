@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Messages · CareX</title>
+<style>
+:root{--bg:#FFF5F8;--pri:#D65C80;--sec:#81516D;--ink:#5C3D50;--w:#FFFFFF;--line:#F4DDE6;--soft:#FCE9F0;--gold:#E9B44C;--mut:#A98A9B;--r:20px}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font:15px/1.45 "Avenir Next",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid rgba(214,92,128,.45);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.ic.sm{width:14px;height:14px}
+/* layout: single column on mobile, split view on desktop */
+.app{height:100dvh;max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1fr;position:relative}
+.list-panel{display:flex;flex-direction:column;min-height:0;padding:max(16px,env(safe-area-inset-top)) 16px 92px;overflow-y:auto}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+h1{font:700 30px/1.1 "Iowan Old Style",Georgia,serif;color:var(--sec);letter-spacing:-.01em}
+.icon-btn{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--w);color:var(--pri);box-shadow:0 2px 10px rgba(129,81,109,.12);transition:transform .2s}
+.icon-btn:active{transform:scale(.92)}
+.search{position:relative;margin-bottom:14px}
+.search .ic{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--mut)}
+.search input{width:100%;height:48px;border-radius:24px;border:1.5px solid var(--line);background:var(--w);padding:0 44px 0 46px;outline:0;transition:border-color .2s,box-shadow .2s}
+.search input:focus{border-color:var(--pri);box-shadow:0 0 0 4px rgba(214,92,128,.12)}
+.search .clr{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:32px;height:32px;display:none;place-items:center;border-radius:50%;color:var(--mut)}
+.search.has .clr{display:grid}
+.card{background:var(--w);border-radius:var(--r);box-shadow:0 4px 18px rgba(129,81,109,.08)}
+.results{margin-bottom:14px;padding:6px 14px}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:4px;background:var(--soft);border-radius:16px;margin-bottom:16px}
+.tab{height:40px;border-radius:12px;font-weight:600;color:var(--sec);transition:background .25s,color .25s,box-shadow .25s;display:flex;align-items:center;justify-content:center;gap:6px}
+.tab[aria-selected=true]{background:var(--w);color:var(--pri);box-shadow:0 2px 8px rgba(129,81,109,.14)}
+.badge{min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--pri);color:#fff;font-size:11px;font-weight:700;display:grid;place-items:center}
+.view{animation:tabin .3s ease both}
+@keyframes tabin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+h2{font-size:13px;font-weight:700;color:var(--sec);margin:4px 2px 10px}
+/* avatars */
+.av{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;color:#fff;font:700 19px "Iowan Old Style",Georgia,serif;flex:none;position:relative}
+.av.sm{width:38px;height:38px;font-size:16px}
+.av.lg{width:60px;height:60px;font-size:24px}
+.dot{position:absolute;right:0;bottom:1px;width:13px;height:13px;border-radius:50%;background:#43C28A;border:2.5px solid var(--w)}
+/* status */
+.stories{display:flex;gap:14px;overflow-x:auto;padding:2px 2px 14px;margin-bottom:6px;scrollbar-width:none;scroll-snap-type:x proximity}
+.stories::-webkit-scrollbar{display:none}
+.story{display:flex;flex-direction:column;align-items:center;gap:6px;width:68px;flex:none;font-size:12px;scroll-snap-align:start}
+.story span.n{max-width:68px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ring{padding:3px;border-radius:50%;background:linear-gradient(135deg,var(--pri),var(--gold))}
+.ring.seen{background:var(--line)}
+.ring .av{border:3px solid var(--bg);width:60px;height:60px}
+.ring.me{background:none;border:2px dashed var(--pri);position:relative}
+.ring.me .av{background:var(--soft)!important;color:var(--pri)}
+.plus{position:absolute;right:-2px;bottom:-2px;width:22px;height:22px;border-radius:50%;background:var(--pri);color:#fff;display:grid;place-items:center;border:2px solid var(--bg)}
+.plus .ic{width:12px;height:12px;stroke-width:3}
+/* chat rows */
+.row{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 14px;border-radius:var(--r);transition:background .2s}
+.row+.row{margin-top:2px}
+.row:hover,.row.active{background:var(--w);box-shadow:0 4px 18px rgba(129,81,109,.08)}
+.row .mid{flex:1;min-width:0}
+.nm{font-weight:700;display:flex;align-items:center;gap:6px}
+.pv{color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px}
+.row.unread .pv{color:var(--ink);font-weight:600}
+.meta{display:flex;flex-direction:column;align-items:flex-end;gap:6px;font-size:12px;color:var(--mut)}
+.cnt{min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--pri);color:#fff;font-weight:700;display:grid;place-items:center}
+.tm{color:var(--pri);display:inline-flex}
+/* user cards & buttons */
+.person{display:flex;align-items:center;gap:12px;padding:12px 0}
+.person+.person{border-top:1px solid var(--line)}
+.person .mid{flex:1;min-width:0}
+.cid{font-size:13px;color:var(--mut)}
+.btn{height:36px;padding:0 16px;border-radius:18px;font-weight:700;font-size:14px;display:inline-flex;align-items:center;gap:6px;transition:transform .15s,opacity .2s}
+.btn:active{transform:scale(.95)}
+.btn.p{background:var(--pri);color:#fff}
+.btn.g{background:var(--soft);color:var(--sec)}
+.btn.o{border:1.5px solid var(--line);color:var(--sec);background:var(--w)}
+.btn[disabled]{opacity:.65;cursor:default}
+.acts{display:flex;gap:8px}
+.pill{font-size:12px;font-weight:700;color:var(--sec);background:var(--soft);padding:5px 12px;border-radius:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.sug{padding:18px 12px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;animation:tabin .35s ease both}
+.sug .btn{margin-top:10px}
+.head-line{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+/* states */
+.empty{text-align:center;padding:36px 20px;color:var(--mut)}
+.empty svg.art{width:120px;height:120px;margin-bottom:8px}
+.empty b{display:block;color:var(--sec);font-size:17px;margin-bottom:4px}
+.skel{height:74px;border-radius:var(--r);margin-bottom:8px;background:linear-gradient(90deg,var(--soft),#fff 50%,var(--soft));background-size:200% 100%;animation:sh 1.2s infinite}
+@keyframes sh{to{background-position:-200% 0}}
+/* chat panel */
+.chat-panel{position:fixed;inset:0;z-index:30;background:var(--bg);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .32s cubic-bezier(.2,.8,.2,1)}
+.app.chat-open .chat-panel{transform:none}
+.ch-empty{display:none}
+.ch-head{display:flex;align-items:center;gap:10px;padding:max(10px,env(safe-area-inset-top)) 12px 10px;background:var(--w);box-shadow:0 2px 14px rgba(129,81,109,.08)}
+.ch-head .who{flex:1;min-width:0}
+.ch-head .st{font-size:12px;color:var(--mut)}
+.ch-head .st.on{color:#2FA774}
+.notice{display:flex;gap:8px;align-items:center;justify-content:center;font-size:12px;color:var(--sec);background:var(--soft);padding:7px 14px}
+.msgs{flex:1;overflow-y:auto;padding:16px 14px;display:flex;flex-direction:column;gap:8px}
+.b{max-width:78%;padding:9px 13px 6px;border-radius:20px;position:relative;word-wrap:break-word;animation:pop .25s ease both;transition:opacity .35s,transform .35s,max-height .35s}
+@keyframes pop{from{opacity:0;transform:scale(.94)}}
+.b.them{align-self:flex-start;background:var(--w);border-bottom-left-radius:6px;box-shadow:0 2px 8px rgba(129,81,109,.07)}
+.b.me{align-self:flex-end;background:linear-gradient(135deg,var(--pri),#E57E9B);color:#fff;border-bottom-right-radius:6px}
+.b.gone{opacity:0;transform:scale(.85)}
+.b .info{display:flex;align-items:center;justify-content:flex-end;gap:6px;font-size:11px;opacity:.8;margin-top:3px}
+.b .tmr{display:inline-flex;align-items:center;gap:3px;font-variant-numeric:tabular-nums}
+.b.them .tmr{color:var(--pri)}
+.rcpt.read{color:#FFE9A8}
+.img-msg{display:block;width:230px;max-width:100%;border-radius:14px;overflow:hidden;margin-bottom:2px}
+.img-msg img{display:block;width:100%;height:auto}
+.composer{display:flex;align-items:center;gap:8px;padding:10px 12px max(12px,env(safe-area-inset-bottom));background:var(--w);position:relative}
+.composer input[type=text]{flex:1;height:44px;border-radius:22px;border:1.5px solid var(--line);padding:0 16px;outline:0;background:var(--bg)}
+.composer input[type=text]:focus{border-color:var(--pri)}
+.composer .icon-btn{box-shadow:none;background:none;width:40px;height:40px}
+.send{background:var(--pri)!important;color:#fff!important}
+.emo{position:absolute;bottom:68px;left:12px;background:var(--w);border-radius:16px;box-shadow:0 8px 28px rgba(129,81,109,.2);padding:8px;display:none;grid-template-columns:repeat(6,1fr);gap:2px}
+.emo.on{display:grid}
+.emo button{font-size:22px;width:40px;height:40px;border-radius:10px}
+.emo button:hover{background:var(--soft)}
+/* bottom nav */
+.bottom{position:fixed;left:12px;right:12px;bottom:max(10px,env(safe-area-inset-bottom));z-index:20;display:flex;justify-content:space-around;background:var(--w);border-radius:26px;padding:8px;box-shadow:0 8px 30px rgba(129,81,109,.18)}
+.bottom a{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:600;color:var(--mut);text-decoration:none;padding:6px 18px;border-radius:18px}
+.bottom a[aria-current=page]{color:var(--pri);background:var(--soft)}
+#lightbox{position:fixed;inset:0;z-index:60;background:rgba(60,30,45,.82);display:none;align-items:center;justify-content:center;padding:20px}
+#lightbox.on{display:flex}
+#lightbox img{max-width:100%;max-height:86vh;border-radius:18px}
+#lightbox button{position:absolute;top:max(16px,env(safe-area-inset-top));right:16px;width:42px;height:42px;border-radius:50%;background:#fff;color:var(--sec);display:grid;place-items:center}
+#toast{position:fixed;left:50%;bottom:104px;transform:translate(-50%,20px);background:var(--sec);color:#fff;padding:10px 18px;border-radius:20px;font-size:14px;opacity:0;pointer-events:none;transition:.3s;z-index:70;max-width:90vw;text-align:center}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+/* desktop split view */
+@media (min-width:900px){
+ .app{grid-template-columns:400px 1fr;gap:0;padding:20px 20px 20px}
+ .list-panel{padding:8px 20px 8px 4px}
+ .chat-panel{position:relative;inset:auto;transform:none;border-radius:28px;overflow:hidden;background:var(--w);box-shadow:0 10px 40px rgba(129,81,109,.12);z-index:1}
+ .msgs{background:var(--bg)}
+ .ch-empty{display:flex;flex:1;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--mut);padding:30px}
+ .ch-empty b{color:var(--sec);font-size:19px}
+ .app:not(.chat-open) .ch-head,.app:not(.chat-open) .notice,.app:not(.chat-open) .msgs,.app:not(.chat-open) .composer{display:none}
+ .app.chat-open .ch-empty{display:none}
+ .back{display:none!important}
+ .bottom{display:none}
+ #toast{bottom:30px}
+}
+@media (min-width:600px) and (max-width:899px){.list-panel{padding-left:max(16px,calc(50% - 320px));padding-right:max(16px,calc(50% - 320px))}.bottom{left:50%;right:auto;width:440px;transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<!-- Lucide-style icon sprite (inline SVG, no external library) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14M12 5v14"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+<symbol id="i-edit" viewBox="0 0 24 24"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.4 2.6a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4Z"/></symbol>
+<symbol id="i-back" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7M19 12H5"/></symbol>
+<symbol id="i-smile" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></symbol>
+<symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></symbol>
+<symbol id="i-send" viewBox="0 0 24 24"><path d="M14.5 21.7a.5.5 0 0 0 .9 0l6.5-19a.5.5 0 0 0-.6-.6l-19 6.5a.5.5 0 0 0 0 .9l7.9 3.2a2 2 0 0 1 1.1 1.1Z"/><path d="m21.9 2.1-10.9 10.9"/></symbol>
+<symbol id="i-timer" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+<symbol id="i-checks" viewBox="0 0 24 24"><path d="M18 6 7 17l-5-5M22 10l-7.5 7.5L13 16"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+<symbol id="i-userplus" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.8 9.8 0 0 1 6.7 2.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-9 9 9.8 9.8 0 0 1-6.7-2.7L3 16M8 16H3v5"/></symbol>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 22V12h6v10"/></symbol>
+<symbol id="i-msg" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
+<symbol id="i-heart" viewBox="0 0 24 24"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.500-2.700-2-4.500-2A5.500 5.500 0 0 0 2 8.500c0 2.300 1.500 4 3 5.500l7 7Z"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+</svg>
+
+<div class="app" id="app">
+  <main class="list-panel">
+    <header class="top">
+      <h1>Messages</h1>
+      <button class="icon-btn" id="newMsg" aria-label="New message"><svg class="ic"><use href="#i-edit"/></svg></button>
+    </header>
+
+    <div class="search" id="searchWrap">
+      <label for="q" class="sr">Search by CareX User ID</label>
+      <svg class="ic"><use href="#i-search"/></svg>
+      <input id="q" type="search" placeholder="Search by CareX User ID..." autocomplete="off" inputmode="text">
+      <button class="clr" id="clr" aria-label="Clear search"><svg class="ic sm"><use href="#i-x"/></svg></button>
+    </div>
+    <section class="card results" id="results" hidden aria-live="polite"></section>
+
+    <div class="tabs" role="tablist" aria-label="Messages sections">
+      <button class="tab" role="tab" id="t-inbox" data-tab="inbox" aria-selected="true">Inbox</button>
+      <button class="tab" role="tab" id="t-requests" data-tab="requests" aria-selected="false">Requests <span class="badge" id="reqBadge" hidden></span></button>
+      <button class="tab" role="tab" id="t-find" data-tab="find" aria-selected="false">Find Friends</button>
+    </div>
+    <div id="view" class="view" role="tabpanel"></div>
+  </main>
+
+  <section class="chat-panel" id="chatPanel" aria-label="Private chat">
+    <div class="ch-empty"><svg class="ic" style="width:48px;height:48px;color:var(--pri);margin-bottom:10px"><use href="#i-msg"/></svg><b>Your private messages</b><span>Pick a conversation to start chatting.</span></div>
+    <header class="ch-head">
+      <button class="icon-btn back" id="back" aria-label="Back to messages"><svg class="ic"><use href="#i-back"/></svg></button>
+      <span id="chAv"></span>
+      <div class="who"><div class="nm" id="chName"></div><div class="st" id="chSt"></div></div>
+    </header>
+    <div class="notice"><svg class="ic sm"><use href="#i-timer"/></svg>Messages disappear 2 minutes after they are read</div>
+    <div class="msgs" id="msgs" aria-live="polite"></div>
+    <form class="composer" id="composer" autocomplete="off">
+      <div class="emo" id="emo" role="group" aria-label="Emoji"></div>
+      <button type="button" class="icon-btn" id="emoBtn" aria-label="Add emoji"><svg class="ic"><use href="#i-smile"/></svg></button>
+      <button type="button" class="icon-btn" id="imgBtn" aria-label="Attach image"><svg class="ic"><use href="#i-image"/></svg></button>
+      <input type="file" id="file" accept="image/*" hidden>
+      <label for="msgIn" class="sr">Message</label>
+      <input type="text" id="msgIn" placeholder="Message...">
+      <button type="submit" class="icon-btn send" aria-label="Send message"><svg class="ic"><use href="#i-send"/></svg></button>
+    </form>
+  </section>
+</div>
+
+<!-- Link targets are placeholders; point them at your existing CareX pages. -->
+<nav class="bottom" aria-label="Main navigation">
+  <a href="#"><svg class="ic"><use href="#i-home"/></svg>Home</a>
+  <a href="#"><svg class="ic"><use href="#i-heart"/></svg>Cycle</a>
+  <a href="chat.html" aria-current="page"><svg class="ic"><use href="#i-msg"/></svg>Chat</a>
+  <a href="#"><svg class="ic"><use href="#i-user"/></svg>Profile</a>
+</nav>
+
+<div id="lightbox" role="dialog" aria-label="Image preview"><button aria-label="Close preview"><svg class="ic"><use href="#i-x"/></svg></button><img alt="Image preview"></div>
+<div id="toast" role="status"></div>
+
+<script>
+/* =====================================================================
+   CareX · Messages — FRONTEND PROTOTYPE ONLY
+   No database, authentication or real-time messaging is connected.
+   All users, chats and requests below are sample data held in memory.
+
+   DISAPPEARING MESSAGES — SECURITY NOTE
+   Rule demonstrated: a message disappears 120s after it is marked READ.
+   The countdown starts at `readAt` (never at send time). Unread messages
+   have no timer. Text, image and video previews follow the same rule.
+   Removing a message from the UI is NOT secure deletion. Anyone can copy
+   it, screenshot it or keep the network response. Real deletion of the
+   message row AND its media files (storage bucket, CDN, backups) must be
+   done by a backend job that stores `read_at`, computes `expires_at =
+   read_at + 120s`, and deletes server-side. Treat this UI as a display only.
+   ===================================================================== */
+const $ = s => document.querySelector(s);
+const TTL = 120000;
+const ic = (n, c = '') => `<svg class="ic ${c}" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+const esc = s => s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+const USERS = [
+  ['CX-2041','Aanya Rao'],['CX-3377','Maya Collins'],['CX-1190','Zara Ahmed'],['CX-8842','Priya Nair'],
+  ['CX-5516','Lena Fischer'],['CX-7023','Noor Hassan'],['CX-4468','Sofia Mendez'],['CX-9120','Ivy Tanaka'],
+  ['CX-6305','Amara Okafor'],['CX-2788','Elif Demir'],['CX-1654','Hana Kim'],['CX-3901','Rhea Kapoor']
+].map(([id, name], i) => ({ id, name, c: i % 5 }));
+const U = id => USERS.find(u => u.id === id);
+const GRAD = [['#D65C80','#EFA6BC'],['#81516D','#C48FAB'],['#E0866A','#F5BBA6'],['#B25A8A','#E6A5C7'],['#C2527A','#E9B44C']];
+const av = (u, s = '', online) => `<span class="av ${s}" style="background:linear-gradient(135deg,${GRAD[u.c][0]},${GRAD[u.c][1]})">${u.name[0]}${online ? '<i class="dot"></i>' : ''}</span>`;
+const sampleImg = (a, b) => 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="480" height="320"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs><rect width="480" height="320" fill="url(#g)"/><circle cx="340" cy="100" r="46" fill="#fff" opacity=".55"/><path d="M0 320 160 160l110 110 70-60 140 110Z" fill="#fff" opacity=".4"/></svg>`);
+
+let seq = 0;
+const T0 = Date.now();
+const msg = (from, type, text, ago, readAgo, src) => ({ id: ++seq, from, type, text, src, t: T0 - ago * 1000, readAt: readAgo == null ? null : T0 - readAgo * 1000 });
+
+const st = {
+  tab: 'inbox', loading: true, open: null, sugg: [],
+  chats: [
+    { uid: 'CX-2041', online: true, msgs: [
+      msg('them','text','Hi! Did the cycle reminder work for you?',540,70),
+      msg('me','text','Yes, it was really helpful 🌸',500,40),
+      msg('them','text','Great! Sending you the article I mentioned.',60,null),
+      msg('them','image','',50,null,sampleImg('#D65C80','#F3B5C7'))] },
+    { uid: 'CX-3377', online: false, msgs: [msg('them','text','Are we still on for the wellness call tomorrow?',3600,null)] },
+    { uid: 'CX-1190', online: true, msgs: [msg('them','text','Thank you for the tips 💗',7200,null), msg('them','text','Talk soon!',7100,null)] },
+    { uid: 'CX-8842', online: false, msgs: [msg('me','text','Hope you feel better soon',86400,null)] }
+  ],
+  received: ['CX-5516','CX-7023'],
+  sent: ['CX-4468'],
+  stories: [['CX-2041',0],['CX-1190',0],['CX-3377',0],['CX-8842',1],['CX-9120',1],['CX-6305',0]]
+};
+
+/* ---------- helpers ---------- */
+const chatOf = uid => st.chats.find(c => c.uid === uid);
+const stateOf = uid => chatOf(uid) ? 'connected' : st.sent.includes(uid) ? 'sent' : st.received.includes(uid) ? 'received' : 'none';
+const fmtTime = t => new Date(t).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+const ago = t => { const m = Math.floor((Date.now() - t) / 60000); return m < 1 ? 'now' : m < 60 ? m + 'm' : m < 1440 ? Math.floor(m / 60) + 'h' : Math.floor(m / 1440) + 'd'; };
+const mmss = ms => { const s = Math.max(0, Math.ceil(ms / 1000)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+const unread = c => c.msgs.filter(m => m.from === 'them' && !m.readAt).length;
+let toastT;
+function toast(t) { const e = $('#toast'); e.textContent = t; e.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => e.classList.remove('on'), 2200); }
+const emptyArt = `<svg class="art" viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="52" fill="#FCE9F0"/><rect x="26" y="34" width="56" height="40" rx="16" fill="#D65C80"/><path d="M40 74l-6 14 18-14Z" fill="#D65C80"/><rect x="48" y="52" width="48" height="34" rx="14" fill="#fff" stroke="#81516D" stroke-width="3"/><circle cx="62" cy="69" r="3" fill="#81516D"/><circle cx="72" cy="69" r="3" fill="#81516D"/><circle cx="82" cy="69" r="3" fill="#81516D"/></svg>`;
+const empty = (t, s) => `<div class="empty">${emptyArt}<b>${t}</b>${s}</div>`;
+
+function connectBtn(uid) {
+  const s = stateOf(uid);
+  if (s === 'connected') return `<button class="btn g" disabled>${ic('check','sm')}Connected</button>`;
+  if (s === 'sent') return `<button class="btn g" disabled>Requested</button>`;
+  if (s === 'received') return `<button class="btn o" data-go="requests">Respond</button>`;
+  return `<button class="btn p" data-connect="${uid}">${ic('userplus','sm')}Connect</button>`;
+}
+
+/* ---------- render: tabs ---------- */
+function renderView() {
+  const v = $('#view');
+  v.style.animation = 'none'; v.offsetHeight; v.style.animation = '';
+  document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', t.dataset.tab === st.tab));
+  v.setAttribute('aria-labelledby', 't-' + st.tab);
+  const b = $('#reqBadge'); b.hidden = !st.received.length; b.textContent = st.received.length;
+  if (st.loading) { v.innerHTML = '<div class="skel"></div>'.repeat(4); return; }
+  v.innerHTML = st.tab === 'inbox' ? inboxHTML() : st.tab === 'requests' ? requestsHTML() : findHTML();
+}
+
+function inboxHTML() {
+  const stories = `<div class="stories" aria-label="Status updates">
+    <button class="story"><span class="ring me"><span class="av lg" style="background:var(--soft)">You<i class="plus">${ic('plus')}</i></span></span><span class="n">Your Status</span></button>
+    ${st.stories.map(([id, seen]) => { const u = U(id); return `<button class="story" data-story="${id}"><span class="ring ${seen ? 'seen' : ''}">${av(u, 'lg')}</span><span class="n">${u.name.split(' ')[0]}</span></button>`; }).join('')}</div>`;
+  const list = [...st.chats].sort((a, b) => lastT(b) - lastT(a));
+  const rows = list.map(c => {
+    const u = U(c.uid), n = unread(c), l = c.msgs[c.msgs.length - 1];
+    const pv = l ? (l.from === 'me' ? 'You: ' : '') + (l.type === 'image' ? '📷 Photo' : esc(l.text)) : 'No messages yet';
+    return `<button class="row ${n ? 'unread' : ''} ${st.open === c.uid ? 'active' : ''}" data-chat="${c.uid}">
+      ${av(u, '', c.online)}<span class="mid"><span class="nm">${esc(u.name)}<span class="tm" title="Disappearing messages on">${ic('timer','sm')}</span></span><span class="pv">${pv}</span></span>
+      <span class="meta"><span>${l ? ago(l.t) : ''}</span>${n ? `<span class="cnt">${n}</span>` : ''}</span></button>`;
+  }).join('');
+  return stories + '<h2>Chats</h2>' + (rows || empty('Your inbox is empty', 'Find friends to start a private conversation.<br><br><button class="btn p" data-go="find">Find friends</button>'));
+}
+const lastT = c => c.msgs.length ? c.msgs[c.msgs.length - 1].t : 0;
+
+function requestsHTML() {
+  if (!st.received.length && !st.sent.length) return empty('No requests', 'New connection requests will show up here.');
+  const rec = st.received.map(id => { const u = U(id); return `<div class="person">${av(u)}<div class="mid"><div class="nm">${esc(u.name)}</div><div class="cid">${u.id}</div></div>
+    <div class="acts"><button class="btn p" data-accept="${id}" aria-label="Accept ${esc(u.name)}">Accept</button><button class="btn o" data-reject="${id}" aria-label="Reject ${esc(u.name)}">Reject</button></div></div>`; }).join('');
+  const snt = st.sent.map(id => { const u = U(id); return `<div class="person">${av(u)}<div class="mid"><div class="nm">${esc(u.name)}</div><div class="cid">${u.id}</div></div><span class="pill">Pending</span></div>`; }).join('');
+  return `<h2>Received</h2><div class="card" style="padding:2px 14px;margin-bottom:18px">${rec || '<p class="cid" style="padding:16px 0">No received requests.</p>'}</div>
+          <h2>Sent</h2><div class="card" style="padding:2px 14px">${snt || '<p class="cid" style="padding:16px 0">No sent requests.</p>'}</div>`;
+}
+
+function findHTML() {
+  return `<div class="head-line"><h2 style="margin:0">Suggested for you</h2><button class="btn g" id="refresh">${ic('refresh','sm')}Refresh Suggestions</button></div>
+  <div class="grid">${st.sugg.map(id => { const u = U(id); return `<div class="card sug">${av(u, 'lg')}<div class="nm" style="margin-top:8px">${esc(u.name)}</div><div class="cid">${u.id}</div>${connectBtn(id)}</div>`; }).join('') || empty('No more suggestions', 'Check back later.')}</div>`;
+}
+
+function newSuggestions() {
+  const pool = USERS.filter(u => stateOf(u.id) === 'none').map(u => u.id);
+  for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]]; }
+  st.sugg = pool.slice(0, 6);
+}
+
+function refreshAll() { renderView(); renderResults(); }
+function setTab(t) { st.tab = t; renderView(); }
+
+/* ---------- search by CareX ID ---------- */
+function renderResults() {
+  const q = $('#q').value.trim().toUpperCase().replace(/\s+/g, ''), box = $('#results');
+  $('#searchWrap').classList.toggle('has', !!q);
+  if (!q) { box.hidden = true; return; }
+  const hits = USERS.filter(u => u.id.replace('-', '').includes(q.replace('-', '')));
+  box.hidden = false;
+  box.innerHTML = hits.length
+    ? hits.map(u => `<div class="person">${av(u)}<div class="mid"><div class="nm">${esc(u.name)}</div><div class="cid">${u.id}</div></div>${connectBtn(u.id)}</div>`).join('')
+    : empty('No user found', 'Check the CareX ID and try again. Try CX-2041 or CX-5516.').replace('class="empty"', 'class="empty" style="padding:20px"');
+}
+
+/* ---------- chat window ---------- */
+function openChat(uid) {
+  st.open = uid; const c = chatOf(uid), u = U(uid);
+  $('#chAv').innerHTML = av(u, 'sm', c.online);
+  $('#chName').textContent = u.name;
+  const s = $('#chSt'); s.textContent = c.online ? 'Online' : 'Offline'; s.className = 'st' + (c.online ? ' on' : '');
+  $('#app').classList.add('chat-open');
+  renderMsgs(true); renderView();
+  // Simulate "marked as read": incoming messages are read once the chat has been open for a moment.
+  setTimeout(() => {
+    if (st.open !== uid) return;
+    let any = false; c.msgs.forEach(m => { if (m.from === 'them' && !m.readAt) { m.readAt = Date.now(); any = true; } });
+    if (any) { renderMsgs(); renderView(); }
+  }, 1200);
+}
+function closeChat() { st.open = null; $('#app').classList.remove('chat-open'); $('#emo').classList.remove('on'); renderView(); }
+
+function bubble(m) {
+  const body = m.type === 'image' ? `<span class="img-msg" role="button" tabindex="0" data-img="${m.src}" aria-label="Open image preview"><img src="${m.src}" alt="Shared photo"></span>` : esc(m.text);
+  const tmr = `<span class="tmr" data-mid="${m.id}">${ic('timer','sm')}<span>${m.readAt ? mmss(m.readAt + TTL - Date.now()) : 'Unread'}</span></span>`;
+  const rc = m.from === 'me' ? `<span class="rcpt ${m.readAt ? 'read' : ''}" title="${m.readAt ? 'Read' : 'Sent'}">${ic(m.readAt ? 'checks' : 'check','sm')}</span>` : '';
+  return `<div class="b ${m.from}" id="m${m.id}">${body}<div class="info"><span>${fmtTime(m.t)}</span>${tmr}${rc}</div></div>`;
+}
+function renderMsgs(scroll) {
+  const c = chatOf(st.open); if (!c) return;
+  const el = $('#msgs'), atEnd = scroll || el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+  el.innerHTML = c.msgs.length ? c.msgs.map(bubble).join('') : empty('Say hello', 'Messages in this chat disappear 2 minutes after they are read.');
+  if (atEnd) el.scrollTop = el.scrollHeight;
+}
+
+$('#composer').addEventListener('submit', e => {
+  e.preventDefault();
+  const i = $('#msgIn'), t = i.value.trim(); if (!t || !st.open) return;
+  sendMsg(msg('me', 'text', t, 0, null)); i.value = '';
+});
+function sendMsg(m) {
+  const c = chatOf(st.open), uid = st.open; m.t = Date.now(); c.msgs.push(m);
+  renderMsgs(true); renderView();
+  // Simulated recipient: marks the message read after ~2.5s. The 2-minute timer starts only then.
+  setTimeout(() => { m.readAt = Date.now(); if (st.open === uid) renderMsgs(); }, 2500);
+}
+$('#file').addEventListener('change', e => {
+  const f = e.target.files[0]; if (!f || !st.open) return;
+  sendMsg(msg('me', 'image', '', 0, null, URL.createObjectURL(f))); e.target.value = '';
+});
+$('#imgBtn').onclick = () => $('#file').click();
+$('#emo').innerHTML = ['😊','😍','🥰','🌸','💗','🙏','😂','😢','🤗','👍','✨','🫶'].map(x => `<button type="button" aria-label="Insert ${x}">${x}</button>`).join('');
+$('#emoBtn').onclick = () => $('#emo').classList.toggle('on');
+$('#emo').onclick = e => { const b = e.target.closest('button'); if (b) { const i = $('#msgIn'); i.value += b.textContent; i.focus(); } };
+$('#back').onclick = closeChat;
+
+/* ---------- disappearing-message engine (runs every second) ---------- */
+setInterval(() => {
+  const n = Date.now(); let removed = false;
+  st.chats.forEach(c => c.msgs.forEach(m => {
+    if (!m.readAt || m.gone) return;           // unread => no countdown
+    const left = m.readAt + TTL - n;
+    const lbl = document.querySelector(`[data-mid="${m.id}"] span`);
+    if (lbl) lbl.textContent = mmss(left);
+    if (left <= 0) {
+      m.gone = true; removed = true;
+      const el = document.getElementById('m' + m.id); if (el) el.classList.add('gone');
+      setTimeout(() => { c.msgs = c.msgs.filter(x => x !== m); if (st.open === c.uid) renderMsgs(); renderView(); }, 380);
+    }
+  }));
+}, 1000);
+
+/* ---------- events ---------- */
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-tab],[data-go],[data-chat],[data-connect],[data-accept],[data-reject],[data-story],[data-img],#refresh');
+  if (!t) return;
+  const d = t.dataset;
+  if (d.tab) setTab(d.tab);
+  else if (d.go) setTab(d.go);
+  else if (d.chat) openChat(d.chat);
+  else if (d.connect) { st.sent.push(d.connect); toast('Request sent to ' + U(d.connect).name); refreshAll(); }
+  else if (d.accept) { st.received = st.received.filter(x => x !== d.accept); st.chats.push({ uid: d.accept, online: Math.random() > .5, msgs: [] }); toast('You are now connected with ' + U(d.accept).name); refreshAll(); }
+  else if (d.reject) { st.received = st.received.filter(x => x !== d.reject); toast('Request rejected'); refreshAll(); }
+  else if (d.story) { const s = st.stories.find(x => x[0] === d.story); s[1] = 1; toast('Status viewer is a prototype'); renderView(); }
+  else if (d.img) { $('#lightbox img').src = d.img; $('#lightbox').classList.add('on'); }
+  else if (t.id === 'refresh') { st.loading = true; renderView(); setTimeout(() => { newSuggestions(); st.loading = false; renderView(); }, 450); }
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') $('#lightbox').classList.remove('on');
+  if (e.key === 'Enter' && e.target.dataset.img) e.target.click();
+});
+$('#lightbox').onclick = () => $('#lightbox').classList.remove('on');
+$('#q').addEventListener('input', renderResults);
+$('#clr').onclick = () => { $('#q').value = ''; renderResults(); $('#q').focus(); };
+$('#newMsg').onclick = () => { setTab('find'); $('#q').focus(); };
+
+/* ---------- init ---------- */
+newSuggestions(); renderView();
+setTimeout(() => { st.loading = false; renderView(); }, 700);
+</script>
+</body>
+</html>

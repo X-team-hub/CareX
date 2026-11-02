@@ -1,0 +1,65 @@
+/* CareX Owner Login — adds only what the landing page stylesheet (owner-welcome.css) does not already provide. */
+.login{flex:1;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:clamp(28px,6vh,64px) 0 24px}
+
+.card{width:100%;max-width:440px;text-align:left;padding:clamp(28px,5vw,40px);
+  background:linear-gradient(180deg,rgba(250,247,240,.05),rgba(250,247,240,.02));
+  border:1px solid var(--cx-line);border-radius:6px;
+  box-shadow:0 30px 60px -30px rgba(0,0,0,.65),inset 0 1px 0 rgba(250,247,240,.05)}
+.card h1{font-size:clamp(2.2rem,7vw,2.8rem);line-height:1.05}
+.sub{margin:10px 0 28px;font-size:.95rem;line-height:1.6;color:var(--cx-muted)}
+
+.field{margin-bottom:20px}
+.field label{display:block;margin-bottom:8px;font-size:.8rem;font-weight:600;letter-spacing:.04em;color:var(--cx-ivory)}
+.field input[type="text"],.field input[type="password"]{
+  width:100%;min-height:50px;padding:0 16px;font:400 .95rem var(--sans);color:var(--cx-ivory);
+  background:rgba(23,26,32,.7);border:1px solid rgba(250,247,240,.16);border-radius:3px;
+  transition:border-color .25s,box-shadow .25s}
+.field input:hover{border-color:rgba(198,161,90,.5)}
+.field input:focus{outline:none;border-color:var(--cx-gold);box-shadow:0 0 0 3px rgba(198,161,90,.2)}
+.field input[aria-invalid="true"]{border-color:#E08A7A}
+.field input[aria-invalid="true"]:focus{box-shadow:0 0 0 3px rgba(224,138,122,.2)}
+/* Keep browser autofill on-theme */
+.field input:-webkit-autofill{-webkit-text-fill-color:var(--cx-ivory);box-shadow:0 0 0 100px #1F232B inset}
+.err{min-height:0;margin:6px 0 0;font-size:.8rem;line-height:1.4;color:#EBA597}
+.err:empty{display:none}
+
+.pw{position:relative}
+.pw input{padding-right:52px!important}
+.eye{position:absolute;top:0;right:0;width:50px;height:100%;display:grid;place-items:center;
+  background:none;border:0;cursor:pointer;color:var(--cx-muted);transition:color .2s}
+.eye:hover{color:var(--cx-gold)}
+.eye:focus-visible{outline:2px solid var(--cx-gold);outline-offset:-4px;border-radius:3px}
+.eye svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.eye .i-hide{display:none}
+.eye[aria-pressed="true"] .i-show{display:none}
+.eye[aria-pressed="true"] .i-hide{display:block}
+
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+.check{display:inline-flex;align-items:center;gap:10px;cursor:pointer;font-size:.85rem;color:var(--cx-muted)}
+.check input{position:absolute;opacity:0;width:1px;height:1px}
+.check .box{width:18px;height:18px;border:1px solid rgba(250,247,240,.35);border-radius:3px;display:grid;place-items:center;transition:.2s}
+.check .box::after{content:"";width:9px;height:5px;border:2px solid #171A20;border-top:0;border-right:0;
+  transform:rotate(-45deg) scale(0);margin-top:-2px;transition:transform .2s var(--ease)}
+.check input:checked+.box{background:var(--cx-gold);border-color:var(--cx-gold)}
+.check input:checked+.box::after{transform:rotate(-45deg) scale(1)}
+.check input:focus-visible+.box{outline:2px solid var(--cx-gold);outline-offset:3px}
+
+.link,.back{color:var(--cx-gold);text-decoration:none;font-size:.85rem;font-weight:500;
+  background:linear-gradient(currentColor,currentColor) 0 100%/0 1px no-repeat;transition:background-size .3s var(--ease)}
+.link:hover,.back:hover{background-size:100% 1px}
+.link:focus-visible,.back:focus-visible{outline:2px solid var(--cx-gold);outline-offset:4px;border-radius:2px}
+
+/* Button and notice come from owner-welcome.css; adjust for the card */
+.card .cta{width:100%;margin-top:24px}
+.card .notice{margin:18px 0 0;max-width:none;text-align:left}
+.card .notice.is-error{border-color:rgba(224,138,122,.45);background:rgba(224,138,122,.08)}
+
+.back{display:inline-flex;align-items:center;gap:8px;margin-top:26px;padding-bottom:2px}
+.back svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .3s var(--ease)}
+.back:hover svg{transform:translateX(-3px)}
+
+.sec-note{max-width:440px;margin-top:24px;align-items:flex-start;text-align:left;font-size:.8rem;line-height:1.6}
+.sec-note svg{flex:none;margin-top:1px}
+
+@media (max-width:520px){.card{padding:26px 22px}.row{gap:14px}}
+@media (prefers-reduced-motion:reduce){.card .notice{animation:none}}

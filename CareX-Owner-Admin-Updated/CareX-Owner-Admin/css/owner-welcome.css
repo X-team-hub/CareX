@@ -1,0 +1,94 @@
+/* CareX Owner Welcome — standalone page styles. Intentionally not loaded together with style.css (that file styles bare body/main/header for the dashboard shell). */
+:root{
+  --cx-bg:#171A20;
+  --cx-gold:#C6A15A;
+  --cx-ivory:#FAF7F0;
+  --cx-muted:rgba(250,247,240,.64);
+  --cx-line:rgba(198,161,90,.28);
+  --serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+  --sans:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --ease:cubic-bezier(.22,.8,.24,1);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html,body{min-height:100%;margin:0}
+body{
+  background:var(--cx-bg);color:var(--cx-ivory);font-family:var(--sans);
+  display:flex;flex-direction:column;min-height:100vh;min-height:100dvh;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+.glow{position:fixed;inset:0;pointer-events:none;
+  background:radial-gradient(60% 50% at 50% 38%,rgba(198,161,90,.11),transparent 70%);
+  animation:breathe 9s ease-in-out infinite alternate}
+@keyframes breathe{from{opacity:.55}to{opacity:1}}
+
+.stage{position:relative;flex:1;width:100%;max-width:720px;margin:0 auto;
+  padding:clamp(28px,5vw,48px) 24px 24px;display:flex;flex-direction:column;align-items:center;text-align:center}
+
+/* Brand */
+.brand{display:flex;align-items:center;gap:14px}
+.mark{width:52px;height:52px;fill:none;stroke:var(--cx-gold);stroke-width:2.2;stroke-linecap:round}
+.mark .tile{stroke-width:1.2;stroke-dasharray:1;stroke-dashoffset:1;animation:draw 2s var(--ease) .2s forwards}
+.mark .heart{stroke-width:2.6;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.8s var(--ease) .8s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fade{to{opacity:1}}
+.wordmark{font-family:var(--serif);font-size:1.7rem;font-weight:600;letter-spacing:.04em}
+.wordmark em{font-style:normal;color:var(--cx-gold);font-weight:500;margin-left:.2em}
+
+/* Hero */
+.hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:clamp(40px,9vh,96px) 0 32px}
+.label{margin:0 0 22px;font-size:.74rem;font-weight:600;letter-spacing:.3em;color:var(--cx-gold);
+  display:flex;align-items:center;gap:14px}
+.label::before,.label::after{content:"";width:28px;height:1px;background:var(--cx-line)}
+h1{margin:0;font-family:var(--serif);font-weight:500;font-size:clamp(2.9rem,9vw,5.2rem);
+  line-height:1.02;letter-spacing:-.005em}
+.lead{margin:24px 0 0;max-width:30em;font-size:clamp(1rem,2.4vw,1.12rem);line-height:1.7;color:var(--cx-muted)}
+
+/* CTA */
+.cta{margin-top:40px;position:relative;overflow:hidden;cursor:pointer;
+  font:600 .82rem/1 var(--sans);letter-spacing:.2em;color:#171A20;background:var(--cx-gold);
+  border:1px solid var(--cx-gold);padding:20px 40px;min-height:56px;border-radius:2px;
+  transition:transform .35s var(--ease),box-shadow .35s var(--ease),background .35s}
+.cta span{position:relative;z-index:1}
+.cta::after{content:"";position:absolute;inset:0 auto 0 -60%;width:40%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.4),transparent);transform:skewX(-20deg)}
+.cta:hover{transform:translateY(-2px);background:#D2B06C;box-shadow:0 14px 34px -12px rgba(198,161,90,.55)}
+.cta:hover::after{left:130%;transition:left .8s var(--ease)}
+.cta:active{transform:translateY(0)}
+.cta:focus-visible{outline:2px solid var(--cx-ivory);outline-offset:4px}
+.cta[aria-busy="true"]{pointer-events:none;opacity:.7}
+
+/* Placeholder message (shown until Owner Login exists) */
+.notice{margin:20px 0 0;max-width:30em;padding:14px 18px;font-size:.9rem;line-height:1.55;
+  color:var(--cx-ivory);background:rgba(198,161,90,.08);border:1px solid var(--cx-line);border-radius:2px}
+.notice:not([hidden]){animation:rise .5s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.secure{margin:28px 0 0;display:flex;align-items:center;gap:10px;font-size:.88rem;color:var(--cx-muted)}
+.secure svg{width:18px;height:18px;fill:none;stroke:var(--cx-gold);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
+/* Privacy */
+.privacy{width:100%;max-width:520px;margin:8px 0 0;padding:22px 0 0;border-top:1px solid var(--cx-line)}
+.privacy h2{margin:0 0 8px;font-family:var(--serif);font-size:1.2rem;font-weight:600;color:var(--cx-gold)}
+.privacy p{margin:0;font-size:.85rem;line-height:1.7;color:var(--cx-muted)}
+
+/* Footer */
+.foot{position:relative;display:flex;justify-content:center;align-items:center;gap:18px;flex-wrap:wrap;
+  padding:22px 24px;border-top:1px solid rgba(250,247,240,.08);font-size:.78rem;color:rgba(250,247,240,.5)}
+.foot-brand{font-family:var(--serif);font-size:1.05rem;font-weight:600;letter-spacing:.06em;color:var(--cx-gold)}
+
+/* Entrance: one staggered page-load sequence */
+.reveal{opacity:0;transform:translateY(14px);animation:rise .9s var(--ease) forwards;animation-delay:calc(var(--d)*.12s + .15s)}
+
+@media (max-width:520px){
+  .cta{width:100%;padding:20px 24px}
+  .label::before,.label::after{width:16px}
+  .wordmark{font-size:1.45rem}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .reveal{opacity:1;transform:none}
+  .mark .tile,.mark .heart{stroke-dashoffset:0}
+}
